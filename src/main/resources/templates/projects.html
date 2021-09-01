@@ -1,0 +1,18 @@
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Project</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.externalProjectId}"></td>
+        <td th:text="${project.name}"></td>
+        <td><a th:href="@{/edit/{id}(id=${project.externalProjectId})}">Edit</a></td>
+        <td><a th:href="@{/delete/{id}(id=${project.externalProjectId})}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
