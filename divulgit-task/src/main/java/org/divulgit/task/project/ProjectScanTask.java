@@ -1,4 +1,4 @@
-package org.divulgit.tasks.project;
+package org.divulgit.task.project;
 
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.gitlab.project.GitLabProject;
@@ -8,8 +8,8 @@ import org.divulgit.model.Project;
 import org.divulgit.model.User;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.tasks.Task;
-import org.divulgit.tasks.TaskUniqueKey;
+import org.divulgit.task.Task;
+import org.divulgit.task.TaskUniqueKey;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;

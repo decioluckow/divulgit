@@ -1,4 +1,4 @@
-package org.divulgit.tasks;
+package org.divulgit.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

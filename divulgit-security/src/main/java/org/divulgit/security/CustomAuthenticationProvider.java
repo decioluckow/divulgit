@@ -37,17 +37,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		final String remoteURL = authentication.getPrincipal().toString();
-		final Remote remote = verifyRemote(remoteURL);
+		final Remote remote = loadRemote(remoteURL);
 		final String remoteToken = authentication.getCredentials().toString();
+		final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
 		Authentication authenticatedUser;
-		final RemoteCallerFacade caller = callerFactory.build(remote);
-		final Optional<RemoteUser> remoteUser = caller.retrieveRemoteUser(remoteToken);
 		if (remoteUser.isPresent()) {
 			authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
 		} else {
 			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
 		}
 		return authenticatedUser;
+	}
+
+	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) {
+		final RemoteCallerFacade caller = callerFactory.build(remote);
+		return caller.retrieveRemoteUser(remoteToken);
 	}
 
 	private UserAuthentication findOrCreateUser(Remote remote, String remoteToken, RemoteUser remoteUser) {
@@ -58,7 +62,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		return UserAuthentication.of(user.get(), remoteToken);
 	}
 
-	private Remote verifyRemote(String remoteURL) {
+	private Remote loadRemote(String remoteURL) {
 		//TODO cadastrar automaticamente, verificando que tipo de repositorio é por meio de chamada de api
 		final Optional<Remote> remote = remoteRepository.findByUrl(remoteURL);
 		if (!remote.isPresent()) {

@@ -1,4 +1,4 @@
-package org.divulgit.tasks;
+package org.divulgit.task;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

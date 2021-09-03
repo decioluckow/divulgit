@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-gitlab</artifactId>
+            <artifactId>divulgit-task</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

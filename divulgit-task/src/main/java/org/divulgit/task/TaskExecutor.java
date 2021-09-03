@@ -1,4 +1,4 @@
-package org.divulgit.tasks;
+package org.divulgit.task;
 
 import org.divulgit.model.Remote;
 import org.divulgit.model.Project;

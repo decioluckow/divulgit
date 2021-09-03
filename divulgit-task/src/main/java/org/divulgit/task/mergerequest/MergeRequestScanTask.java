@@ -1,12 +1,12 @@
-package org.divulgit.tasks.mergerequest;
+package org.divulgit.task.mergerequest;
 
 import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.tasks.Task;
-import org.divulgit.tasks.TaskUniqueKey;
+import org.divulgit.task.Task;
+import org.divulgit.task.TaskUniqueKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
