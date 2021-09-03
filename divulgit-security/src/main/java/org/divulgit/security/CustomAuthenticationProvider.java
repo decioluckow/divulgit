@@ -36,35 +36,35 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		final String originURL = authentication.getPrincipal().toString();
-		final Remote remote = verifyOrigin(originURL);
-		final String originToken = authentication.getCredentials().toString();
+		final String remoteURL = authentication.getPrincipal().toString();
+		final Remote remote = verifyRemote(remoteURL);
+		final String remoteToken = authentication.getCredentials().toString();
 		Authentication authenticatedUser;
 		final RemoteCallerFacade caller = callerFactory.build(remote);
-		final Optional<RemoteUser> remoteUser = caller.retrieveRemoteUser(originToken);
+		final Optional<RemoteUser> remoteUser = caller.retrieveRemoteUser(remoteToken);
 		if (remoteUser.isPresent()) {
-			authenticatedUser = findOrCreateUser(remote, originToken, remoteUser.get());
+			authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
 		} else {
 			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
 		}
 		return authenticatedUser;
 	}
 
-	private UserAuthentication findOrCreateUser(Remote remote, String originToken, RemoteUser remoteUser) {
+	private UserAuthentication findOrCreateUser(Remote remote, String remoteToken, RemoteUser remoteUser) {
 		Optional<User> user = userRepository.findByExternalUserIdAndRemoteId(remoteUser.getInternalId(), remote.getId());
 		if (!user.isPresent()) {
 			user = Optional.of(userService.save(remoteUser, remote));
 		}
-		return UserAuthentication.of(user.get(), originToken);
+		return UserAuthentication.of(user.get(), remoteToken);
 	}
 
-	private Remote verifyOrigin(String originURL) {
+	private Remote verifyRemote(String remoteURL) {
 		//TODO cadastrar automaticamente, verificando que tipo de repositorio é por meio de chamada de api
-		final Optional<Remote> origin = remoteRepository.findByUrl(originURL);
-		if (!origin.isPresent()) {
-			throw new OriginNotFoundException("Origin " + originURL + " not found");
+		final Optional<Remote> remote = remoteRepository.findByUrl(remoteURL);
+		if (!remote.isPresent()) {
+			throw new RemoteNotFoundException("Remote " + remoteURL + " not found");
 		}
-		return origin.get();
+		return remote.get();
 	}
 
 	@Override

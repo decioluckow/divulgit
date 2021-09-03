@@ -57,6 +57,7 @@ public class MergeRequestCaller {
     }
 
     private String mountURL(final Remote remote, Project project, List<String> requestedMergeRequestExternalIds, final String page) {
+        //GET /projects/:id/merge_requests?iids[]=42&iids[]=43
         String requestedMergeRequestExternalIdsParam = String.join(",", requestedMergeRequestExternalIds);
         return MessageFormat.format("https://{0}/api/v4/projects/{1}/merge_requests?iids[]={2}per_page={3}&page={4}",
                 remote.getUrl(),

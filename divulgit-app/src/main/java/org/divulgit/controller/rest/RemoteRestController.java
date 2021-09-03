@@ -1,4 +1,4 @@
-package org.divulgit.controller;
+package org.divulgit.controller.rest;
 
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
@@ -18,29 +18,29 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-public class RestOriginController {
+public class RemoteRestController {
 
     @Autowired
     private TaskExecutor taskExecutor;
 
     @Autowired
-    private RemoteRepository originRepos;
+    private RemoteRepository remoteRepos;
 
-    @PostMapping("/in/origin/scan")
+    @PostMapping("/in/remote/scan")
     public Map<String, String> scan(Authentication auth) {
         UserAuthentication userAuthentication = (UserAuthentication) auth;
         UserDetails userDetails = userAuthentication.getUserDetails();
         User user = userDetails.getUser();
-        Remote remote = loadOrigin(user.getRemoteId());
-        TaskUniqueKey taskUniqueKey = taskExecutor.scanProjects(remote, user, userDetails.getOriginToken());
+        Remote remote = loadRemote(user.getRemoteId());
+        TaskUniqueKey taskUniqueKey = taskExecutor.scanRemoteForProjects(remote, user, userDetails.getRemoteToken());
         return Map.of("taskKey", taskUniqueKey.getTaskUniqueKey());
     }
 
-    private Remote loadOrigin(String originId) {
-        final Optional<Remote> origin = originRepos.findById(originId);
-        if (!origin.isPresent()) {
-            throw new RuntimeException("Origin " + originId + " não encontrada");
+    private Remote loadRemote(String remoteId) {
+        final Optional<Remote> remote = remoteRepos.findById(remoteId);
+        if (!remote.isPresent()) {
+            throw new RuntimeException("Remote " + remoteId + " não encontrada");
         }
-        return origin.get();
+        return remote.get();
     }
 }

@@ -15,11 +15,11 @@ public class UserAuthentication implements Authentication {
     private UserDetails details;
     private boolean authenticated;
 
-    public static UserAuthentication of(final User user, final String originToken) {
+    public static UserAuthentication of(final User user, final String remoteToken) {
         return UserAuthentication.builder()
                 .name(user.getName())
                 .principal(user.getUsername())
-                .details(UserDetails.builder().user(user).originToken(originToken).build())
+                .details(UserDetails.builder().user(user).remoteToken(remoteToken).build())
                 .authenticated(true).build();
     }
 

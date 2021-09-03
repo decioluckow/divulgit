@@ -18,13 +18,13 @@ public class TaskExecutor {
     @Autowired
     private ExecutorService executorService;
 
-    public TaskUniqueKey scanProjects(final Remote remote, final User user, final String token) {
+    public TaskUniqueKey scanRemoteForProjects(final Remote remote, final User user, final String token) {
         Task projectScanTask = (Task) context.getBean("projectScanTask", remote, user, token);
         executorService.execute(projectScanTask);
         return projectScanTask.uniqueKey();
     }
 
-    public TaskUniqueKey scanMergeRequests(final Project project, final String token) {
+    public TaskUniqueKey scanProjectForMergeRequests(final Project project, final String token) {
         Task projectScanTask = (Task) context.getBean("mergeRequestScanTask", project, token);
         executorService.execute(projectScanTask);
         return projectScanTask.uniqueKey();

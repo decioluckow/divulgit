@@ -1,4 +1,4 @@
-package org.divulgit.controller;
+package org.divulgit.controller.rest;
 
 import org.divulgit.model.Project;
 import org.divulgit.security.UserAuthentication;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-public class RestProjectController {
+public class ProjectRestController {
 
     @Autowired
     private ProjectRepository projectRepos;
@@ -54,12 +54,12 @@ public class RestProjectController {
         return ResponseEntity.ok("start set");
     }
 
-    @PostMapping("/in/project/{projectId}/scan/")
+    @PostMapping("/in/project/{projectId}/scan/mergerequests")
     public ResponseEntity<TaskUniqueKey> scanMergeRequests(Authentication authentication, @PathVariable String projectId) {
         //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
         UserDetails userDetails = getUserDetails(authentication);
         Project project = loadProject(projectId);
-        TaskUniqueKey taskUniqueKey = taskExecutor.scanMergeRequests(project, userDetails.getOriginToken());
+        TaskUniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(project, userDetails.getRemoteToken());
         return ResponseEntity.ok(taskUniqueKey);
     }
 
@@ -72,7 +72,6 @@ public class RestProjectController {
     }
 
     private UserDetails getUserDetails(Authentication authentication) {
-        final UserAuthentication userAuthentication = (UserAuthentication) authentication;
-        return userAuthentication.getUserDetails();
+        return ((UserAuthentication) authentication).getUserDetails();
     }
 }

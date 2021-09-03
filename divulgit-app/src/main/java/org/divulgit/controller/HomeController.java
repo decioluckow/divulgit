@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j
 @Controller
-public class IndexController {
+public class HomeController {
 
     @GetMapping("/")
-    public String showUserList(Model model) {
+    public String home(Model model) {
         return "index";
     }
 }

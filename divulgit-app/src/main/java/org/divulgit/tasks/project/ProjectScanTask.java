@@ -46,13 +46,13 @@ public class ProjectScanTask extends Task {
 
     @Override
     public TaskUniqueKey uniqueKey() {
-        return new TaskUniqueKey("origin:" + remote.getId() + "|user:" + user.getId());
+        return new TaskUniqueKey("remote:" + remote.getId() + "|user:" + user.getId());
     }
 
     @Override
     public void execute() {
         try {
-            log.info("Starting scanning projects for origin {}", remote.getId());
+            log.info("Starting scanning projects for remote {}", remote.getId());
             List<GitLabProject> projects = caller.retrieveProjects(remote, token);
             log.info("Finished scanning, found {} projects", projects);
             List<String> existingExternalProjectIds = projectRepository.findExternalProjectIdByRemoteId(remote.getId());
@@ -69,10 +69,10 @@ public class ProjectScanTask extends Task {
 
     private List<Project> addNewProjects(final List<GitLabProject> projects, final List<String> existingExternalProjectIds) {
         var newProjects = new ArrayList<Project>();
-        for (GitLabProject originProject: projects) {
-            boolean exist = existingExternalProjectIds.stream().anyMatch(p -> p.equals(originProject.getExternalId()));
+        for (GitLabProject remoteProject: projects) {
+            boolean exist = existingExternalProjectIds.stream().anyMatch(p -> p.equals(remoteProject.getExternalId()));
             if (!exist) {
-                final Project project = originProject.convertToProject();
+                final Project project = remoteProject.convertToProject();
                 project.setState(ProjectState.NEW);
                 project.setMergeRequestStart(0);
                 newProjects.add(project);
