@@ -2,9 +2,7 @@ package org.divulgit.task;
 
 
 import com.google.common.collect.ImmutableList;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.apache.logging.log4j.util.Strings;
 
 import java.time.LocalDateTime;
@@ -16,7 +14,7 @@ public abstract class Task implements Runnable {
     private List<Step> steps = new ArrayList<Step>();
 
     protected Task() {
-        steps.add(Step.builder().state(State.WAITING).build());
+        addStep("", State.WAITING);
     }
 
     public abstract UniqueKey uniqueKey();
@@ -66,7 +64,6 @@ public abstract class Task implements Runnable {
     @Builder
     @AllArgsConstructor
     public static class Step {
-
         private String description;
         private LocalDateTime dateTime;
         private Task.State state;
@@ -77,6 +74,4 @@ public abstract class Task implements Runnable {
     public static class UniqueKey {
         private String taskUniqueKey;
     }
-
-
 }
