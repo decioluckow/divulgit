@@ -5,8 +5,8 @@ import org.divulgit.model.User;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.security.UserDetails;
+import org.divulgit.task.Task;
 import org.divulgit.task.TaskExecutor;
-import org.divulgit.task.TaskUniqueKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,13 +27,12 @@ public class RemoteRestController {
     private RemoteRepository remoteRepos;
 
     @PostMapping("/in/remote/scan")
-    public Map<String, String> scan(Authentication auth) {
+    public Task.UniqueKey scan(Authentication auth) {
         UserAuthentication userAuthentication = (UserAuthentication) auth;
         UserDetails userDetails = userAuthentication.getUserDetails();
         User user = userDetails.getUser();
         Remote remote = loadRemote(user.getRemoteId());
-        TaskUniqueKey taskUniqueKey = taskExecutor.scanRemoteForProjects(remote, user, userDetails.getRemoteToken());
-        return Map.of("taskKey", taskUniqueKey.getTaskUniqueKey());
+        return taskExecutor.scanRemoteForProjects(remote, user, userDetails.getRemoteToken());
     }
 
     private Remote loadRemote(String remoteId) {

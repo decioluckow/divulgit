@@ -9,7 +9,6 @@ import org.divulgit.model.User;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.task.Task;
-import org.divulgit.task.TaskUniqueKey;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +44,8 @@ public class ProjectScanTask extends Task {
     }
 
     @Override
-    public TaskUniqueKey uniqueKey() {
-        return new TaskUniqueKey("remote:" + remote.getId() + "|user:" + user.getId());
+    public UniqueKey uniqueKey() {
+        return new UniqueKey("remote:" + remote.getId() + "|user:" + user.getId());
     }
 
     @Override

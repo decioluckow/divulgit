@@ -3,8 +3,8 @@ package org.divulgit.controller.rest;
 import org.divulgit.model.Project;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.security.UserDetails;
+import org.divulgit.task.Task;
 import org.divulgit.task.TaskExecutor;
-import org.divulgit.task.TaskUniqueKey;
 import org.divulgit.type.ProjectState;
 import org.divulgit.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -55,11 +55,11 @@ public class ProjectRestController {
     }
 
     @PostMapping("/in/project/{projectId}/scan/mergerequests")
-    public ResponseEntity<TaskUniqueKey> scanMergeRequests(Authentication authentication, @PathVariable String projectId) {
+    public ResponseEntity<Task.UniqueKey> scanMergeRequests(Authentication authentication, @PathVariable String projectId) {
         //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
         UserDetails userDetails = getUserDetails(authentication);
         Project project = loadProject(projectId);
-        TaskUniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(project, userDetails.getRemoteToken());
+        Task.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(project, userDetails.getRemoteToken());
         return ResponseEntity.ok(taskUniqueKey);
     }
 

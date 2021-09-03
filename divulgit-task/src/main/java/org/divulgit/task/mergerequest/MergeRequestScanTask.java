@@ -6,7 +6,6 @@ import org.divulgit.model.Remote;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.task.Task;
-import org.divulgit.task.TaskUniqueKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +29,7 @@ public class MergeRequestScanTask extends Task {
     private Project project;
     private String token;
 
-    //@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public MergeRequestScanTask(Remote remote, Project project, String token) {
         this.remote = remote;
         this.project = project;
@@ -38,8 +37,8 @@ public class MergeRequestScanTask extends Task {
     }
 
     @Override
-    public TaskUniqueKey uniqueKey() {
-        return new TaskUniqueKey("project:" + project.getId());
+    public UniqueKey uniqueKey() {
+        return new UniqueKey("project:" + project.getId());
     }
 
     @Override
