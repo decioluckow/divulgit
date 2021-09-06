@@ -1,0 +1,26 @@
+{
+  "name": "divulgit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "scss": "node-sass src/main/resources/scss -o target/classes/static/css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teggr/customise-bootstrap-for-spring-boot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teggr/customise-bootstrap-for-spring-boot/issues"
+  },
+  "homepage": "https://github.com/teggr/customise-bootstrap-for-spring-boot#readme",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "copyfiles": "^2.1.0",
+    "jquery": "^3.4.1",
+    "node-sass": "4.12.0",
+    "popper.js": "^1.15.0"
+  }
+}

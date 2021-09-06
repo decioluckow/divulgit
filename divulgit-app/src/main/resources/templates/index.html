@@ -1,1 +1,43 @@
-index
+<html th:replace="~{base :: layout (~{:: main})}">
+<body>
+<main>
+
+    <section class="py-4 text-center container">
+        <div class="row py-lg-4">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Existem informações preciosas escondidas nos code reviews do seu time</h1>
+                <p>
+                    <a href="/start/" class="btn btn-primary my-2">Começe a explorar agora</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <h1 class="display-5 fw-bold  text-center">Como funciona?</h1>
+    <section class="py-4 text-center container">
+        <div class="row">
+            <div class="col-lg-4 text-center">
+                <img src="/images/step-1.gif" class="rounded"/>
+                <h2>Faça o code-review</h2>
+                <p>Faça os code reviews para o seu time, usando a mesma ferramenta de sempre. O DivulGit trabalha com
+                    GitHub ou GitLab</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <img src="/images/step-2.gif" class="rounded"/>
+                <h2>Destaque o que for interessante!</h2>
+                <p>Comente usando #divulgar, #interessante ou qualquer outra palavra, o importante é ser #. Pode ser o
+                    seu próprio comentário de code review, ou complementando o comentário de outra pessoa.</p>
+                <a class="btn btn-secondary" href="#">Veja exemplos...</a>
+            </div>
+            <div class="col-lg-4 text-center">
+                <img src="/images/step-3.gif" class="rounded"/>
+                <h2>Reuna o time e discuta</h2>
+                <p>Reuna o time e use o DivulGit para encontrar os code reviews que foram destacados usando #. Converse
+                    sobre cada pontos, todos terão a oportunidade de contribuir e aprender. Faça disso um encontro
+                    periodico!
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

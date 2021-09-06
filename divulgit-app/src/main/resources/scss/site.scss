@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans&display=swap');
+
+$white: #fff;
+$gray-100: #eceff4;
+$gray-200: #e5e9f0;
+$gray-300: #e5e9f0;
+$gray-400: #d8dee9;
+$gray-500: #d8dee9;
+$gray-600: #4c566a;
+$gray-700: #434c5e;
+$gray-800: #3b4252;
+$gray-900: #2e3440;
+
+$blue:    #88c0d0;
+$indigo:  #81a1c1;
+$purple:  #5e81ac;
+$pink:    #bf616a;
+$red:     #bf616a;
+$orange:  #d08770;
+$yellow:  #ebcb8b;
+$green:   #a3be8c;
+$teal:    #88c0d0;
+$cyan:    #88c0d0;
+
+$secondary: $gray-600;
+
+$text-muted: $gray-400;
+
+$font-family-sans-serif: 'PT Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+@import "../../../../node_modules/bootstrap/scss/bootstrap";

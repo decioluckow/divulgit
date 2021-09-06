@@ -24,8 +24,8 @@ public class TaskExecutor {
         return projectScanTask.uniqueKey();
     }
 
-    public Task.UniqueKey scanProjectForMergeRequests(final Project project, final String token) {
-        Task projectScanTask = (Task) context.getBean("mergeRequestScanTask", project, token);
+    public Task.UniqueKey scanProjectForMergeRequests(final Remote remote, final Project project, final String token) {
+        Task projectScanTask = (Task) context.getBean("mergeRequestScanTask", remote, project, token);
         executorService.execute(projectScanTask);
         return projectScanTask.uniqueKey();
     }

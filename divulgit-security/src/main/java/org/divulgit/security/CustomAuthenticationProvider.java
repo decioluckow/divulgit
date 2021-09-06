@@ -2,6 +2,7 @@ package org.divulgit.security;
 
 import java.util.Optional;
 
+import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.service.UserService;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
@@ -39,19 +40,23 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		final String remoteURL = authentication.getPrincipal().toString();
 		final Remote remote = loadRemote(remoteURL);
 		final String remoteToken = authentication.getCredentials().toString();
-		final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
 		Authentication authenticatedUser;
-		if (remoteUser.isPresent()) {
-			authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
-		} else {
-			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
+		try {
+			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
+			if (remoteUser.isPresent()) {
+				authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
+			} else {
+				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
+			}
+		} catch (RemoteException e) {
+			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação", e);
 		}
 		return authenticatedUser;
 	}
 
-	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) {
+	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) throws RemoteException {
 		final RemoteCallerFacade caller = callerFactory.build(remote);
-		return caller.retrieveRemoteUser(remoteToken);
+		return caller.retrieveRemoteUser(remote, remoteToken);
 	}
 
 	private UserAuthentication findOrCreateUser(Remote remote, String remoteToken, RemoteUser remoteUser) {

@@ -14,11 +14,7 @@ public class GitLabRestCaller {
     @Autowired
     private RestTemplateCustomizer restTemplateCustomizer;
 
-    //getForEntity
-    //https://www.baeldung.com/spring-resttemplate-json-list
-
-    public ResponseEntity<String> call(final String url, final String token) {
-
+    public ResponseEntity<String> call(String url, String token) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplateCustomizer.customize(restTemplate);
 
@@ -29,6 +25,5 @@ public class GitLabRestCaller {
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
         return restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
     }
 }

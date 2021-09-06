@@ -1,11 +1,13 @@
 package org.divulgit.gitlab.user;
 
+import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
 import org.divulgit.gitlab.restcaller.GitLabRestCaller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.divulgit.remote.remote.model.RemoteUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,9 @@ public class CurrentUserCaller {
 
     @Autowired
     private GitLabRestCaller restCaller;
+
+    @Autowired
+    private UserURLGenerator urlGenerator;
     
     @Autowired
     private UserMapper userMapper;
@@ -28,9 +33,10 @@ public class CurrentUserCaller {
     //getForEntity
     //https://www.baeldung.com/spring-resttemplate-json-list
 
-    public Optional<GitLabUser> retrieveCurrentUser(final String token) throws RemoteException {
-        ResponseEntity<String> response = restCaller.call("https://git.neogrid.com/api/v4/user/", token);
-        Optional<GitLabUser> authenticatedUser = Optional.empty();
+    public Optional<RemoteUser> retrieveCurrentUser(Remote remote, String token) throws RemoteException {
+        String url = urlGenerator.build(remote);
+        ResponseEntity<String> response = restCaller.call(url, token);
+        Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
             authenticatedUser = handle200Response(response);
         } else if (response.getBody().contains("error_description")) {
@@ -39,9 +45,9 @@ public class CurrentUserCaller {
         return authenticatedUser;
     }
 
-    private Optional<GitLabUser> handle200Response(ResponseEntity<String> response) throws RemoteException {
+    private Optional<RemoteUser> handle200Response(ResponseEntity<String> response) throws RemoteException {
         try {
-            return Optional.ofNullable(userMapper.convertToUser(response.getBody()));
+            return Optional.ofNullable((RemoteUser) userMapper.convertToUser(response.getBody()));
         } catch (JsonProcessingException e) {
             String message = "Error on converting json to Object";
             log.error(message + "[json: " + response.getBody() +"]");

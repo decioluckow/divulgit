@@ -1,0 +1,36 @@
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "../../../../node_modules/bootstrap/scss/_variables";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+
+.start-width {
+  width: 500px;
+}
+
+.bg-blue-800 {
+  background-color: #212529;
+}
+
+.logo {
+  color: #cbbcb1 !important;
+  font-size: xx-large;
+}
+
+.mr-state-bage {
+  @extend .badge;
+  @extend .text-white;
+}
+
+.mr-state-merged {
+  @extend .mr-state-bage;
+  @extend .bg-success;
+}
+
+.mr-state-closed {
+  @extend .mr-state-bage;
+  @extend .bg-danger;
+}
+
+.mr-state-opened {
+  @extend .mr-state-bage;
+  @extend .bg-primary;
+}

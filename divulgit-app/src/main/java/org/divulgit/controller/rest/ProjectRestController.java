@@ -1,13 +1,15 @@
 package org.divulgit.controller.rest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.divulgit.model.Project;
+import org.divulgit.model.Remote;
+import org.divulgit.repository.ProjectRepository;
+import org.divulgit.repository.RemoteRepository;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.security.UserDetails;
 import org.divulgit.task.Task;
 import org.divulgit.task.TaskExecutor;
 import org.divulgit.type.ProjectState;
-import org.divulgit.repository.ProjectRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,9 @@ public class ProjectRestController {
 
     @Autowired
     private ProjectRepository projectRepos;
+
+    @Autowired
+    private RemoteRepository remoteRepository;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -45,21 +50,14 @@ public class ProjectRestController {
         return ResponseEntity.ok("project activated");
     }
 
-    @PostMapping("/in/project/{projectId}/setstart/{start}")
-    public ResponseEntity<String> setStart(Authentication auth, @PathVariable String projectId, @PathVariable int start) {
-        //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
-        Project project = loadProject(projectId);
-        project.setMergeRequestStart(start);
-        projectRepos.save(project);
-        return ResponseEntity.ok("start set");
-    }
-
-    @PostMapping("/in/project/{projectId}/scan/mergerequests")
-    public ResponseEntity<Task.UniqueKey> scanMergeRequests(Authentication authentication, @PathVariable String projectId) {
-        //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
+    @PostMapping("/in/project/{projectId}/scanFrom/{scanFrom}")
+    public ResponseEntity<Task.UniqueKey> setStart(Authentication authentication, @PathVariable String projectId, @PathVariable int scanFrom) {
         UserDetails userDetails = getUserDetails(authentication);
+        Remote remote = loadRemote(userDetails.getUser().getRemoteId());
         Project project = loadProject(projectId);
-        Task.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(project, userDetails.getRemoteToken());
+        project.setMergeRequestStart(scanFrom);
+        projectRepos.save(project);
+        Task.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, project, userDetails.getRemoteToken());
         return ResponseEntity.ok(taskUniqueKey);
     }
 
@@ -69,6 +67,14 @@ public class ProjectRestController {
             throw new RuntimeException("Project " + projectId + " not found");
         }
         return project.get();
+    }
+
+    private Remote loadRemote(String remoteId) {
+        Optional<Remote> remote = remoteRepository.findById(remoteId);
+        if (!remote.isPresent()) {
+            throw new RuntimeException("Remote not found");
+        }
+        return remote.get();
     }
 
     private UserDetails getUserDetails(Authentication authentication) {

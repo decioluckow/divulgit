@@ -1,15 +1,16 @@
 package org.divulgit.model;
 
+import lombok.*;
 import org.divulgit.type.ProjectState;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "project")
 public class Project {
 
@@ -19,6 +20,7 @@ public class Project {
     private String externalId;
     private String remoteId;
     private String name;
+    private String url;
     private String description;
     private int mergeRequestStart;
     private ProjectState state;

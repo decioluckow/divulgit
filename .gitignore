@@ -29,3 +29,7 @@ target/
 .project
 .settings/
 
+node_modules/
+node/
+package-lock.json
+

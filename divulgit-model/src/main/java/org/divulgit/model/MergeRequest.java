@@ -1,6 +1,5 @@
 package org.divulgit.model;
 
-import org.divulgit.type.MergeRequestStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,21 +19,20 @@ public class MergeRequest {
     private String id;
 
     private String projectId;
-    private String externalId;
+    private int externalId;
     private String title;
     private String author;
-    private String externalState;
-    private MergeRequestStatus status;
+    private State state;
     private List<Comment> comments;
 
     @Setter(AccessLevel.NONE)
-    private long commentsLength;
+    private long commentsTotal;
 
     @Setter(AccessLevel.NONE)
     private long commentsDiscussed;
 
     protected void calculateComments() {
-        commentsLength = comments.size();
+        commentsTotal = comments.size();
         commentsDiscussed = comments.stream().filter(c -> c.isDiscussed()).count();
     }
 
@@ -47,5 +45,9 @@ public class MergeRequest {
         private String text;
         private List<String> hashTags;
         private boolean discussed;
+    }
+
+    public static enum State {
+        OPENED, MERGED, CLOSED;
     }
 }

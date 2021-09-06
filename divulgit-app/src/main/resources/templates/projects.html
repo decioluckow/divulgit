@@ -1,18 +1,98 @@
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Project</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="project : ${projects}">
-        <td th:text="${project.externalProjectId}"></td>
-        <td th:text="${project.name}"></td>
-        <td><a th:href="@{/edit/{id}(id=${project.externalProjectId})}">Edit</a></td>
-        <td><a th:href="@{/delete/{id}(id=${project.externalProjectId})}">Delete</a></td>
-    </tr>
-    </tbody>
-</table>
+<body th:replace="~{base :: layout (~{:: main})}">
+    <main>
+        <a href="javascript:void(0)" onclick="javascript:scanRemoteForProjets()">scan projets</a>
+        <table class="table table-hover">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Comments to discuss</th>
+                <th scope="col">Total Comments</th>
+                <th scope="col">Actions</th>
+            </tr>
+            <tr th:each="project : ${projects}" th:id="${project.id}">
+                <td><a  th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+                <td th:text="${project.name}"></td>
+                <td><%=projects[i].commentsToDiscuss%></td>
+                <td><%=projects[i].commentsLength%></td>
+                <td th:id="'actions-' + ${project.id}">
+                    <span th:if="${project.state == T(org.divulgit.type.ProjectState).NEW}">
+                        [<a href="javascript:void(0)" th:data-project-id="${project.id}" onclick="javascript:scanFrom(this.getAttribute('data-project-id'))">scan from </a>
+                        <input  type="text"
+                                th:id="'scan-from-' + ${project.id}"
+                                value="0"
+                                size="2"
+                                style="font-size: xx-small;"
+                                title="Fill with the number of merge request that you started to hash tag comments">]
+                        [<a href="javascript:void(0)" onclick="ignoreProject('${project.id}');">ignore</a>]
+                    </span>
+                    <span th:if="${project.state == T(org.divulgit.type.ProjectState).ACTIVE}">
+                        [<a href="javascript:void(0)" onclick="scanLatest('${project.id}');">rescan</a>]
+                            <!--
+                            [<a href="javascript:void(0)" onclick="scanComments('${project.id}');">scan comments</a>]
+                            -->
+                        [<a href='/mergeRequests/project/${project.id}'>merge requests</a>]
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <script>
+            function scanRemoteForProjets(){
+                $.ajax({
+                    url:'/in/rest/remote/scan',
+                    method:'post',
+                    dataType:'json',
+                    success:function(data, textStatus, xhr){
+                        if (xhr.status == 200) {
+                            alert('Scan queued, refresh later');
+                        } else {
+                            alert('some error occurred try again');
+                        }
+                    },
+                    error:function(response){
+                        alert('server error occured')
+                    }
+                });
+            }
+
+            function ignoreProject(projectId){
+                $.ajax({
+                    url:'/in/project/'+ projectId +'/ignore',
+                    method:'post',
+                    dataType:'json',
+                    success:function(data, textStatus, xhr){
+                        if (xhr.status == 200) {
+                            alert('Scan queued, refresh later');
+                        } else {
+                            alert('some error occurred try again');
+                        }
+                    },
+                    error:function(response){
+                        alert('server error occured')
+                    }
+                });
+            }
+
+            function scanFrom(projectId){
+                const scanFrom = $("#scan-from-" + projectId).val();
+                if (!scanFrom) {
+                    alert('Please, fill the initial merge request number to consider in scanning. This is the mergerequest that your team started hashtagging')
+                } else {
+                    $.ajax({
+                        url:'/in/project/' + projectId + '/scanFrom/' + scanFrom + '/',
+                        method:'post',
+                        dataType:'json',
+                        success:function(data, textStatus, xhr){
+                            if (xhr.status == 200) {
+                                $("#actions-"+projectId).html('scanning...');
+                            }
+                            console.log(response)
+                        },
+                        error:function(response){
+                            alert('server error occured')
+                        }
+                    });
+                }
+            }
+        </script>
+    </main>
+</body>

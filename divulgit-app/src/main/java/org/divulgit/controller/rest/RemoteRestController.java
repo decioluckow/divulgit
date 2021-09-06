@@ -26,7 +26,7 @@ public class RemoteRestController {
     @Autowired
     private RemoteRepository remoteRepos;
 
-    @PostMapping("/in/remote/scan")
+    @PostMapping("/in/rest/remote/scan")
     public Task.UniqueKey scan(Authentication auth) {
         UserAuthentication userAuthentication = (UserAuthentication) auth;
         UserDetails userDetails = userAuthentication.getUserDetails();
