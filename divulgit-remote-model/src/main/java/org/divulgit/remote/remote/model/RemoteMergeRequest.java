@@ -2,8 +2,9 @@ package org.divulgit.remote.remote.model;
 
 public interface RemoteMergeRequest {
 
-     String getExternalId();
+     int getExternalId();
      String getTitle();
+     String getDescription();
      String getAuthor();
      String getState();
 }

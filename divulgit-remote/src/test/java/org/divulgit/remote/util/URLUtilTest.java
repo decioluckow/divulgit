@@ -11,7 +11,7 @@ public class URLUtilTest {
 
     @Test
     public void testToListOfParamsWithOneValue() {
-        List<String> ids = Arrays.asList("1");
+        List<Integer> ids = Arrays.asList(1);
 
         String listOfParams = URLUtil.toListOfParams(ids, "id[]");
 
@@ -20,7 +20,7 @@ public class URLUtilTest {
 
     @Test
     public void testToListOfParamsWithValues() {
-        List<String> ids = Arrays.asList("1","2","3","4","5");
+        List<Integer> ids = Arrays.asList(1,2,3,4,5);
 
         String listOfParams = URLUtil.toListOfParams(ids, "id[]");
 
@@ -29,7 +29,7 @@ public class URLUtilTest {
 
     @Test
     public void testToListOfParamsWithoutValues() {
-        List<String> ids = Collections.emptyList();
+        List<Integer> ids = Collections.emptyList();
 
         String listOfParams = URLUtil.toListOfParams(ids, "id[]");
 

@@ -26,11 +26,11 @@ public class MergeRequestURLGenerator {
     @Value("${rest.caller.pageSize:50}")
     private int pageSize;
 
-    public String build(final Remote remote, Project project, List<String> requestedMergeRequestExternalIds, final String page) {
+    public String build(final Remote remote, Project project, List<Integer> requestedMergeRequestExternalIds, final String page) {
         String idParams = URLUtil.toListOfParams(requestedMergeRequestExternalIds, "iids[]");
         return MessageFormat.format("https://{0}/api/v4/projects/{1}/merge_requests?per_page={2}&page={3}{4}",
                 remote.getUrl(),
-                project.getId(),
+                project.getExternalId(),
                 pageSize,
                 page,
                 URLUtil.prepareToConcat(idParams, true));

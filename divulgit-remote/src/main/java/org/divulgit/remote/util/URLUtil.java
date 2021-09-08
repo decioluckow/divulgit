@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class URLUtil {
 
-    public static String toListOfParams(List<String> values, String paramName) {
+    public static String toListOfParams(List<Integer> values, String paramName) {
         return values.stream().map(id -> paramName + "=" + id).collect(Collectors.joining("&"));
     }
 

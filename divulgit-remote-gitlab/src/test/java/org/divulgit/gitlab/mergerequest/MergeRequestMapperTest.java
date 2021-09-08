@@ -25,12 +25,11 @@ public class MergeRequestMapperTest {
         assertEquals(2, mergeRequests.size());
         GitLabMergeRequest mergeRequest0 = mergeRequests.get(0);
         assertEquals("NFE-0000 correção de bug", mergeRequest0.getTitle());
-        assertEquals("1234", mergeRequest0.getExternalId());
+        assertEquals(1234, mergeRequest0.getExternalId());
         assertEquals("opened", mergeRequest0.getState());
         GitLabMergeRequest mergeRequest1 = mergeRequests.get(1);
         assertEquals("NFE-0001 melhoria", mergeRequest1.getTitle());
-        assertEquals("4321", mergeRequest1.getExternalId());
+        assertEquals(4321, mergeRequest1.getExternalId());
         assertEquals("merged", mergeRequest1.getState());
     }
-
 }

@@ -21,6 +21,7 @@ public class MergeRequest {
     private String projectId;
     private int externalId;
     private String title;
+    private String description;
     private String author;
     private State state;
     private List<Comment> comments;
@@ -32,8 +33,13 @@ public class MergeRequest {
     private long commentsDiscussed;
 
     protected void calculateComments() {
-        commentsTotal = comments.size();
-        commentsDiscussed = comments.stream().filter(c -> c.isDiscussed()).count();
+        if (comments != null) {
+            commentsTotal = comments.size();
+            commentsDiscussed = comments.stream().filter(c -> c.isDiscussed()).count();
+        } else {
+            commentsTotal = 0;
+            commentsDiscussed = 0;
+        }
     }
 
     @Getter

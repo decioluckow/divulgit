@@ -13,10 +13,10 @@ import java.util.List;
 class MergeRequestURLGeneratorTest {
 
     public static final Remote REMOTE = Remote.builder().url("git.company.com").build();
-    public static final Project PROJECT = Project.builder().id("250").build();
+    public static final Project PROJECT = Project.builder().externalId("250").build();
     public static final String PAGE_1 = "1";
     public static final String PAGE_5 = "5";
-    public static final List<String> MR_IDS = Arrays.asList("5","7","9");
+    public static final List<Integer> MR_IDS = Arrays.asList(5,7,9);
 
     private MergeRequestURLGenerator urlGenerator = new MergeRequestURLGenerator();
 

@@ -1,5 +1,6 @@
 package org.divulgit.gitlab.comments;
 
+import org.divulgit.model.MergeRequest;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
@@ -22,6 +23,7 @@ import java.util.List;
 @Component
 public class CommentCaller {
 
+    public static final String START_PAGE = "1";
     @Autowired
     private GitLabRestCaller restCaller;
     
@@ -31,38 +33,33 @@ public class CommentCaller {
     @Autowired
     private ErrorMapper errorMapper;
 
+    @Autowired
+    private CommentURLGenerator urlGenerator;
+
     @Value("${rest.caller.pageSize:50}")
     private int pageSize;
 
     //getForEntity
     //https://www.baeldung.com/spring-resttemplate-json-list
 
-    public List<GitLabComment> retrieveMergeRequests(final Remote remote, Project project, final String token) throws RemoteException {
-        final List<GitLabComment> mergeRequests = new ArrayList<>();
-        retrieveMergeRequests(remote, project, "1");
-        return mergeRequests;
+    public List<GitLabComment> retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, String token) throws RemoteException {
+        final List<GitLabComment> comments = new ArrayList<>();
+        retrieveComments(remote, project, mergeRequest, comments, token, START_PAGE);
+        return comments;
     }
 
-    private void retrieveMergeRequests(Remote remote, Project project, List<GitLabComment> loadedMergeRequests, List<String> requestedMergeRequestExternalIds, String token, final String page) throws RemoteException {
-        ResponseEntity<String> response = restCaller.call(mountURL(remote, project, requestedMergeRequestExternalIds, page), token);
+    private void retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, List<GitLabComment> comments, String token, String page) throws RemoteException {
+        String url = urlGenerator.build(remote, project, mergeRequest, page);
+        ResponseEntity<String> response = restCaller.call(url, token);
         if (response.getStatusCode().is2xxSuccessful()) {
-            loadedMergeRequests.addAll(handle200Response(response));
+            comments.addAll(handle200Response(response));
         } else if (response.getBody().contains("error_description")) {
             handleErrorResponse(response);
         }
         String nextPage = response.getHeaders().getFirst("x-next-page");
         if (!Strings.isNullOrEmpty(nextPage)) {
-            retrieveMergeRequests(remote, project, loadedMergeRequests, requestedMergeRequestExternalIds, token, nextPage);
+            retrieveComments(remote, project, mergeRequest, comments, token, nextPage);
         }
-    }
-
-    private String mountURL(final Remote remote, Project project, List<String> requestedMergeRequestExternalIds, final String page) {
-        String requestedMergeRequestExternalIdsParam = String.join(",", requestedMergeRequestExternalIds);
-        return MessageFormat.format("https://{0}/api/v4/projects/{1}/merge_requests?iids[]={2}per_page={3}&page={4}",
-                remote.getUrl(),
-                project.getId(),
-                requestedMergeRequestExternalIdsParam,
-                pageSize, page);
     }
 
     private List<GitLabComment> handle200Response(ResponseEntity<String> response) throws RemoteException {

@@ -40,10 +40,6 @@ public class ProjectCommentsSum {
         return project.getDescription();
     }
 
-    public int getMergeRequestStart() {
-        return project.getMergeRequestStart();
-    }
-
     public ProjectState getState() {
         return project.getState();
     }

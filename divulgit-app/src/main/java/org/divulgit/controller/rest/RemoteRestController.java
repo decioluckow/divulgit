@@ -5,15 +5,14 @@ import org.divulgit.model.User;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.security.UserDetails;
-import org.divulgit.task.Task;
-import org.divulgit.task.TaskExecutor;
+import org.divulgit.task.RemoteScan;
+import org.divulgit.task.ScanExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -21,13 +20,13 @@ import java.util.Optional;
 public class RemoteRestController {
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private ScanExecutor taskExecutor;
 
     @Autowired
     private RemoteRepository remoteRepos;
 
     @PostMapping("/in/rest/remote/scan")
-    public Task.UniqueKey scan(Authentication auth) {
+    public RemoteScan.UniqueKey scan(Authentication auth) {
         UserAuthentication userAuthentication = (UserAuthentication) auth;
         UserDetails userDetails = userAuthentication.getUserDetails();
         User user = userDetails.getUser();

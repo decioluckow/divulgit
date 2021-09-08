@@ -1,28 +1,25 @@
 package org.divulgit.gitlab.mergerequest;
 
-import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.model.Remote;
-import org.divulgit.model.Project;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
 import org.divulgit.gitlab.restcaller.GitLabRestCaller;
-import org.divulgit.remote.util.URLUtil;
+import org.divulgit.model.Project;
+import org.divulgit.model.Remote;
+import org.divulgit.remote.exception.RemoteException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Slf4j
 @Component
 public class MergeRequestCaller {
+
+    public static final String STARTING_PAGE = "1";
 
     @Autowired
     private GitLabRestCaller restCaller;
@@ -42,11 +39,22 @@ public class MergeRequestCaller {
     public List<GitLabMergeRequest> retrieveMergeRequests(
             Remote remote,
             Project project,
-            List<String> requestedMergeRequestExternalIds,
-            int scanFrom,
+            List<Integer> requestedMergeRequestExternalIds,
             String token) throws RemoteException {
         final List<GitLabMergeRequest> mergeRequests = new ArrayList<>();
-        retrieveMergeRequests(remote, project, mergeRequests, requestedMergeRequestExternalIds, scanFrom, token, "1");
+        Integer emptyScanFrom = 0;
+        retrieveMergeRequests(remote, project, mergeRequests, requestedMergeRequestExternalIds, emptyScanFrom, token, STARTING_PAGE);
+        return mergeRequests;
+    }
+
+    public List<GitLabMergeRequest> retrieveMergeRequests(
+            Remote remote,
+            Project project,
+            Integer scanFrom,
+            String token) throws RemoteException {
+        final List<GitLabMergeRequest> mergeRequests = new ArrayList<>();
+        List<Integer> emptyRequestedMergeRequestExternalIds = Collections.emptyList();
+        retrieveMergeRequests(remote, project, mergeRequests, emptyRequestedMergeRequestExternalIds, scanFrom, token, STARTING_PAGE);
         return mergeRequests;
     }
 
@@ -54,8 +62,8 @@ public class MergeRequestCaller {
             Remote remote,
             Project project,
             List<GitLabMergeRequest> loadedMergeRequests,
-            List<String> requestedMergeRequestExternalIds,
-            int scanFrom,
+            List<Integer> requestedMergeRequestExternalIds,
+            Integer scanFrom,
             String token,
             final String page) throws RemoteException {
         String url = urlGenerator.build(remote, project, requestedMergeRequestExternalIds, page);

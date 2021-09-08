@@ -2,6 +2,7 @@ package org.divulgit.gitlab.comments;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.divulgit.model.MergeRequest;
 
 import java.util.List;
 
@@ -9,10 +10,21 @@ import java.util.List;
 public class GitLabComment {
     @JsonProperty("id")
     private String externalId;
-    @JsonProperty("author.username")
-    private String author;
+    private Author author;
     @JsonProperty("body")
     private String text;
     private boolean system;
-    private List<String> hashTags;
+
+    @Data
+    public static class Author {
+        private String username;
+    }
+
+    public MergeRequest.Comment toComment() {
+        return MergeRequest.Comment.builder()
+                .externalId(externalId)
+                .text(text)
+                .author(author.getUsername())
+                .build();
+    }
 }

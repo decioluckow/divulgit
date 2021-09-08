@@ -1,5 +1,6 @@
 package org.divulgit.service;
 
+import com.google.common.collect.ImmutableList;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.repository.MergeRequestRepository;
@@ -31,11 +32,23 @@ public class MergeRequestService {
         this.mergeRequestRepository = mergeRequestRepository;
     }
 
-    public int findLastExternalId(Project project) {
+    public Optional<Integer> findLastExternalId(Project project) {
         Optional<MergeRequest> mergeRequest = mergeRequestRepository.findFirstByProjectIdOrderByExternalIdDesc(project.getId());
-        int lastExternalId = 0;
+        Optional<Integer> LastExternalId = Optional.empty();
         if (mergeRequest.isPresent())
-            lastExternalId = mergeRequest.get().getExternalId();
-        return lastExternalId;
+            LastExternalId = Optional.of(mergeRequest.get().getExternalId());
+        return LastExternalId;
+    }
+
+    public List<MergeRequest> findAllByIds(List<String> mergeRequestIds) {
+        return ImmutableList.copyOf(mergeRequestRepository.findAllById(mergeRequestIds));
+    }
+
+    public MergeRequest save(MergeRequest mergeRequest) {
+        return mergeRequestRepository.save(mergeRequest);
+    }
+
+    public List<MergeRequest> saveAll(List<MergeRequest> mergeRequests) {
+        return mergeRequestRepository.saveAll(mergeRequests);
     }
 }

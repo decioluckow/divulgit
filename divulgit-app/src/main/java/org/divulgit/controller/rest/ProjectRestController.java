@@ -7,8 +7,8 @@ import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.security.UserDetails;
-import org.divulgit.task.Task;
-import org.divulgit.task.TaskExecutor;
+import org.divulgit.task.RemoteScan;
+import org.divulgit.task.ScanExecutor;
 import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class ProjectRestController {
     private RemoteRepository remoteRepository;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    private ScanExecutor taskExecutor;
 
     @PostMapping("/in/project/{projectId}/ignore")
     public ResponseEntity<String> ignore(Authentication auth, @PathVariable String projectId) {
@@ -51,13 +51,28 @@ public class ProjectRestController {
     }
 
     @PostMapping("/in/project/{projectId}/scanFrom/{scanFrom}")
-    public ResponseEntity<Task.UniqueKey> setStart(Authentication authentication, @PathVariable String projectId, @PathVariable int scanFrom) {
+    public ResponseEntity<RemoteScan.UniqueKey> scanFrom(
+            Authentication authentication,
+            @PathVariable String projectId,
+            @PathVariable int scanFrom) {
         UserDetails userDetails = getUserDetails(authentication);
         Remote remote = loadRemote(userDetails.getUser().getRemoteId());
         Project project = loadProject(projectId);
-        project.setMergeRequestStart(scanFrom);
-        projectRepos.save(project);
-        Task.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, project, userDetails.getRemoteToken());
+        RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(
+                remote, project, Optional.of(scanFrom), userDetails.getRemoteToken());
+        return ResponseEntity.ok(taskUniqueKey);
+    }
+
+    @PostMapping("/in/project/{projectId}/scanFrom/latest")
+    public ResponseEntity<RemoteScan.UniqueKey> scanFrom(
+            Authentication authentication, @PathVariable String projectId) {
+
+        UserDetails userDetails = getUserDetails(authentication);
+        Remote remote = loadRemote(userDetails.getUser().getRemoteId());
+        Project project = loadProject(projectId);
+        Optional<Integer> emptyScanFrom = Optional.empty();
+        RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, project, emptyScanFrom, userDetails.getRemoteToken());
+
         return ResponseEntity.ok(taskUniqueKey);
     }
 

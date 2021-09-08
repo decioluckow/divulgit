@@ -2,25 +2,30 @@ package org.divulgit.task;
 
 
 import com.google.common.collect.ImmutableList;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.scheduling.annotation.Async;
 
+import java.rmi.Remote;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Task implements Runnable {
+public abstract class AbstractRemoteScan implements RemoteScan {
 
     private List<Step> steps = new ArrayList<Step>();
 
-    protected Task() {
+    protected AbstractRemoteScan() {
         addStep("", State.WAITING);
     }
 
-    public abstract UniqueKey uniqueKey();
+    public abstract RemoteScan.UniqueKey uniqueKey();
 
+    @Async
     @Override
-    public final void run() {
+    public void run() {
         addStep(Strings.EMPTY, State.RUNNING);
         execute();
         addStep(Strings.EMPTY, State.FINISHED);
@@ -66,7 +71,7 @@ public abstract class Task implements Runnable {
     public static class Step {
         private String description;
         private LocalDateTime dateTime;
-        private Task.State state;
+        private AbstractRemoteScan.State state;
     }
 
     @Getter
