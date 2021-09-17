@@ -31,10 +31,11 @@ public class ProjectCommentsService {
         List<ProjectCommentsSum> projectComments = new ArrayList<>();
         for (Project project : projects) {
             var projectCommentsSum = projectCommentsSumMap.get(project.getId());
-            projectComments.add(ProjectCommentsSum.builder()
-                    .project(project)
-                    .commentsTotal(projectCommentsSum.getCommentsTotal())
-                    .commentsDiscussed(projectCommentsSum.getCommentsDiscussed()).build());
+            if (projectCommentsSum != null) {
+                projectComments.add(new ProjectCommentsSum(project, projectCommentsSum.getCommentsTotal(), projectCommentsSum.getCommentsDiscussed()));
+            } else {
+                projectComments.add(new ProjectCommentsSum(project, 0, 0));
+            }
         }
         return projectComments;
     }

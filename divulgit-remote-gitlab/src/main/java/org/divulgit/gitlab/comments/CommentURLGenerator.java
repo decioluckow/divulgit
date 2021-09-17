@@ -22,7 +22,7 @@ public class CommentURLGenerator {
         return MessageFormat.format("https://{0}/api/v4/projects/{1}/merge_requests/{2}/notes?page={3}",
                 remote.getUrl(),
                 project.getExternalId(),
-                mergeRequest.getExternalId(),
+                String.valueOf(mergeRequest.getExternalId()),
                 page);
     }
 }

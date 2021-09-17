@@ -22,11 +22,11 @@ class ProjectCommentsServiceTest {
 
     private static final String PROJECT_ID_1 = "1";
     private static final Project PROJECT_1 = Project.builder().id(PROJECT_ID_1).build();
-    private static final ProjectIdCommentsSum PROJECT_1_COMMENTS_SUM = ProjectIdCommentsSum.builder().projectId(PROJECT_ID_1).commentsTotal(100).commentsDiscussed(10).build();
+    private static final ProjectIdCommentsSum PROJECT_1_COMMENTS_SUM = ProjectIdCommentsSum.builder().id(PROJECT_ID_1).commentsTotal(100).commentsDiscussed(10).build();
 
     private static final String PROJECT_ID_2 = "2";
     private static final Project PROJECT_2 = Project.builder().id(PROJECT_ID_2).build();
-    final ProjectIdCommentsSum PROJECT_2_COMMENTS_SUM = ProjectIdCommentsSum.builder().projectId(PROJECT_ID_2).commentsTotal(200).commentsDiscussed(20).build();
+    final ProjectIdCommentsSum PROJECT_2_COMMENTS_SUM = ProjectIdCommentsSum.builder().id(PROJECT_ID_2).commentsTotal(200).commentsDiscussed(20).build();
 
 
     @Mock

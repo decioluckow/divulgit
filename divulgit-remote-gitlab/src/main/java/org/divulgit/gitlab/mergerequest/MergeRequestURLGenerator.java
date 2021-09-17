@@ -31,7 +31,7 @@ public class MergeRequestURLGenerator {
         return MessageFormat.format("https://{0}/api/v4/projects/{1}/merge_requests?per_page={2}&page={3}{4}",
                 remote.getUrl(),
                 project.getExternalId(),
-                pageSize,
+                String.valueOf(pageSize),
                 page,
                 URLUtil.prepareToConcat(idParams, true));
     }

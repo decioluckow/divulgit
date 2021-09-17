@@ -38,16 +38,7 @@ public class ProjectRestController {
         Project project = loadProject(projectId);
         project.setState(ProjectState.IGNORED);
         projectRepos.save(project);
-        return ResponseEntity.ok("project ignored");
-    }
-
-    @PostMapping("/in/project/{projectId}/activate")
-    public ResponseEntity<String> activate(Authentication auth, @PathVariable String projectId) {
-        //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
-        Project project = loadProject(projectId);
-        project.setState(ProjectState.ACTIVE);
-        projectRepos.save(project);
-        return ResponseEntity.ok("project activated");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/in/project/{projectId}/scanFrom/{scanFrom}")
@@ -58,13 +49,15 @@ public class ProjectRestController {
         UserDetails userDetails = getUserDetails(authentication);
         Remote remote = loadRemote(userDetails.getUser().getRemoteId());
         Project project = loadProject(projectId);
+        project.setState(ProjectState.ACTIVE);
+        projectRepos.save(project);
         RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(
                 remote, project, Optional.of(scanFrom), userDetails.getRemoteToken());
         return ResponseEntity.ok(taskUniqueKey);
     }
 
-    @PostMapping("/in/project/{projectId}/scanFrom/latest")
-    public ResponseEntity<RemoteScan.UniqueKey> scanFrom(
+    @PostMapping("/in/project/{projectId}/scanFrom/lastest")
+    public ResponseEntity<RemoteScan.UniqueKey> scanLastest(
             Authentication authentication, @PathVariable String projectId) {
 
         UserDetails userDetails = getUserDetails(authentication);

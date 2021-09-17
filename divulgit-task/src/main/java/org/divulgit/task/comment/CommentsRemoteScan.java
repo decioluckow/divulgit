@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Scope("prototype")
 public class CommentsRemoteScan extends AbstractRemoteScan {
 
-    private static Pattern HASH_TAG_PATTERN = Pattern.compile("(^|\\s)(#[A-Za-z\\d-]+)");
+    private static Pattern HASH_TAG_PATTERN = Pattern.compile("(?:\\s|\\A|^)[##]+([A-Za-z0-9-_]+)");
 
     @Autowired
     private CommentCaller caller;
@@ -45,11 +45,11 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     private final MergeRequest mergeRequest;
     private final String token;
 
-    public static CommentsRemoteScan build(Remote remote,
+    public static RemoteScan build(Remote remote,
                                            Project project,
                                            MergeRequest mergeRequest,
                                            String token) {
-        return (CommentsRemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, project, mergeRequest, token);
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, project, mergeRequest, token);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -72,38 +72,56 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     @Override
     public void execute() {
         try {
-            log.debug("Start retrieving merge requests from remote");
+            log.debug("Start retrieving comments from merge request");
             List<GitLabComment> remoteComments = caller.retrieveComments(remote, project, mergeRequest, token);
-            log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteComments.size());
+            log.debug("Finished retrieving comments from merge request, {} retrieved", remoteComments.size());
 
-            log.debug("Start merging merge requests");
+            //TODO depois de gastar o tempo de busca dos comentarios, deveriamos recarregar o merge request?
+            // alguém pode ter alterado o registro neste tempo?
+
+            log.debug("Start merging comments");
             for (GitLabComment remoteComment : remoteComments) {
-                if (remoteComment.isSystem() /*DiffNote?*/)
+                if (remoteComment.isSystem() || !"DiffNote".equals(remoteComment.getType()) || !remoteComment.getText().contains("#"))
                     continue;
-                Optional<MergeRequest.Comment> existingComment = mergeRequest.getComments().stream().filter(c -> c.getExternalId() == remoteComment.getExternalId()).findFirst();
-                if (existingComment.isPresent()) {
-                    existingComment.get().setText(remoteComment.getText());
-                } else {
-                    mergeRequest.getComments().add(remoteComment.toComment());
+                var hashTags = extractRelevantHashTags(remoteComment.getText());
+                if (!hashTags.isEmpty()) {
+                    Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
+                    if (existingComment.isPresent()) {
+                        existingComment.get().setText(remoteComment.getText());
+                        existingComment.get().setHashTags(hashTags);
+                    } else {
+                        mergeRequest.getComments().add(remoteComment.toComment(hashTags));
+                    }
                 }
             }
             mergeRequestService.save(mergeRequest);
-            log.debug("Finished merge requests merging");
+            log.debug("Finished comments merging");
         } catch (RemoteException e) {
-            final String message = "Error executing project scanning";
+            final String message = "Error executing comments scanning";
             addErrorStep(message + " - " + e.getMessage());
             log.error(message, e);
         }
     }
 
+    private Optional<MergeRequest.Comment> findExistingComment(GitLabComment remoteComment) {
+        return mergeRequest.getComments().stream().filter(c -> c.getExternalId() == remoteComment.getExternalId()).findFirst();
+    }
+
+    public static List<String> extractRelevantHashTags(String text) {
+        return extractHashTag(text);
+    }
+
+    //TODO acredito que seja interessante mover este método para uma classe específica
     public static List<String> extractHashTag(String text) {
-        Matcher matcher = HASH_TAG_PATTERN.matcher(text);
-        List<String> hashTags = new ArrayList<>();
-        if (matcher.find()) {
-            for (int i = 0; i < matcher.groupCount(); i++) {
+        var hashTags = new ArrayList<String>();
+        final Matcher matcher = HASH_TAG_PATTERN.matcher(text);
+        while (matcher.find()) {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
                 hashTags.add(matcher.group(i));
             }
         }
         return hashTags;
     }
+
+
 }

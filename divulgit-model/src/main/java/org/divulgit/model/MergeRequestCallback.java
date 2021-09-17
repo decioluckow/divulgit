@@ -10,6 +10,8 @@ class MergeRequestCallback implements BeforeSaveCallback<MergeRequest> {
 	@Override
 	public MergeRequest onBeforeSave(MergeRequest mergeRequest, Document document, String s) {
 		mergeRequest.calculateComments();
+		document.put("commentsTotal", mergeRequest.getCommentsTotal());
+		document.put("commentsDiscussed", mergeRequest.getCommentsDiscussed());
 		return mergeRequest;
 	}
 }

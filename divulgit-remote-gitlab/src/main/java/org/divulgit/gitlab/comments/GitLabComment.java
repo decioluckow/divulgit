@@ -8,11 +8,12 @@ import java.util.List;
 
 @Data
 public class GitLabComment {
-    @JsonProperty("id")
+    @JsonProperty("noteable_iid")
     private String externalId;
     private Author author;
     @JsonProperty("body")
     private String text;
+    private String type;
     private boolean system;
 
     @Data
@@ -20,11 +21,12 @@ public class GitLabComment {
         private String username;
     }
 
-    public MergeRequest.Comment toComment() {
+    public MergeRequest.Comment toComment(List<String> hashTags) {
         return MergeRequest.Comment.builder()
                 .externalId(externalId)
                 .text(text)
                 .author(author.getUsername())
+                .hashTags(hashTags)
                 .build();
     }
 }

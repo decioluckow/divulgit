@@ -39,11 +39,11 @@ public class ProjectController {
         UserDetails userDetails = getUserDetails(authentication);
         User user = loadUser(userDetails.getUser().getId());
         List<String> projectIds = user.getProjectIds();
-        List<ProjectCommentsSum> projectsComments = new ArrayList<>();
+        List<ProjectCommentsSum> projectsComments;
         if (!ObjectUtils.isEmpty(projectIds)) {
             List<Project> projects = projectService.findAllById(projectIds);
-            //projectsComments = projectCommentsService.populateCommentsSum(projects);
-            model.addAttribute("projects", projects);
+            projectsComments = projectCommentsService.populateCommentsSum(projects);
+            model.addAttribute("projects", projectsComments);
         }
         return "projects";
     }

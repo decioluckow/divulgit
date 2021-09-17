@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CommentsRemoteScanTest {
 
-//    @Test
+    @Test
     public void testHashTags() {
         List<String> hashTags = CommentsRemoteScan.extractHashTag("Este é um #teste de #comentarios bem #bacana");
 

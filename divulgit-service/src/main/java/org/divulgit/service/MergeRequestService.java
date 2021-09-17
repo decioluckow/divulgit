@@ -44,6 +44,10 @@ public class MergeRequestService {
         return ImmutableList.copyOf(mergeRequestRepository.findAllById(mergeRequestIds));
     }
 
+    public Optional<MergeRequest> findById(String mergeRequestId) {
+        return mergeRequestRepository.findById(mergeRequestId);
+    }
+
     public MergeRequest save(MergeRequest mergeRequest) {
         return mergeRequestRepository.save(mergeRequest);
     }

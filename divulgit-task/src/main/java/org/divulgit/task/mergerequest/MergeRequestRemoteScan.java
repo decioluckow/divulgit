@@ -13,6 +13,7 @@ import org.divulgit.repository.UserRepository;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
+import org.divulgit.task.comment.CommentsRemoteScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -87,10 +88,19 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
             List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
             mergeRequestService.saveAll(mergeRequests);
             log.debug("Finished merge requests saving");
+            log.debug("Start queueing scan comments");
+            mergeRequests.forEach(mr -> scanComments(mr));
+            log.debug("Finished queueing scan comments");
         } catch (RemoteException e) {
             final String message = "Error executing project scanning";
             addErrorStep(message + " - " + e.getMessage());
             log.error(message, e);
         }
+    }
+
+    private void scanComments(MergeRequest mergeRequest) {
+        log.debug("Queueing scan comments for merge request {}", mergeRequest.getId());
+        RemoteScan remoteScan = CommentsRemoteScan.build(remote, project, mergeRequest, token);
+        remoteScan.run();
     }
 }

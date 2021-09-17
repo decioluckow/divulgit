@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,17 +27,16 @@ public class MergeRequest {
     private State state;
     private List<Comment> comments;
 
-    @Setter(AccessLevel.NONE)
-    private long commentsTotal;
+    private int commentsTotal;
 
-    @Setter(AccessLevel.NONE)
-    private long commentsDiscussed;
+    private int commentsDiscussed;
 
     protected void calculateComments() {
         if (comments != null) {
             commentsTotal = comments.size();
-            commentsDiscussed = comments.stream().filter(c -> c.isDiscussed()).count();
+            commentsDiscussed = (int) comments.stream().filter(c -> c.isDiscussed()).count();
         } else {
+            comments = new ArrayList<>();
             commentsTotal = 0;
             commentsDiscussed = 0;
         }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ProjectIdCommentsSum {
-    private String projectId;
+    private String id;
     private long commentsTotal;
     private long commentsDiscussed;
 }

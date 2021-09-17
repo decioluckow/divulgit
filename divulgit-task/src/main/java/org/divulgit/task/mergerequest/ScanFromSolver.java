@@ -36,11 +36,11 @@ class ScanFromSolver {
         Optional<Integer> lastExternalId = mergeRequestService.findLastExternalId(project);
         Integer scanFrom = 0;
         if (lastExternalId.isPresent() && requestedScanFrom.isEmpty()) {
-            scanFrom = lastExternalId.get();
+            scanFrom = lastExternalId.get() + 1;
         } else if (lastExternalId.isEmpty() && requestedScanFrom.isPresent()) {
             scanFrom = requestedScanFrom.get();
         } else if (lastExternalId.isPresent() && requestedScanFrom.isPresent()) {
-            scanFrom = Math.max(lastExternalId.get(), requestedScanFrom.get());
+            scanFrom = Math.max(lastExternalId.get() + 1, requestedScanFrom.get());
         }
         return scanFrom;
     }

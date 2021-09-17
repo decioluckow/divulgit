@@ -9,24 +9,24 @@
                 <th scope="col">Total Comments</th>
                 <th scope="col">Actions</th>
             </tr>
-            <tr th:each="project : ${projects}" th:id="${project.id}">
+            <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
                 <td><a  th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
                 <td th:text="${project.name}"></td>
-                <td><%=projects[i].commentsToDiscuss%></td>
-                <td><%=projects[i].commentsLength%></td>
+                <td th:text="${project.commentsTotal}"></td>
+                <td th:text="${project.commentsDiscussed}"></td>
                 <td th:id="'actions-' + ${project.id}">
                     <span th:if="${project.state == T(org.divulgit.type.ProjectState).NEW}">
-                        [<a href="javascript:void(0)" th:data-project-id="${project.id}" onclick="javascript:scanFrom(this.getAttribute('data-project-id'))">scan from </a>
+                        [<a href="javascript:void(0)" onclick="javascript:scanFrom(getProjectId(this))">scan from </a>
                         <input  type="text"
                                 th:id="'scan-from-' + ${project.id}"
                                 value="0"
                                 size="2"
                                 style="font-size: xx-small;"
                                 title="Fill with the number of merge request that you started to hash tag comments">]
-                        [<a href="javascript:void(0)" onclick="ignoreProject('${project.id}');">ignore</a>]
+                        [<a href="javascript:void(0)" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</a>]
                     </span>
                     <span th:if="${project.state == T(org.divulgit.type.ProjectState).ACTIVE}">
-                        [<a href="javascript:void(0)" onclick="scanLatest('${project.id}');">rescan</a>]
+                        [<a href="javascript:void(0)" onclick="javascript:scanLastest(getProjectId(this))">rescan</a>]
                             <!--
                             [<a href="javascript:void(0)" onclick="scanComments('${project.id}');">scan comments</a>]
                             -->
@@ -54,19 +54,22 @@
                 });
             }
 
-            function ignoreProject(projectId){
+            function ignoreProject(projectElement, projectId){
                 $.ajax({
                     url:'/in/project/'+ projectId +'/ignore',
                     method:'post',
-                    dataType:'json',
-                    success:function(data, textStatus, xhr){
-                        if (xhr.status == 200) {
-                            alert('Scan queued, refresh later');
+                    success:function(data, textStatus, jqXHR){
+                        console.log(mainItem);
+                        if (jqXHR.status == 200) {
+                            $(projectElement).hide(250);
                         } else {
                             alert('some error occurred try again');
                         }
                     },
-                    error:function(response){
+                    error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
                         alert('server error occured')
                     }
                 });
@@ -93,6 +96,32 @@
                     });
                 }
             }
+
+            function scanLastest(projectId){
+                $.ajax({
+                    url:'/in/project/' + projectId + '/scanFrom/lastest/',
+                    method:'post',
+                    dataType:'json',
+                    success:function(data, textStatus, xhr){
+                        if (xhr.status == 200) {
+                            $("#actions-"+projectId).html('scanning...');
+                        }
+                        console.log(response)
+                    },
+                    error:function(response){
+                        alert('server error occured')
+                    }
+                });
+            }
+
+            function getProjectId(element) {
+                return getProjectElement(element).attr("data-project-id");
+            }
+
+            function getProjectElement(actualElement) {
+                return $(actualElement).parents(".project-item")
+            }
+
         </script>
     </main>
 </body>
