@@ -1,5 +1,6 @@
 package org.divulgit.controller.rest;
 
+import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.repository.RemoteRepository;
@@ -23,22 +24,13 @@ public class RemoteRestController {
     private ScanExecutor taskExecutor;
 
     @Autowired
-    private RemoteRepository remoteRepos;
+    private EntityLoader loader;
 
     @PostMapping("/in/rest/remote/scan")
-    public RemoteScan.UniqueKey scan(Authentication auth) {
-        UserAuthentication userAuthentication = (UserAuthentication) auth;
-        UserDetails userDetails = userAuthentication.getUserDetails();
-        User user = userDetails.getUser();
-        Remote remote = loadRemote(user.getRemoteId());
-        return taskExecutor.scanRemoteForProjects(remote, user, userDetails.getRemoteToken());
-    }
-
-    private Remote loadRemote(String remoteId) {
-        final Optional<Remote> remote = remoteRepos.findById(remoteId);
-        if (!remote.isPresent()) {
-            throw new RuntimeException("Remote " + remoteId + " não encontrada");
-        }
-        return remote.get();
+    public RemoteScan.UniqueKey scan(Authentication authentication) {
+        User user = loader.loadUser(authentication);
+        Remote remote = loader.loadRemote(user.getRemoteId());
+        String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
+        return taskExecutor.scanRemoteForProjects(remote, user, remoteToken);
     }
 }

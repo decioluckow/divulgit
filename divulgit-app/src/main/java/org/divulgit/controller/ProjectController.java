@@ -2,6 +2,7 @@ package org.divulgit.controller;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.security.UserAuthentication;
@@ -26,37 +27,24 @@ import java.util.*;
 public class ProjectController {
 
     @Autowired
-    private UserRepository userRepos;
-
-    @Autowired
     private ProjectService projectService;
 
     @Autowired
     private ProjectCommentsService projectCommentsService;
 
+    @Autowired
+    private EntityLoader loader;
+
     @GetMapping("/in/projects")
     public String list(Authentication authentication, Model model) {
-        UserDetails userDetails = getUserDetails(authentication);
-        User user = loadUser(userDetails.getUser().getId());
+        User user = loader.loadUser(authentication);
         List<String> projectIds = user.getProjectIds();
         List<ProjectCommentsSum> projectsComments;
         if (!ObjectUtils.isEmpty(projectIds)) {
-            List<Project> projects = projectService.findAllById(projectIds);
+            List<Project> projects = projectService.findAllNewOrActiveByProjectIds(projectIds);
             projectsComments = projectCommentsService.populateCommentsSum(projects);
             model.addAttribute("projects", projectsComments);
         }
         return "projects";
-    }
-
-    private User loadUser(String userId) {
-        Optional<User> user = userRepos.findById(userId);
-        if (!user.isPresent()) {
-            throw new RuntimeException("User not found");
-        }
-        return user.get();
-    }
-
-    private UserDetails getUserDetails(Authentication authentication) {
-        return ((UserAuthentication) authentication).getUserDetails();
     }
 }

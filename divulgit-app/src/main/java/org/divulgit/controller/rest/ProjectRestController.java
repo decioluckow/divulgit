@@ -1,8 +1,10 @@
 package org.divulgit.controller.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.security.UserAuthentication;
@@ -27,15 +29,16 @@ public class ProjectRestController {
     private ProjectRepository projectRepos;
 
     @Autowired
-    private RemoteRepository remoteRepository;
+    private ScanExecutor taskExecutor;
 
     @Autowired
-    private ScanExecutor taskExecutor;
+    private EntityLoader loader;
 
     @PostMapping("/in/project/{projectId}/ignore")
     public ResponseEntity<String> ignore(Authentication auth, @PathVariable String projectId) {
         //TODO verificar se o usuário autenticado tem acesso ao projeto, ou embaralhar id
-        Project project = loadProject(projectId);
+        User user = loader.loadUser(auth);
+        Project project = loader.loadProject(user, projectId);
         project.setState(ProjectState.IGNORED);
         projectRepos.save(project);
         return ResponseEntity.ok().build();
@@ -46,46 +49,27 @@ public class ProjectRestController {
             Authentication authentication,
             @PathVariable String projectId,
             @PathVariable int scanFrom) {
-        UserDetails userDetails = getUserDetails(authentication);
-        Remote remote = loadRemote(userDetails.getUser().getRemoteId());
-        Project project = loadProject(projectId);
+        User user = loader.loadUser(authentication);
+        Remote remote = loader.loadRemote(user.getRemoteId());
+        Project project = loader.loadProject(user, projectId);
         project.setState(ProjectState.ACTIVE);
         projectRepos.save(project);
+        String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
         RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(
-                remote, project, Optional.of(scanFrom), userDetails.getRemoteToken());
+                remote, project, Optional.of(scanFrom), remoteToken);
         return ResponseEntity.ok(taskUniqueKey);
     }
 
     @PostMapping("/in/project/{projectId}/scanFrom/lastest")
     public ResponseEntity<RemoteScan.UniqueKey> scanLastest(
             Authentication authentication, @PathVariable String projectId) {
-
-        UserDetails userDetails = getUserDetails(authentication);
-        Remote remote = loadRemote(userDetails.getUser().getRemoteId());
-        Project project = loadProject(projectId);
+        User user = loader.loadUser(authentication);
+        Remote remote = loader.loadRemote(user.getRemoteId());
+        Project project = loader.loadProject(user, projectId);
+        String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
         Optional<Integer> emptyScanFrom = Optional.empty();
-        RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, project, emptyScanFrom, userDetails.getRemoteToken());
-
+        RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(
+                remote, project, emptyScanFrom, remoteToken);
         return ResponseEntity.ok(taskUniqueKey);
-    }
-
-    private Project loadProject(String projectId) {
-        final Optional<Project> project = projectRepos.findById(projectId);
-        if (!project.isPresent()) {
-            throw new RuntimeException("Project " + projectId + " not found");
-        }
-        return project.get();
-    }
-
-    private Remote loadRemote(String remoteId) {
-        Optional<Remote> remote = remoteRepository.findById(remoteId);
-        if (!remote.isPresent()) {
-            throw new RuntimeException("Remote not found");
-        }
-        return remote.get();
-    }
-
-    private UserDetails getUserDetails(Authentication authentication) {
-        return ((UserAuthentication) authentication).getUserDetails();
     }
 }

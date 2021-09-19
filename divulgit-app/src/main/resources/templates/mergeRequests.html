@@ -1,0 +1,143 @@
+<body th:replace="~{base :: layout (~{:: main})}">
+<main>
+  <h1 class="display-1" th:text="${project.name}"></h1>
+  <table class="table">
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col">Author</th>
+      <th scope="col">Title</th>
+      <th scope="col">Discussed</th>
+    </tr>
+    </tr>
+    <th:block th:each="mergeRequest : ${mergeRequests}">
+      <tr class="mergerequest-item" th:data-mergerequest-id="${mergeRequest.id}">
+        <td><a th:href="${mergeRequest.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+        <td><span th:class="'mr-state-' + ${mergeRequest.state}" th:text="${mergeRequest.state}"></span></td>
+        <td th:text="${mergeRequest.author}"></td>
+        <td th:text="${mergeRequest.title}"></td>
+        <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
+          <!--
+          <a href="javascript:void(0)" onclick="rescan(this, '<%=mergeRequests[i].id%>')"><i class="bi bi-arrow-clockwise"/></a>
+          <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+          </div>
+          -->
+        </td>
+      </tr>
+      <th:block th:if="${mergeRequest.comments.size() > 0}">
+        <tr class="comment-line" th:each="comment : ${mergeRequest.comments}"
+            th:data-merge-request-id="${mergeRequest.id}" th:data-comment-id="${comment.externalId}" th:data-discussed="${comment.discussed}" >
+          <td><!--<a href="javascript:void(0)" onclick="deleteComment(this)"><i class="bi bi-trash comment-delete-button"></i></a>--></td>
+          <td></td>
+          <td style="white-space: nowrap">
+              <a th:href="${commentURLs.get(mergeRequest.externalId + '-' + comment.externalId)}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
+              <span th:text="${comment.author}"/>
+          </td>
+          <td th:text="${comment.text}"></td>
+          <td class="text-end">
+            <button type="button" class="btn btn-outline-success btn-sm btn-mark-discussed" onclick="markAsDiscussed(this, true)">Discussed</button>
+            <button type="button" class="btn btn-outline-warning btn-sm btn-unmark-discussed" onclick="markAsDiscussed(this, false)">Unmark</button>
+          </td>
+        </tr>
+      </th:block>
+    </th:block>
+  </table>
+  <script>
+    $(document).ready(function() {
+      $('.comment-line').each(function(button) {
+        toogleDiscussedButton(this);
+      });
+    });
+
+    function toogleDiscussedButton(commentLine) {
+      console.log('toogleDiscussedButton(commentLine)');
+      var discussed = $(commentLine).data('discussed');
+      console.log(discussed);
+      var discussedButton = $(commentLine).find('.btn-mark-discussed');
+      console.log(discussedButton);
+      var undiscussedButton = $(commentLine).find('.btn-unmark-discussed');
+      console.log(undiscussedButton);
+      if (discussed) {
+        $(discussedButton).hide();
+        $(undiscussedButton).show();
+      } else {
+        $(discussedButton).show();
+        $(undiscussedButton).hide();
+      }
+    }
+
+    function markAsDiscussed(button, markDiscussed) {
+      var commentLine = getParentByClass(button, '.comment-line');
+      var mergeRequestId = commentLine.data('merge-request-id');
+      var commentId = commentLine.data('comment-id');
+      $.ajax({
+        url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/discussed/' + markDiscussed,
+        method:'post',
+        success:function(data, textStatus, jqXHR){
+          console.log(data);
+          if (jqXHR.status == 200) {
+            console.log('discusssed makr ' + markDiscussed);
+            console.log('1toogleDiscussedButton(commentLine) ' + commentLine.data('discussed'));
+            $(commentLine).data('discussed', markDiscussed);
+            console.log('2toogleDiscussedButton(commentLine) ' + commentLine.data('discussed'));
+            toogleDiscussedButton(commentLine);
+          } else {
+            alert('some error occurred try again');
+          }
+        },
+        error:function(jqXHR, textStatus, errorThrown){
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert('server error occured')
+        }
+      });
+    }
+
+    function rescan(link, mergeRequestId) {
+      $.ajax({
+        url:'/scan/mergerequests/project/<%=project.id%>/mergerequest/' + mergeRequestId + '/',
+        method:'post',
+        dataType:'json',
+        success:function(response) {
+          console.log(response)
+        },
+        error:function(response) {
+          alert('server error occured')
+        }
+      });
+
+
+    }
+
+    function deleteComment(button) {
+      var commentLine = getParentByClass(button, 'comment-line');
+      var mergeRequestId = commentLine.attr('data-merge-request-id');
+      var commentId = commentLine.attr('data-comment-id');
+      $.ajax({
+        url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/',
+        method:'delete',
+        success:function(data, textStatus, jqXHR){
+          console.log(data);
+          if (jqXHR.status == 200) {
+            $(commentLine).hide(250);
+          } else {
+            alert('some error occurred try again');
+          }
+        },
+        error:function(jqXHR, textStatus, errorThrown){
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert('server error occured')
+        }
+      });
+    }
+
+    function getParentByClass(element, parentClass) {
+      return $(element).parents(parentClass);
+    }
+  </script>
+</main>
+</body>
