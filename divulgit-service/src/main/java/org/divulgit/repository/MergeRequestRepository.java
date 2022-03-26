@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface MergeRequestRepository extends MongoRepository<MergeRequest, String> {
 
+    List<MergeRequest> findByProjectIdAndAndCommentsTotalGreaterThanOrderByExternalIdDesc(String projectId, long commentsGreaterThan);
+
     Optional<MergeRequest> findFirstByProjectIdOrderByExternalIdDesc(String projectId);
 
     @Aggregation({

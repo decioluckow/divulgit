@@ -16,7 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import org.divulgit.remote.RemoteCallerFacade;
+import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 
 @Component
@@ -55,7 +55,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	}
 
 	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) throws RemoteException {
-		final RemoteCallerFacade caller = callerFactory.build(remote);
+		final RemoteFacade caller = callerFactory.build(remote);
 		return caller.retrieveRemoteUser(remote, remoteToken);
 	}
 

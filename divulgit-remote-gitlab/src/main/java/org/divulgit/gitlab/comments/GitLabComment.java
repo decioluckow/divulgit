@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class GitLabComment {
-    @JsonProperty("noteable_iid")
+    @JsonProperty("id")
     private String externalId;
     private Author author;
     @JsonProperty("body")

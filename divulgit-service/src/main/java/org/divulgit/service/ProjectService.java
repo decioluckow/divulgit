@@ -4,9 +4,11 @@ import com.google.common.collect.ImmutableList;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.repository.ProjectRepository;
+import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,10 @@ public class ProjectService {
 
     public List<Project> findAllById(List<String> ids) {
         return ImmutableList.copyOf(projectRepository.findAllById(ids));
+    }
+
+    public List<Project> findAllNewOrActiveByProjectIds(List<String> projectIds) {
+        return ImmutableList.copyOf(projectRepository.findByIdInAndStateInOrderByName(projectIds, Arrays.asList(ProjectState.ACTIVE, ProjectState.NEW)));
     }
 
     public Project save(Project project) {

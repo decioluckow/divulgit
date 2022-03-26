@@ -21,6 +21,7 @@ public class MergeRequest {
 
     private String projectId;
     private int externalId;
+    private String url;
     private String title;
     private String description;
     private String author;

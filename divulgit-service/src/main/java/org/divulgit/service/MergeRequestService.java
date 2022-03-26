@@ -48,6 +48,10 @@ public class MergeRequestService {
         return mergeRequestRepository.findById(mergeRequestId);
     }
 
+    public List<MergeRequest> findAllWithHashTaggedCommentsByProjectId(Project project) {
+        return mergeRequestRepository.findByProjectIdAndAndCommentsTotalGreaterThanOrderByExternalIdDesc(project.getId(), 0);
+    }
+
     public MergeRequest save(MergeRequest mergeRequest) {
         return mergeRequestRepository.save(mergeRequest);
     }

@@ -11,12 +11,16 @@ public class RemoteCallerFacadeFactory {
 
     @Autowired
     @ForRemote(RemoteType.GITLAB)
-    private RemoteCallerFacade gitLabCallerFacade;
+    private RemoteFacade gitLabCallerFacade;
 
-    public RemoteCallerFacade build(Remote remote) {
+    @Autowired
+    @ForRemote(RemoteType.GITHUB)
+    private RemoteFacade gitHubCallerFacade;
+
+    public RemoteFacade build(Remote remote) {
         switch (remote.getType()) {
             case GITLAB: return gitLabCallerFacade;
-            case GITHUB:
+            case GITHUB: return gitHubCallerFacade;
             default:
                 throw new RuntimeException("Opcao nao implementada");
         }

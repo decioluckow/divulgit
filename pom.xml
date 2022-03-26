@@ -100,5 +100,6 @@
         <module>divulgit-remote</module>
         <module>divulgit-service</module>
         <module>divulgit-task</module>
+        <module>divulgit-remote-github</module>
     </modules>
 </project>

@@ -1,18 +1,18 @@
-package org.divulgit.gitlab.project;
+package org.divulgit.github.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Getter;
 import org.divulgit.model.Project;
-import lombok.Data;
 import org.divulgit.remote.remote.model.RemoteProject;
 
 @Getter
 @Data
-public class GitLabProject implements RemoteProject {
+public class GitHubProject implements RemoteProject {
 
     @JsonProperty("id")
     private String externalId;
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     private String url;
     private String name;
     private String description;

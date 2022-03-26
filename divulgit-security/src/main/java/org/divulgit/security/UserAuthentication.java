@@ -62,5 +62,8 @@ public class UserAuthentication implements Authentication {
         return name;
     }
 
+    public String getRemoteToken() {
+        return details.getRemoteToken();
+    }
 
 }
