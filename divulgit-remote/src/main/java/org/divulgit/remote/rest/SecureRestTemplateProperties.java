@@ -1,4 +1,4 @@
-package org.divulgit.github.restcaller;
+package org.divulgit.remote.rest;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

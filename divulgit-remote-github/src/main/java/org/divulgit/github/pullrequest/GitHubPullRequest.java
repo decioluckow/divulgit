@@ -1,16 +1,21 @@
-package org.divulgit.github.mergerequest;
+package org.divulgit.github.pullrequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.divulgit.github.user.GitHubUser;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
-import org.divulgit.remote.remote.model.RemoteMergeRequest;
+import org.divulgit.remote.model.RemoteMergeRequest;
 
 @Data
 @Builder
-public class GitHubMergeRequest implements RemoteMergeRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class GitHubPullRequest implements RemoteMergeRequest {
 
     private static final String STATE_OPENED = "open";
     private static final String STATE_CLOSED = "closed";
@@ -20,19 +25,14 @@ public class GitHubMergeRequest implements RemoteMergeRequest {
     private String title;
     @JsonProperty("body")
     private String description;
-    private User user;
+    private GitHubUser user;
     private String state;
     @JsonProperty("merged_at")
     private String mergedAt;
 
     @Override
     public String getAuthor() {
-        return user.getLogin();
-    }
-
-    @Data
-    public static class User {
-        private String login;
+        return user.getUsername();
     }
 
     public MergeRequest toMergeRequest(Project project) {
@@ -41,7 +41,7 @@ public class GitHubMergeRequest implements RemoteMergeRequest {
                 .externalId(externalId)
                 .title(title)
                 .description(description)
-                .author(user.getLogin())
+                .author(user.getUsername())
                 .state(convertState(state)).build();
     }
 

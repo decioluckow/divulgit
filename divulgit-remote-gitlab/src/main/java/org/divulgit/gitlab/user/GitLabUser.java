@@ -4,7 +4,7 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.divulgit.remote.remote.model.RemoteUser;
+import org.divulgit.remote.model.RemoteUser;
 
 @Data
 public class GitLabUser implements RemoteUser {

@@ -87,19 +87,17 @@
         </plugins>
     </build>
 
-
-
     <modules>
+        <module>divulgit-type</module>
         <module>divulgit-app</module>
         <module>divulgit-model</module>
         <module>divulgit-arch</module>
-        <module>divulgit-type</module>
         <module>divulgit-remote-model</module>
         <module>divulgit-remote-gitlab</module>
+        <module>divulgit-remote-github</module>
         <module>divulgit-security</module>
         <module>divulgit-remote</module>
         <module>divulgit-service</module>
         <module>divulgit-task</module>
-        <module>divulgit-remote-github</module>
     </modules>
 </project>

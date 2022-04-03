@@ -1,8 +1,8 @@
-package org.divulgit.remote.gitlab;
+package org.divulgit.github;
 
 import org.divulgit.annotation.ForRemote;
-import org.divulgit.gitlab.project.ProjectCaller;
-import org.divulgit.gitlab.user.CurrentUserCaller;
+import org.divulgit.github.project.RepositoryCaller;
+import org.divulgit.github.user.CurrentUserCaller;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.exception.RemoteException;
@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@ForRemote(RemoteType.GITLAB)
-public class GitLabCallerFacade implements RemoteFacade {
+@ForRemote(RemoteType.GITHUB)
+public class GitHubCallerFacade implements RemoteFacade {
 
     @Autowired
     private CurrentUserCaller currentUserCaller;
 
     @Autowired
-    private ProjectCaller projectCaller;
+    private RepositoryCaller projectCaller;
 
     @Override
     public Optional<RemoteUser> retrieveRemoteUser(Remote remote, String token) throws RemoteException {
@@ -32,6 +32,6 @@ public class GitLabCallerFacade implements RemoteFacade {
 
     @Override
     public List<? extends RemoteProject> retrieveRemoteProjects(Remote remote, String token) throws RemoteException {
-        return projectCaller.retrieveProjects(remote, token);
+        return projectCaller.retrieveRepositories(remote, token);
     }
 }

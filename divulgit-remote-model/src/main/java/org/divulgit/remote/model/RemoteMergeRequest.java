@@ -1,4 +1,4 @@
-package org.divulgit.remote.remote.model;
+package org.divulgit.remote.model;
 
 public interface RemoteMergeRequest {
 

@@ -6,9 +6,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper {
+public class GitHubUserMapper {
 
-    public GitHubUser convertToUser(String json) throws JsonProcessingException {
+    public GitHubUser convert(String json) throws JsonProcessingException {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         ObjectMapper objectMapper = builder.build();
         return objectMapper.readValue(json, GitHubUser.class);

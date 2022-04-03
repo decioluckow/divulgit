@@ -3,7 +3,6 @@ package org.divulgit.model;
 import lombok.*;
 import org.divulgit.type.ProjectState;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -23,4 +22,5 @@ public class Project {
     private String url;
     private String description;
     private ProjectState state;
+
 }

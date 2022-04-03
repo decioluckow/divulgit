@@ -24,6 +24,10 @@ hs_err_pid*
 
 target/
 
+.classpath
+.project
+.factorypath
+
 .idea/
 .mvn/
 .project
@@ -33,3 +37,4 @@ node_modules/
 node/
 package-lock.json
 
+/divulgit-arch/.classpath

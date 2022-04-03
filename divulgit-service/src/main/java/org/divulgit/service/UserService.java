@@ -3,7 +3,7 @@ package org.divulgit.service;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.remote.remote.model.RemoteUser;
+import org.divulgit.remote.model.RemoteUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

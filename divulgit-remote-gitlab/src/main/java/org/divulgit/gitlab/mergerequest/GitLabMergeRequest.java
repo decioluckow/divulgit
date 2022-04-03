@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
-import org.divulgit.remote.remote.model.RemoteMergeRequest;
+import org.divulgit.remote.model.RemoteMergeRequest;
 
 @Data
 public class GitLabMergeRequest implements RemoteMergeRequest {

@@ -37,5 +37,10 @@
             <artifactId>divulgit-remote-gitlab</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-remote-github</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

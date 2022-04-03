@@ -2,7 +2,9 @@ package org.divulgit.remote.exception;
 
 public class RemoteException extends Exception {
 
-    public RemoteException(String message) {
+	private static final long serialVersionUID = -8218248675095617591L;
+
+	public RemoteException(String message) {
         super(message);
     }
 

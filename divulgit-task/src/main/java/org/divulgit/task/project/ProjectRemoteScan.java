@@ -1,27 +1,26 @@
 package org.divulgit.task.project;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.divulgit.config.ApplicationContextProvider;
-import org.divulgit.gitlab.project.GitLabProject;
-import org.divulgit.gitlab.project.ProjectCaller;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
+import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.model.RemoteProject;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.service.ProjectService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -29,7 +28,7 @@ import java.util.Optional;
 public class ProjectRemoteScan extends AbstractRemoteScan {
 
     @Autowired
-    private ProjectCaller caller;
+    private RemoteCallerFacadeFactory callerFactory;
 
     @Autowired
     private ProjectService projectService;
@@ -61,7 +60,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.info("Starting scanning projects for remote {}", remote.getId());
-            List<GitLabProject> projects = caller.retrieveProjects(remote, token);
+            List<? extends RemoteProject> projects = callerFactory.build(remote).retrieveRemoteProjects(remote, token);
             log.info("Finished scanning, found {} projects", projects);
             List<String> existingExternalProjectIds = projectService.findExternalIdByRemote(remote);
             List<Project> newProjects = addNewProjects(remote, projects, existingExternalProjectIds);
@@ -75,9 +74,9 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
         }
     }
 
-    private List<Project> addNewProjects(Remote remote, final List<GitLabProject> projects, final List<String> existingExternalProjectIds) {
+    private List<Project> addNewProjects(Remote remote, final List<? extends RemoteProject> projects, final List<String> existingExternalProjectIds) {
         var newProjects = new ArrayList<Project>();
-        for (GitLabProject remoteProject : projects) {
+        for (RemoteProject remoteProject : projects) {
             boolean exist = existingExternalProjectIds.stream().anyMatch(p -> p.equals(remoteProject.getExternalId()));
             if (!exist) {
                 final Project project = remoteProject.convertToProject();

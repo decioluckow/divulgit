@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ProjectMapper {
+public class RepositoryMapper {
 
-    public List<GitHubProject> convertToProjects(String json) throws JsonProcessingException {
+    public List<GitHubRepository> convertToProjects(String json) throws JsonProcessingException {
         final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         final ObjectMapper objectMapper = builder.build();
-        final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubProject.class);
+        final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubRepository.class);
         return objectMapper.readValue(json, collectionType);
     }
 }

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
 import org.divulgit.model.Project;
-import org.divulgit.remote.remote.model.RemoteProject;
+import org.divulgit.remote.model.RemoteProject;
 
 @Getter
 @Data
-public class GitHubProject implements RemoteProject {
+public class GitHubRepository implements RemoteProject {
 
     @JsonProperty("id")
     private String externalId;

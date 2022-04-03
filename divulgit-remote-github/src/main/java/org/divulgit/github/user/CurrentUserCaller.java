@@ -1,53 +1,52 @@
-package org.divulgit.gitlab.user;
+package org.divulgit.github.user;
 
+import java.util.Optional;
+
+import org.divulgit.github.GitHubURLBuilder;
+import org.divulgit.github.error.ErrorResponseHandler;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.gitlab.error.ErrorMapper;
-import org.divulgit.gitlab.error.ErrorMessage;
-import org.divulgit.gitlab.restcaller.GitLabRestCaller;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.extern.slf4j.Slf4j;
 import org.divulgit.remote.model.RemoteUser;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class CurrentUserCaller {
 
     @Autowired
-    private GitLabRestCaller restCaller;
+    private RestCaller restCaller;
 
     @Autowired
-    private UserURLGenerator urlGenerator;
+    private GitHubURLBuilder urlBuilder;
     
     @Autowired
-    private UserMapper userMapper;
+    private GitHubUserMapper userMapper;
 
     @Autowired
-    private ErrorMapper errorMapper;
-
-    //getForEntity
-    //https://www.baeldung.com/spring-resttemplate-json-list
+    private ErrorResponseHandler errorResponseHandler;
 
     public Optional<RemoteUser> retrieveCurrentUser(Remote remote, String token) throws RemoteException {
-        String url = urlGenerator.build(remote);
+        final String url = urlBuilder.buildUserURL(remote);
         ResponseEntity<String> response = restCaller.call(url, token);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
             authenticatedUser = handle200Response(response);
         } else if (response.getBody().contains("error_description")) {
-            handleErrorResponse(response);
+        	errorResponseHandler.handleErrorResponse(response);
         }
         return authenticatedUser;
     }
 
     private Optional<RemoteUser> handle200Response(ResponseEntity<String> response) throws RemoteException {
         try {
-            return Optional.ofNullable((RemoteUser) userMapper.convertToUser(response.getBody()));
+            return Optional.ofNullable((RemoteUser) userMapper.convert(response.getBody()));
         } catch (JsonProcessingException e) {
             String message = "Error on converting json to Object";
             log.error(message + "[json: " + response.getBody() +"]");
@@ -55,14 +54,4 @@ public class CurrentUserCaller {
         }
     }
 
-    private Optional<GitLabUser> handleErrorResponse(ResponseEntity<String> response) throws RemoteException {
-        try {
-            ErrorMessage errorMessage = errorMapper.convertFrom(response.getBody());
-            throw new RemoteException(errorMessage.getErrorDescription());
-        } catch (JsonProcessingException e) {
-            String message = "Error on converting json to Object";
-            log.error(message + "[json: " + response.getBody() +"]");
-            throw new RemoteException(message, e);
-        }
-    }
 }

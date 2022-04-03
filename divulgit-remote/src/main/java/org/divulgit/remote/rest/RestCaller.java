@@ -1,4 +1,4 @@
-package org.divulgit.github.restcaller;
+package org.divulgit.remote.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.Collections;
 
 @Slf4j
 @Component
-public class GitLabRestCaller {
+public class RestCaller {
 
     //TODO criar uma classe generica de rest caller baseada em TokenHeader
 

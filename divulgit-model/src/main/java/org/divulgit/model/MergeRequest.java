@@ -1,6 +1,5 @@
 package org.divulgit.model;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +49,7 @@ public class MergeRequest {
         private String externalId;
         private String author;
         private String text;
+        private String url;
         private List<String> hashTags;
         private boolean discussed;
     }
