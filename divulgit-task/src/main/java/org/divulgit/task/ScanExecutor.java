@@ -5,13 +5,11 @@ import org.divulgit.model.Project;
 import org.divulgit.model.User;
 import org.divulgit.task.mergerequest.MergeRequestIdsRemoteScan;
 import org.divulgit.task.mergerequest.MergeRequestRemoteScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
 @Component
 public class ScanExecutor {

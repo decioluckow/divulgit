@@ -11,7 +11,9 @@ import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.model.RemoteComment;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
@@ -35,7 +37,7 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     private static Pattern HASH_TAG_PATTERN = Pattern.compile("(?:\\s|\\A|^)[##]+([A-Za-z0-9-_]+)");
 
     @Autowired
-    private CommentCaller caller;
+    private RemoteCallerFacadeFactory callerFactory;
 
     @Autowired
     private MergeRequestService mergeRequestService;
@@ -73,26 +75,20 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.debug("Start retrieving comments from merge request");
-            List<GitLabComment> remoteComments = caller.retrieveComments(remote, project, mergeRequest, token);
+            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, project, mergeRequest, token);
             log.debug("Finished retrieving comments from merge request, {} retrieved", remoteComments.size());
 
             //TODO depois de gastar o tempo de busca dos comentarios, deveriamos recarregar o merge request?
             // alguém pode ter alterado o registro neste tempo?
 
             log.debug("Start merging comments");
-            for (GitLabComment remoteComment : remoteComments) {
-                if (remoteComment.isSystem() || !"DiffNote".equals(remoteComment.getType()) || !remoteComment.getText().contains("#"))
-                    continue;
-                var hashTags = extractRelevantHashTags(remoteComment.getText());
-                if (!hashTags.isEmpty()) {
-                    Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
-                    if (existingComment.isPresent()) {
-                        existingComment.get().setText(remoteComment.getText());
-                        existingComment.get().setHashTags(hashTags);
-                    } else {
-                        mergeRequest.getComments().add(remoteComment.toComment(hashTags));
-                    }
-                }
+            for (RemoteComment remoteComment : remoteComments) {
+            	Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
+            	if (existingComment.isPresent()) {
+            		updateIfNecessary(remoteComment, existingComment);
+            	} else {
+            		addNewComment(remoteComment);
+            	}
             }
             mergeRequestService.save(mergeRequest);
             log.debug("Finished comments merging");
@@ -103,8 +99,21 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
         }
     }
 
-    private Optional<MergeRequest.Comment> findExistingComment(GitLabComment remoteComment) {
-        return mergeRequest.getComments().stream().filter(c -> c.getExternalId() == remoteComment.getExternalId()).findFirst();
+	private void updateIfNecessary(RemoteComment remoteComment, Optional<MergeRequest.Comment> existingComment) {
+		if (!existingComment.get().getText().equals(remoteComment.getText())) {
+			List<String> hashTags = extractRelevantHashTags(remoteComment.getText());
+			existingComment.get().setText(remoteComment.getText());
+		    existingComment.get().setHashTags(hashTags);
+		}
+	}
+
+	private void addNewComment(RemoteComment remoteComment) {
+		List<String> hashTags = extractRelevantHashTags(remoteComment.getText());
+		mergeRequest.getComments().add(remoteComment.toComment(hashTags));
+	}
+
+    private Optional<MergeRequest.Comment> findExistingComment(RemoteComment remoteComment) {
+        return mergeRequest.getComments().stream().filter(c -> c.getExternalId().equals(remoteComment.getExternalId())).findFirst();
     }
 
     public static List<String> extractRelevantHashTags(String text) {

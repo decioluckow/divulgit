@@ -1,13 +1,7 @@
 package org.divulgit.task;
 
-
-import com.google.common.collect.ImmutableList;
-import lombok.*;
-import org.apache.logging.log4j.util.Strings;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public interface RemoteScan extends Runnable {
 

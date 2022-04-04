@@ -8,7 +8,9 @@ import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.model.RemoteMergeRequest;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
@@ -34,13 +36,13 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
     private static final String STATE_MERGED = "merged";
 
     @Autowired
-    private MergeRequestCaller caller;
+    private RemoteCallerFacadeFactory callerFactory;
 
     @Autowired
     private MergeRequestService mergeRequestService;
 
     @Autowired
-    private ScanFromSolver scanFromSolver;
+    private ScanFromResolver scanFromResolver;
 
     private final Remote remote;
     private final Project project;
@@ -77,13 +79,13 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
         try {
             log.info("Starting scanning mergeRequests ids for remote: {} and project: {}", remote.getId(), project.getId());
 
-            Integer scanFrom = scanFromSolver.solveScanFrom(requestedScanFrom, project);
+            Integer scanFrom = scanFromResolver.resolveScanFrom(requestedScanFrom, project);
             log.info("Considering scanning from merge request {}", scanFrom);
 
             log.debug("Start retrieving merge requests from remote");
-            List<GitLabMergeRequest> remoteMergeRequests = caller.retrieveMergeRequests(remote, project, scanFrom, token);
+            List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, project, scanFrom, token);
             log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
-
+            
             log.debug("Start saving merge requests");
             List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
             mergeRequestService.saveAll(mergeRequests);

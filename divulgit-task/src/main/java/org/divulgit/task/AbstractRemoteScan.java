@@ -8,7 +8,6 @@ import lombok.Getter;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.scheduling.annotation.Async;
 
-import java.rmi.Remote;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public abstract class AbstractRemoteScan implements RemoteScan {
     private List<Step> steps = new ArrayList<Step>();
 
     protected AbstractRemoteScan() {
-        addStep("", State.WAITING);
+        addStep(Strings.EMPTY, State.WAITING);
     }
 
     public abstract RemoteScan.UniqueKey uniqueKey();
@@ -49,7 +48,7 @@ public abstract class AbstractRemoteScan implements RemoteScan {
         return ImmutableList.copyOf(steps);
     }
 
-    public State getLastStepState() {
+    public RemoteScan.State getLastStepState() {
         return getLastStep().getState();
     }
 
@@ -61,17 +60,13 @@ public abstract class AbstractRemoteScan implements RemoteScan {
         return steps.get(steps.size() - 1);
     }
 
-    public static enum State {
-        WAITING, RUNNING, FINISHED, ERROR;
-    }
-
     @Getter
     @Builder
     @AllArgsConstructor
     public static class Step {
         private String description;
         private LocalDateTime dateTime;
-        private AbstractRemoteScan.State state;
+        private State state;
     }
 
     @Getter

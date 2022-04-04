@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -43,9 +44,14 @@ public class CommentCaller {
     //https://www.baeldung.com/spring-resttemplate-json-list
 
     public List<GitLabComment> retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, String token) throws RemoteException {
-        final List<GitLabComment> comments = new ArrayList<>();
+        List<GitLabComment> comments = new ArrayList<>();
         retrieveComments(remote, project, mergeRequest, comments, token, START_PAGE);
+        comments = removeUseless(comments);
         return comments;
+    }
+    
+    private List<GitLabComment> removeUseless(List<GitLabComment> comments) {
+    	return comments.stream().filter(c -> !c.isSystem() && "DiffNote".equals(c.getType()) && c.getText().contains("#")).collect(Collectors.toList());
     }
 
     private void retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, List<GitLabComment> comments, String token, String page) throws RemoteException {

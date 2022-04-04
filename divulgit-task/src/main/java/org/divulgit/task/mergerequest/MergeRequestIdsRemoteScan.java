@@ -67,7 +67,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
     @Override
     public void execute() {
         try {
-            log.info("Starting scanning mergeRequests ids for remote: {} and project: {}", remote.getId(), project.getId());
+            log.info("Starting scanning code review ids for remote: {} and project: {}", remote.getId(), project.getId());
             List<MergeRequest> requestedMergeRequests = mergeRequestService.findAllByIds(requestedMergeRequestIds);
             List<Integer> requestedMergeRequestExernalIds = requestedMergeRequests.stream().map(mr -> mr.getExternalId()).collect(Collectors.toList());
             log.debug("Considering external ids: {}", Joiner.on(",").join(requestedMergeRequestExernalIds));

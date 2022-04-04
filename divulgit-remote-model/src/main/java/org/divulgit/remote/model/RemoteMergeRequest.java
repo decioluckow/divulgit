@@ -1,5 +1,8 @@
 package org.divulgit.remote.model;
 
+import org.divulgit.model.MergeRequest;
+import org.divulgit.model.Project;
+
 public interface RemoteMergeRequest {
 
      int getExternalId();
@@ -7,4 +10,6 @@ public interface RemoteMergeRequest {
      String getDescription();
      String getAuthor();
      String getState();
+     
+     MergeRequest toMergeRequest(Project project); 
 }
