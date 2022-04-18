@@ -1,4 +1,4 @@
-package org.divulgit.github.pullrequest.issue.comment;
+package org.divulgit.github.comment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import org.divulgit.remote.model.RemoteComment;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GitHubIssueComment implements RemoteComment {
+public class GitHubComment implements RemoteComment {
 
     @JsonProperty("id")
     private String externalId;
@@ -25,7 +25,7 @@ public class GitHubIssueComment implements RemoteComment {
     private String text;
     @JsonProperty("html_url")
     private String url;
-
+    
     @Override
     public String getAuthor() {
         return user.getUsername();

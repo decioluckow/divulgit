@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.remote.model.RemoteUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class GitHubURLBuilder {
         return MessageFormat.format("https://{0}/user", remote.getUrl());
     }
     
-    public String buildIssueComment(Remote remote, RemoteUser user, Project project, MergeRequest mergeRequest, int page) {
+    public String buildIssueComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
         return MessageFormat.format("https://{0}/repos/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
                 remote.getUrl(),
                 user.getUsername(),
@@ -31,7 +32,7 @@ public class GitHubURLBuilder {
                 page);
     }
     
-    public String buildPullRequestComment(Remote remote, RemoteUser user, Project project, MergeRequest mergeRequest, int page) {
+    public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
         return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}/comments?per_page={4}&page={5}",
                 remote.getUrl(),
                 user.getUsername(),
@@ -41,8 +42,8 @@ public class GitHubURLBuilder {
                 page);
     }
     
-    public String buildPullRequestsURL(Remote remote, RemoteUser user, Project project, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls?per_page={2}&page={3}",
+    public String buildPullRequestsURL(Remote remote, User user, Project project, int page) {
+        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls?per_page={3}&page={4}",
                 remote.getUrl(),
                 user.getUsername(),
                 project.getName(),
@@ -50,7 +51,7 @@ public class GitHubURLBuilder {
                 page);
     }
 
-    public String buildPullRequestURL(Remote remote, RemoteUser user, Project project, Integer mergeRequestExternalId) {
+    public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
         return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}",
                 remote.getUrl(),
                 user.getUsername(),

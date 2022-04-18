@@ -1,4 +1,4 @@
-package org.divulgit.github.pullrequest.comment;
+package org.divulgit.github.comment;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class PullRequestCommentResponseHandler {
+public class GitHubCommentResponseHandler {
 	
-    public List<GitHubPullRequestComment> handle200ResponseMultipleResult(ResponseEntity<String> response) throws RemoteException {
+    public List<GitHubComment> handle200ResponseMultipleResult(ResponseEntity<String> response) throws RemoteException {
         try {
             final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
             final ObjectMapper objectMapper = builder.build();
-            final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubPullRequestComment.class);
+            final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubComment.class);
             return objectMapper.readValue(response.getBody(), collectionType);
         } catch (JsonProcessingException e) {
             String message = "Error on converting json to Object";

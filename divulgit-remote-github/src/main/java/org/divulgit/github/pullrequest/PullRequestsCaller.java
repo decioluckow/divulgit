@@ -8,14 +8,12 @@ import org.divulgit.github.error.ErrorResponseHandler;
 import org.divulgit.github.util.LinkHeaderUtil;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,10 +35,11 @@ public class PullRequestsCaller {
 
     public List<GitHubPullRequest> retrievePullRequests(
             Remote remote,
-            RemoteUser user,
+            User user,
             Project project,
             List<Integer> externalIds,
             String token) throws RemoteException {
+    	log.info("Retrieving pull requests for {} ids", externalIds.size());
         final List<GitHubPullRequest> pullRequests = new ArrayList<>();
         for (Integer id : externalIds) {
         	pullRequests.add(retrievePullRequest(remote, user, project, id, token));
@@ -50,10 +49,11 @@ public class PullRequestsCaller {
 
     public List<GitHubPullRequest> retrievePullRequests(
             Remote remote,
-            RemoteUser user,
+            User user,
             Project project,
             Integer scanFrom,
             String token) throws RemoteException {
+    	log.info("Retrieving pull requests from number {}", scanFrom);
         final List<GitHubPullRequest> pullRequests = new ArrayList<>();
         retrievePullRequests(remote, user, project, pullRequests, scanFrom, token, GitHubURLBuilder.INITIAL_PAGE);
         return pullRequests;
@@ -61,7 +61,7 @@ public class PullRequestsCaller {
 
     private void retrievePullRequests(
             Remote remote,
-            RemoteUser user,
+            User user,
             Project project,
             List<GitHubPullRequest> loadedPullRequests,
             Integer scanFrom,
@@ -89,7 +89,7 @@ public class PullRequestsCaller {
 
     private GitHubPullRequest retrievePullRequest(
             Remote remote,
-            RemoteUser user,
+            User user,
             Project project,
             Integer externalId,
             String token) throws RemoteException {

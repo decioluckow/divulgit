@@ -25,7 +25,8 @@ public class RestCaller {
         restTemplateCustomizer.customize(restTemplate);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization",token);
+        headers.add("Authorization","token " + token);
+        headers.add("Private-Token",token);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>("body", headers);

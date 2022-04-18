@@ -44,7 +44,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
                         Project project,
                         List<String> requestedMergeRequestIds,
                         String token) {
-        return (MergeRequestIdsRemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, project, requestedMergeRequestIds, token);
+        return (MergeRequestIdsRemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestRemoteScan", remote, project, requestedMergeRequestIds, token);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")

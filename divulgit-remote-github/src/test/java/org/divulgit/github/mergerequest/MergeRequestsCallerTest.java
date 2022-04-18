@@ -8,10 +8,11 @@ import org.divulgit.github.error.ErrorMessage;
 import org.divulgit.github.error.ErrorResponseHandler;
 import org.divulgit.github.error.GitHubErrorMapper;
 import org.divulgit.github.pullrequest.GitHubPullRequest;
-import org.divulgit.github.pullrequest.PullRequestMapper;
+import org.divulgit.github.pullrequest.PullRequestResponseHandler;
 import org.divulgit.github.pullrequest.PullRequestsCaller;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.remote.rest.RestCaller;
@@ -40,7 +41,7 @@ class MergeRequestsCallerTest {
     private static final int TOTAL_PAGES = 3;
 
     private Remote REMOTE = Remote.builder().url("localhost").build();
-    private RemoteUser USER = buildRemoteUser();
+    private User USER = buildRemoteUser();
     private Project PROJECT = Project.builder().build();
     private String TOKEN = "xpto";
 
@@ -51,7 +52,7 @@ class MergeRequestsCallerTest {
     private RestCaller restCaller;
 
     @Mock
-    private PullRequestMapper mapper;
+    private PullRequestResponseHandler successHandler;
 
     @Mock
     private ErrorResponseHandler errorResponseHandler;
@@ -66,10 +67,10 @@ class MergeRequestsCallerTest {
     void retrieveMergeRequests() throws RemoteException, JsonProcessingException {
         Mockito.when(urlBuilder.buildPullRequestsURL(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn("localhost");
         Mockito.when(restCaller.call(Mockito.anyString(), Mockito.anyString())).thenReturn(ResponseEntity.ok("{}"));
-        Mockito.when(mapper.parsePullRequests(Mockito.anyString())).thenReturn(MERGE_REQUESTS);
+        Mockito.when(successHandler.handle200ResponseMultipleResult(Mockito.any())).thenReturn(MERGE_REQUESTS);
         Mockito.verify(errorResponseHandler, Mockito.never()).handleErrorResponse(ArgumentMatchers.<ResponseEntity<String>>any());
 
-        List<GitHubPullRequest> mergeRequests = caller.retrieveMergeRequests(REMOTE, USER, PROJECT, 0, TOKEN);
+        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN);
 
         assertTrue(mergeRequests.get(0) == MERGE_REQUEST);
     }
@@ -79,10 +80,10 @@ class MergeRequestsCallerTest {
         Mockito.when(urlBuilder.buildPullRequestsURL(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn("localhost");
         AtomicInteger page = new AtomicInteger();
         Mockito.when(restCaller.call(Mockito.anyString(), Mockito.anyString())).thenAnswer(i -> callPaginatingRest(page));
-        Mockito.doReturn(MERGE_REQUESTS).when(mapper.parsePullRequests(Mockito.anyString()));
+        Mockito.when(successHandler.handle200ResponseMultipleResult(Mockito.any())).thenReturn(MERGE_REQUESTS);
         Mockito.verify(errorResponseHandler, Mockito.never()).handleErrorResponse(ArgumentMatchers.<ResponseEntity<String>>any());
 
-        List<GitHubPullRequest> mergeRequests = caller.retrieveMergeRequests(REMOTE, USER, PROJECT, 0, TOKEN);
+        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN);
 
         assertTrue(mergeRequests.get(0) == MERGE_REQUEST);
     }
@@ -103,32 +104,12 @@ class MergeRequestsCallerTest {
         Mockito.when(errorResponseHandler.handleErrorResponse(Mockito.any())).thenThrow(new RemoteException("Bad credentials"));
 
         Exception exception = Assertions.assertThrows(RemoteException.class, () ->
-                caller.retrieveMergeRequests(REMOTE, USER, PROJECT, 0, TOKEN));
+                caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN));
         
         assertEquals("Bad credentials", exception.getMessage());
     }
 
-     private RemoteUser buildRemoteUser() {
-        return new RemoteUser() {
-            @Override
-            public String getInternalId() {
-                return null;
-            }
-
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @Override
-            public String getUsername() {
-                return null;
-            }
-
-            @Override
-            public String getAvatarURL() {
-                return null;
-            }
-        };
+     private User buildRemoteUser() {
+        return User.builder().build();
     }
 }

@@ -1,20 +1,9 @@
 package org.divulgit.controller.rest;
 
-import lombok.extern.slf4j.Slf4j;
 import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.model.MergeRequest;
-import org.divulgit.model.Project;
-import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.repository.ProjectRepository;
-import org.divulgit.repository.RemoteRepository;
-import org.divulgit.repository.UserRepository;
-import org.divulgit.security.UserAuthentication;
-import org.divulgit.security.UserDetails;
 import org.divulgit.service.MergeRequestCommentService;
-import org.divulgit.task.RemoteScan;
-import org.divulgit.task.ScanExecutor;
-import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController

@@ -6,7 +6,8 @@
             <div class="mb-3">
                 <select id="select-repository-type" name="repositoryType" class="form-select" aria-label="Selecione o seu repositório">
                     <option selected>Selecione o seu repositório</option>
-                    <option value="gitlab.com">GitLab - www.gitlab.com</option>
+                    <option value="api.gitlab.com">GitLab - www.gitlab.com</option>
+                    <option value="api.github.com">GitHub - www.github.com</option>
                     <option value="other">GitLab - on-premisses (somente GitLab)</option>
                 </select>
             </div>
@@ -35,18 +36,18 @@
         const selectRepositoryTypeId = "#select-repository-type";
 
         $(document).ready(function() {
-            //$(inputOtherRepositoryURLId).hide();
+            $(inputOtherRepositoryURLId).hide();
         });
 
         $(selectRepositoryTypeId).change(function() {
             var selectedRepository = $(selectRepositoryTypeId).val();
             if (selectedRepository == 'other') {
-                //$(inputOtherRepositoryURLId).show(200);
-                $(inputOtherRepositoryURLId).prop( "disabled", false );
+                $(inputOtherRepositoryURLId).show(200);
+                $(inputOtherRepositoryURLId).prop( "readonly", false );
                 $(inputOtherRepositoryURLId).val('');
             } else {
-                //$(inputOtherRepositoryURLId).hide(200);
-                $(inputOtherRepositoryURLId).prop( "disabled", true );
+                $(inputOtherRepositoryURLId).hide(200);
+                $(inputOtherRepositoryURLId).prop( "readonly", true );
                 $(inputOtherRepositoryURLId).val(selectedRepository);
             }
         });

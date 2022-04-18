@@ -5,10 +5,10 @@ import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
-import org.divulgit.gitlab.restcaller.GitLabRestCaller;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class MergeRequestCaller {
     public static final String STARTING_PAGE = "1";
 
     @Autowired
-    private GitLabRestCaller restCaller;
+    private RestCaller restCaller;
 
     @Autowired
     private MergeRequestMapper mapper;

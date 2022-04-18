@@ -16,13 +16,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 
+@Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
 	private RemoteCallerFacadeFactory callerFactory;
 
@@ -38,6 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		final String remoteURL = authentication.getPrincipal().toString();
+		log.info("Autenticating user on {}", remoteURL);
 		final Remote remote = loadRemote(remoteURL);
 		final String remoteToken = authentication.getCredentials().toString();
 		Authentication authenticatedUser;

@@ -1,20 +1,20 @@
 package org.divulgit.task.comment;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Joiner;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.divulgit.config.ApplicationContextProvider;
-import org.divulgit.gitlab.comments.CommentCaller;
-import org.divulgit.gitlab.comments.GitLabComment;
-import org.divulgit.gitlab.mergerequest.GitLabMergeRequest;
-import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteComment;
-import org.divulgit.repository.UserRepository;
+import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
@@ -22,12 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -43,24 +38,28 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     private MergeRequestService mergeRequestService;
 
     private final Remote remote;
+    private final User user;
     private final Project project;
     private final MergeRequest mergeRequest;
     private final String token;
 
     public static RemoteScan build(Remote remote,
-                                           Project project,
-                                           MergeRequest mergeRequest,
-                                           String token) {
-        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, project, mergeRequest, token);
+    		 					   User user,
+                                   Project project,
+                                   MergeRequest mergeRequest,
+                                   String token) {
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, user, project, mergeRequest, token);
     }
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public CommentsRemoteScan(
             Remote remote,
+            User user,
             Project project,
             MergeRequest mergeRequest,
             String token) {
         this.remote = remote;
+        this.user = user;
         this.project = project;
         this.mergeRequest = mergeRequest;
         this.token = token;
@@ -75,12 +74,8 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.debug("Start retrieving comments from merge request");
-            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, project, mergeRequest, token);
+            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, user, project, mergeRequest, token);
             log.debug("Finished retrieving comments from merge request, {} retrieved", remoteComments.size());
-
-            //TODO depois de gastar o tempo de busca dos comentarios, deveriamos recarregar o merge request?
-            // alguém pode ter alterado o registro neste tempo?
-
             log.debug("Start merging comments");
             for (RemoteComment remoteComment : remoteComments) {
             	Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
@@ -131,6 +126,4 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
         }
         return hashTags;
     }
-
-
 }

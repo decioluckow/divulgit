@@ -61,7 +61,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
         try {
             log.info("Starting scanning projects for remote {}", remote.getId());
             List<? extends RemoteProject> projects = callerFactory.build(remote).retrieveRemoteProjects(remote, token);
-            log.info("Finished scanning, found {} projects", projects);
+            log.info("Finished scanning, found {} projects", projects.size());
             List<String> existingExternalProjectIds = projectService.findExternalIdByRemote(remote);
             List<Project> newProjects = addNewProjects(remote, projects, existingExternalProjectIds);
             log.info("Found {} new projects", newProjects.size());

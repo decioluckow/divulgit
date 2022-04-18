@@ -2,9 +2,9 @@ package org.divulgit.gitlab.comments;
 
 import org.divulgit.model.MergeRequest;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
-import org.divulgit.gitlab.restcaller.GitLabRestCaller;
 import org.divulgit.model.Remote;
 import org.divulgit.model.Project;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class CommentCaller {
 
     public static final String START_PAGE = "1";
     @Autowired
-    private GitLabRestCaller restCaller;
+    private RestCaller restCaller;
     
     @Autowired
     private CommentMapper mapper;
