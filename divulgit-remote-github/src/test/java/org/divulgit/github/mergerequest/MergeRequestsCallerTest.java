@@ -1,12 +1,14 @@
 package org.divulgit.github.mergerequest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.extern.slf4j.Slf4j;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.divulgit.github.GitHubURLBuilder;
-import org.divulgit.github.error.ErrorMessage;
 import org.divulgit.github.error.ErrorResponseHandler;
-import org.divulgit.github.error.GitHubErrorMapper;
 import org.divulgit.github.pullrequest.GitHubPullRequest;
 import org.divulgit.github.pullrequest.PullRequestResponseHandler;
 import org.divulgit.github.pullrequest.PullRequestsCaller;
@@ -14,7 +16,6 @@ import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.remote.rest.RestCaller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,11 +27,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)

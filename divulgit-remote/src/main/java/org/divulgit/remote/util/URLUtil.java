@@ -1,10 +1,11 @@
 package org.divulgit.remote.util;
 
-import lombok.experimental.UtilityClass;
-import org.apache.logging.log4j.util.Strings;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.util.Strings;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class URLUtil {

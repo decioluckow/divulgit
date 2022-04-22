@@ -1,6 +1,7 @@
 package org.divulgit.security;
 
 import org.divulgit.model.User;
+
 import lombok.Builder;
 import lombok.Getter;
 

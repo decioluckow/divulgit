@@ -4,26 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <dependencies>
-        <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
     <parent>
         <groupId>br.com.decioluckow</groupId>
         <artifactId>divulgit</artifactId>
-        <version>1.0-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
     </parent>
 
+    <artifactId>divulgit-remote-model</artifactId>
+    
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-
-    <artifactId>divulgit-remote-model</artifactId>
-
+    
+    <dependencies>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-model</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

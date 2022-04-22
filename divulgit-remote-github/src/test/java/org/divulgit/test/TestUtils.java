@@ -3,7 +3,6 @@ package org.divulgit.test;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

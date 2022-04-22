@@ -1,14 +1,14 @@
 package org.divulgit.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import org.divulgit.type.ProjectState;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -23,6 +23,21 @@ public class User {
     private String name;
     private String username;
     private String avatarURL;
-    private List<String> projectIds = new ArrayList<>();
+    @Builder.Default
+    private List<UserProject> userProjects = new ArrayList<>();
     private String remoteId;
+    
+    @Getter
+    @Setter
+    @Builder
+    public static class UserProject {
+        private String projectId;
+        private State state;
+        
+        public static enum State {
+        	NEW, ACTIVE, IGNORED;
+        }
+    }
+
+
 }

@@ -1,10 +1,10 @@
 package org.divulgit.github.user;
 
-import org.divulgit.model.Remote;
-import org.divulgit.model.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import org.divulgit.remote.model.RemoteUser;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
 
 @Data
 public class GitHubUser implements RemoteUser {

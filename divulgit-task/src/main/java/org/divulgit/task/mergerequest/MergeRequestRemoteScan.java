@@ -12,7 +12,6 @@ import org.divulgit.model.User;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteMergeRequest;
-import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
@@ -52,7 +51,6 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
                 .getBean("mergeRequestRemoteScan", remote, user, project, requestedScanFrom, token);
     }
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public MergeRequestRemoteScan(
             Remote remote,
             User user,

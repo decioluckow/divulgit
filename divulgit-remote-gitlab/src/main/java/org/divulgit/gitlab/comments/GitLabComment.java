@@ -1,13 +1,15 @@
 package org.divulgit.gitlab.comments;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import java.util.List;
 
 import org.divulgit.gitlab.user.GitLabUser;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.remote.model.RemoteComment;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
 
 @Data
 public class GitLabComment implements RemoteComment {
@@ -17,6 +19,7 @@ public class GitLabComment implements RemoteComment {
     private GitLabUser author;
     @JsonProperty("body")
     private String text;
+    @JsonIgnore
     private String url;
     private String type;
     private boolean system;
@@ -30,6 +33,7 @@ public class GitLabComment implements RemoteComment {
         return MergeRequest.Comment.builder()
                 .externalId(externalId)
                 .text(text)
+                .url(url)
                 .author(author.getUsername())
                 .hashTags(hashTags)
                 .build();

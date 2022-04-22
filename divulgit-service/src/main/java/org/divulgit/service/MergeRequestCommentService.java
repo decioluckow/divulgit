@@ -1,12 +1,13 @@
 package org.divulgit.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.divulgit.model.MergeRequest;
+import org.divulgit.model.util.MergeRequestUtil;
 import org.divulgit.repository.MergeRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MergeRequestCommentService {
@@ -20,28 +21,18 @@ public class MergeRequestCommentService {
 
     public void markDiscussed(MergeRequest mergeRequest, String commentExternalId, boolean discussed) {
         List<MergeRequest.Comment> comments = mergeRequest.getComments();
-        Optional<MergeRequest.Comment> comment = findComment(commentExternalId, comments);
-        if (comment.isPresent()) {
-            comment.get().setDiscussed(discussed);
-            mergeRequestRepository.save(mergeRequest);
-        } else {
-            throw new RuntimeException("Comment not found to mark discussed");
-        }
+        MergeRequest.Comment comment = MergeRequestUtil.getComment(comments, commentExternalId);
+        comment.setDiscussed(discussed);
+        comment.setDiscussedOn(LocalDateTime.now());
+        mergeRequestRepository.save(mergeRequest);
     }
 
     public void delete(MergeRequest mergeRequest, String commentExternalId) {
         List<MergeRequest.Comment> comments = mergeRequest.getComments();
-        Optional<MergeRequest.Comment> comment = findComment(commentExternalId, comments);
-        if (comment.isPresent()) {
-            comments.remove(comment.get());
-            mergeRequestRepository.save(mergeRequest);
-        } else {
-            throw new RuntimeException("Comment not found do delete");
-        }
+        MergeRequest.Comment comment = MergeRequestUtil.getComment(comments, commentExternalId);
+        comments.remove(comment);
+        mergeRequestRepository.save(mergeRequest);
     }
 
-    private Optional<MergeRequest.Comment> findComment(String commentExternalId, List<MergeRequest.Comment> comments) {
-        return comments.stream()
-                .filter(c -> commentExternalId.equals(c.getExternalId())).findFirst();
-    }
+
 }

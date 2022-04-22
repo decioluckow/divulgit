@@ -1,16 +1,19 @@
 package org.divulgit.security;
 
+import java.util.Collection;
+
 import org.divulgit.model.User;
-import lombok.Builder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
+import lombok.Builder;
 
 @Builder
 public class UserAuthentication implements Authentication {
 
-    private String name;
+	private static final long serialVersionUID = 2860593790255593860L;
+	
+	private String name;
     private String principal;
     private UserDetails details;
     private boolean authenticated;

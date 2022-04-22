@@ -6,7 +6,6 @@ import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.remote.model.RemoteUser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

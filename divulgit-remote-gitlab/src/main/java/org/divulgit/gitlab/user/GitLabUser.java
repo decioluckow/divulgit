@@ -1,8 +1,10 @@
 package org.divulgit.gitlab.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import org.divulgit.remote.model.RemoteUser;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
 
 @Data
 public class GitLabUser implements RemoteUser {

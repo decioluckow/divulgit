@@ -1,14 +1,12 @@
 package org.divulgit.gitlab.project;
 
-import lombok.extern.slf4j.Slf4j;
-import org.divulgit.model.Project;
+import java.text.MessageFormat;
+
 import org.divulgit.model.Remote;
-import org.divulgit.remote.util.URLUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

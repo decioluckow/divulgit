@@ -1,14 +1,15 @@
 <body th:replace="~{base :: layout (~{:: main})}">
 <main>
-  <h1 class="display-1" th:text="${project.name}"></h1>
-  <table class="table">
-    <tr>
-      <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col">Author</th>
-      <th scope="col">Title</th>
-      <th scope="col">Discussed</th>
-    </tr>
+   </br>
+   <h1 class="display-4" th:text="${project.name}"></h1>
+   <table class="table">
+      <tr>
+         <th scope="col"></th>
+         <th scope="col"></th>
+         <th scope="col">Author</th>
+         <th scope="col">Title</th>
+         <th scope="col">Discussed</th>
+      </tr>
     </tr>
     <th:block th:each="mergeRequest : ${mergeRequests}">
       <tr class="mergerequest-item" th:data-mergerequest-id="${mergeRequest.id}">
@@ -31,7 +32,7 @@
           <td><!--<a href="javascript:void(0)" onclick="deleteComment(this)"><i class="bi bi-trash comment-delete-button"></i></a>--></td>
           <td></td>
           <td style="white-space: nowrap">
-              <a th:href="${commentURLs.get(mergeRequest.externalId + '-' + comment.externalId)}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
+              <a th:href="${comment.url}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
               <span th:text="${comment.author}"/>
           </td>
           <td th:text="${comment.text}"></td>

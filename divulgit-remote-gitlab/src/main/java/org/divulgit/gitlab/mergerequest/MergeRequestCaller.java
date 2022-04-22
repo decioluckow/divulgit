@@ -1,8 +1,9 @@
 package org.divulgit.gitlab.mergerequest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Strings;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
 import org.divulgit.model.Project;
@@ -13,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Strings;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

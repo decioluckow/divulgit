@@ -1,10 +1,12 @@
 package org.divulgit.gitlab.project;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 import org.divulgit.model.Project;
-import lombok.Data;
 import org.divulgit.remote.model.RemoteProject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Data;
+import lombok.Getter;
 
 @Getter
 @Data

@@ -1,23 +1,26 @@
 package org.divulgit.gitlab.comments;
 
-import org.divulgit.model.MergeRequest;
-import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.RestCaller;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
-import org.divulgit.model.Remote;
+import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Strings;
-import lombok.extern.slf4j.Slf4j;
+import org.divulgit.model.Remote;
+import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.util.HashTagIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Strings;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -50,7 +53,7 @@ public class CommentCaller {
     }
     
     private List<GitLabComment> removeUseless(List<GitLabComment> comments) {
-    	return comments.stream().filter(c -> !c.isSystem() && "DiffNote".equals(c.getType()) && c.getText().contains("#")).collect(Collectors.toList());
+    	return comments.stream().filter(c -> !c.isSystem() && "DiffNote".equals(c.getType()) && HashTagIdentifierUtil.containsHashTag(c.getText())).collect(Collectors.toList());
     }
 
     private void retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, List<GitLabComment> comments, String token, String page) throws RemoteException {

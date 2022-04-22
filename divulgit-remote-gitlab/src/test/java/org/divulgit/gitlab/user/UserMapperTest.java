@@ -1,13 +1,12 @@
 package org.divulgit.gitlab.user;
 
-import org.divulgit.gitlab.project.ProjectMapperTest;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class UserMapperTest {
 

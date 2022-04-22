@@ -1,7 +1,8 @@
 package org.divulgit.remote.rest;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import lombok.Data;
 
 @ConfigurationProperties("secure-rest")
 @Data

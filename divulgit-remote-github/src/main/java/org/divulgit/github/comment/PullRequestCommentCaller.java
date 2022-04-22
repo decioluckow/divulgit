@@ -11,7 +11,6 @@ import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

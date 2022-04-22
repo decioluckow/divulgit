@@ -8,6 +8,7 @@ import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
+import org.divulgit.model.User.UserProject;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteProject;
@@ -15,7 +16,6 @@ import org.divulgit.repository.UserRepository;
 import org.divulgit.service.ProjectService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
-import org.divulgit.type.ProjectState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -65,7 +65,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
             List<String> existingExternalProjectIds = projectService.findExternalIdByRemote(remote);
             List<Project> newProjects = addNewProjects(remote, projects, existingExternalProjectIds);
             log.info("Found {} new projects", newProjects.size());
-            List<String> newUserProjectIds = addNewProjectsToUser(newProjects, user);
+            List<UserProject> newUserProjectIds = addNewProjectsToUser(newProjects, user);
             log.info("Added {} new projects to user {}", newUserProjectIds.size(), user.getId());
         } catch (RemoteException e) {
             final String message = "Error executing project scanning";
@@ -80,7 +80,6 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
             boolean exist = existingExternalProjectIds.stream().anyMatch(p -> p.equals(remoteProject.getExternalId()));
             if (!exist) {
                 final Project project = remoteProject.convertToProject();
-                project.setState(ProjectState.NEW);
                 project.setRemoteId(remote.getId());
                 newProjects.add(project);
             }
@@ -88,18 +87,18 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
         return projectService.saveAll(newProjects);
     }
 
-    private List<String> addNewProjectsToUser(final List<Project> newProjects, final User user) {
-        var newUserProjectIds = new ArrayList<String>();
+    private List<UserProject> addNewProjectsToUser(final List<Project> newProjects, final User user) {
+        var newUserProjectIds = new ArrayList<UserProject>();
         for (Project project : newProjects) {
-            boolean exist = user.getProjectIds().stream().anyMatch(id -> id.equals(project.getId()));
+            boolean exist = user.getUserProjects().stream().anyMatch(up -> up.getProjectId().equals(project.getId()));
             if (!exist) {
-                newUserProjectIds.add(project.getId());
+                newUserProjectIds.add(UserProject.builder().projectId(project.getId()).state(UserProject.State.NEW).build());
             }
         }
         if (!newUserProjectIds.isEmpty()) {
             Optional<User> freshUser = userRepository.findById(user.getId());
             if (freshUser.isPresent()) {
-                freshUser.get().getProjectIds().addAll(newUserProjectIds);
+                freshUser.get().getUserProjects().addAll(newUserProjectIds);
                 userRepository.save(freshUser.get());
             }
         }

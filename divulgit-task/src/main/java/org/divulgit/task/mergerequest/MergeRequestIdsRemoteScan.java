@@ -1,7 +1,9 @@
 package org.divulgit.task.mergerequest;
 
-import com.google.common.base.Joiner;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.gitlab.mergerequest.GitLabMergeRequest;
 import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
@@ -17,9 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.google.common.base.Joiner;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -47,7 +49,6 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
         return (MergeRequestIdsRemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestRemoteScan", remote, project, requestedMergeRequestIds, token);
     }
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public MergeRequestIdsRemoteScan(
             Remote remote,
             Project project,

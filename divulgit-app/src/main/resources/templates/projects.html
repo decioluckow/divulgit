@@ -1,36 +1,89 @@
 <body th:replace="~{base :: layout (~{:: main})}">
     <main>
-        <a href="javascript:void(0)" onclick="javascript:scanRemoteForProjets()">scan projets</a>
+    </br>
+		<span th:if="${viewMode == 'main'}">
+			<div class="row justify-content-between">
+				<div class="col-4">
+					<button type="button" class="btn btn-dark btn-sm" href="javascript:void(0)" onclick="javascript:scanRemoteForProjets()">scan projets</button>
+				</div>
+				<div class="col-4 text-right">
+					<button type="button" class="btn btn-outline-warning btn-sm" onclick="window.location='/in/projects/ignored'">show ignoreds</button>
+				</div>
+			</div>
+        </span>
+        <span th:if="${viewMode == 'ignored'}">
+        	<div class="row justify-content-between">
+				<div class="col-4">
+					<button type="button" class="btn btn-secondary btn-sm" onclick="window.location='/in/projects'">back</button>
+				</div>
+				<div class="col-4 text-right">
+					.
+				</div>
+			</div>
+        </span>
+        </br>
         <table class="table table-hover">
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Name</th>
-                <th scope="col">Comments to discuss</th>
+                <th scope="col">Undiscussed Comments</th>
                 <th scope="col">Total Comments</th>
+                <th scope="col">Last Discussion</th>
                 <th scope="col">Actions</th>
             </tr>
             <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
-                <td><a th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
-                <td th:text="${project.name}"></td>
+                <td class="align-middle"><a th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+                <td class="align-middle">
+                	<span th:text="${project.name}"></span>
+                	<span th:if="${project.isNew()}">
+                        <span class="badge bg-success">new</span>
+                    </span>
+                </td>
                 <td th:text="${project.commentsTotal} - ${project.commentsDiscussed}"></td>
                 <td th:text="${project.commentsTotal}"></td>
+                <td th:text="${project.commentsTotal}"></td>
                 <td th:id="'actions-' + ${project.id}">
-                    <span th:if="${project.state == T(org.divulgit.type.ProjectState).NEW}">
-                        [<a href="javascript:void(0)" onclick="javascript:scanFrom(getProjectId(this))">scan from </a>
-                        <input  type="text"
-                                th:id="'scan-from-' + ${project.id}"
-                                value="0"
-                                size="2"
-                                style="font-size: xx-small;"
-                                title="Fill with the number of merge request that you started to hash tag comments">]
-                        [<a href="javascript:void(0)" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</a>]
+                    <span th:if="${project.isNew()}">
+						<div class="row justify-content-end">
+							<div class="col-4">
+								<button type="button" class="btn btn-primary btn-sm">scan</button>
+	                    		<div class="collapse" th:id="'scan-from-' + ${project.id}">
+		                    		<div class="input-group input-group-sm mb-3">
+										<span class="input-group-text" id="inputGroup-sizing-sm">From number</span>
+										<input th:id="'scan-from-' + ${project.id}" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+									</div>
+								</div>
+	                    	</div>
+	                    	<div class="col-4">
+	                    		<button type="button" class="btn btn-outline-warning btn-sm" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
+	                    	</div>
+	                    		<!--
+	                    			<input  type="text"  value="0" size="2" style="font-size: xx-small;" title="Fill with the number of merge request that you started to hash tag comments">
+	                    				<button type="button" class="btn btn-primary btn-sm" onclick="javascript:scanFrom(getProjectId(this))">ok</button>
+	                    			</div>
+								</div>
+							<div class="col-4 text-right">
+								.
+							</div>-->
+						</div>
                     </span>
-                    <span th:if="${project.state == T(org.divulgit.type.ProjectState).ACTIVE}">
-                        [<a href="javascript:void(0)" onclick="javascript:scanLastest(getProjectId(this))">rescan</a>]
-                            <!--
-                            [<a href="javascript:void(0)" onclick="scanComments('${project.id}');">scan comments</a>]
-                            -->
-                        [<a th:href="@{/in/project/{projectId}/mergeRequests(projectId=${project.id})}">merge requests</a>]
+                    <span th:if="${project.isActive()}">
+                   		<button type="button" class="btn btn-primary btn-sm" onclick="javascript:scanLastest(getProjectId(this))">rescan</button>
+                   		<button type="button" class="btn btn-success btn-sm" th:if="${project.commentsTotal > 0}" onclick="javascript:explore(getProjectId(this))">explore</button>
+                        <!--[<a th:href="@{/in/project/{projectId}/mergeRequests(projectId=${project.id})}">merge requests</a>]-->
+						<!--<div class="dropdown">
+							<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+				    			<i class="bi bi-list"></i>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<li><a class="dropdown-item" href="#">Action</a></li>
+								<li><a class="dropdown-item" href="#">Another action</a></li>
+								<li><a class="dropdown-item" href="#">Something else here</a></li>
+							</ul>
+						</div>-->
+                    </span>
+					<span th:if="${project.isIgnored()}">
+                        [<a href="javascript:void(0)" onclick="activateProject(getProjectElement(this), getProjectId(this));">ignore</a>]
                     </span>
                 </td>
             </tr>
@@ -49,6 +102,31 @@
                         }
                     },
                     error:function(response){
+                        alert('server error occured')
+                    }
+                });
+            }
+            
+            function explore(projectId){
+				window.location='/in/project/' + projectId + '/mergeRequests';
+            }
+            
+            function activateProject(projectElement, projectId){
+                $.ajax({
+                    url:'/in/project/'+ projectId +'/activate',
+                    method:'post',
+                    success:function(data, textStatus, jqXHR){
+                        console.log(data);
+                        if (jqXHR.status == 200) {
+                            $(projectElement).hide(250);
+                        } else {
+                            alert('some error occurred try again');
+                        }
+                    },
+                    error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
                         alert('server error occured')
                     }
                 });

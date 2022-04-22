@@ -1,13 +1,13 @@
 package org.divulgit.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.divulgit.model.MergeRequest;
 import org.divulgit.vo.ProjectIdCommentsSum;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface MergeRequestRepository extends MongoRepository<MergeRequest, String> {
 

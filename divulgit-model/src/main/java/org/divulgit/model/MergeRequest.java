@@ -1,13 +1,15 @@
 package org.divulgit.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -52,6 +54,7 @@ public class MergeRequest {
         private String url;
         private List<String> hashTags;
         private boolean discussed;
+        private LocalDateTime discussedOn;
     }
 
     public static enum State {

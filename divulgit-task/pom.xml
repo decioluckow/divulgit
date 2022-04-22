@@ -5,7 +5,7 @@
     <parent>
         <artifactId>divulgit</artifactId>
         <groupId>br.com.decioluckow</groupId>
-        <version>1.0-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,11 +17,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-model</artifactId>
@@ -41,6 +36,11 @@
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-remote-github</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 </project>

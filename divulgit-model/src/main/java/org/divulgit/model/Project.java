@@ -1,9 +1,13 @@
 package org.divulgit.model;
 
-import lombok.*;
-import org.divulgit.type.ProjectState;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -21,6 +25,5 @@ public class Project {
     private String name;
     private String url;
     private String description;
-    private ProjectState state;
 
 }

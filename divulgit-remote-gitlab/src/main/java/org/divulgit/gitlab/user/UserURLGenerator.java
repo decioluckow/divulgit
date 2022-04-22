@@ -1,13 +1,12 @@
 package org.divulgit.gitlab.user;
 
-import lombok.extern.slf4j.Slf4j;
-import org.divulgit.model.Remote;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.text.MessageFormat;
 
-@Slf4j
+import org.divulgit.model.Remote;
+import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Component
 public class UserURLGenerator {
 

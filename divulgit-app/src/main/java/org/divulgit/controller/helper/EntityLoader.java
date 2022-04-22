@@ -1,5 +1,7 @@
 package org.divulgit.controller.helper;
 
+import java.util.Optional;
+
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -13,8 +15,6 @@ import org.divulgit.security.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class EntityLoader {
@@ -56,7 +56,7 @@ public class EntityLoader {
         final Optional<Project> project = projectRepository.findById(projectId);
         if (!project.isPresent())
             throw new RuntimeException("Project " + projectId + " not found");
-        if (!user.getProjectIds().contains(project.get().getId()))
+        if (user.getUserProjects().stream().noneMatch(up -> up.getProjectId().equals(project.get().getId())))
             throw new RuntimeException("User don´t have access to the project");
         return project.get();
     }

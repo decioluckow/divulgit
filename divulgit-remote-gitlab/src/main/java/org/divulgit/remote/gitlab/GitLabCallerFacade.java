@@ -1,7 +1,10 @@
 package org.divulgit.remote.gitlab;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.divulgit.annotation.ForRemote;
-import org.divulgit.gitlab.comments.CommentCaller;
+import org.divulgit.gitlab.comments.GitLabCommentService;
 import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.gitlab.project.ProjectCaller;
 import org.divulgit.gitlab.user.GitLabCurrentUserCaller;
@@ -19,9 +22,6 @@ import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-
 @Component
 @ForRemote(RemoteType.GITLAB)
 public class GitLabCallerFacade implements RemoteFacade {
@@ -36,7 +36,7 @@ public class GitLabCallerFacade implements RemoteFacade {
     private MergeRequestCaller mergeRequestCaller;
     
     @Autowired
-    private CommentCaller commentCaller;
+    private GitLabCommentService commentService;
 
     @Override
     public Optional<RemoteUser> retrieveRemoteUser(Remote remote, String token) throws RemoteException {
@@ -57,6 +57,6 @@ public class GitLabCallerFacade implements RemoteFacade {
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
     		String token) throws RemoteException {
-    	return commentCaller.retrieveComments(remote, project, mergeRequest, token);
+    	return commentService.retrieveComments(remote, project, mergeRequest, token);
     }
 }

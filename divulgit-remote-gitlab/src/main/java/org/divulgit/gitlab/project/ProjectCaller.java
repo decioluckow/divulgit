@@ -1,20 +1,22 @@
 package org.divulgit.gitlab.project;
 
-import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.model.Remote;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.divulgit.gitlab.error.ErrorMapper;
 import org.divulgit.gitlab.error.ErrorMessage;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Strings;
-import lombok.extern.slf4j.Slf4j;
+import org.divulgit.model.Remote;
+import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Strings;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

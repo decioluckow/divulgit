@@ -1,16 +1,18 @@
 package org.divulgit.task;
 
 
-import com.google.common.collect.ImmutableList;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import org.apache.logging.log4j.util.Strings;
-import org.springframework.scheduling.annotation.Async;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.scheduling.annotation.Async;
+
+import com.google.common.collect.ImmutableList;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 public abstract class AbstractRemoteScan implements RemoteScan {
 

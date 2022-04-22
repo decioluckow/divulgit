@@ -1,5 +1,8 @@
 package org.divulgit.github;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.github.comment.GitHubCommentService;
 import org.divulgit.github.project.RepositoryCaller;
@@ -18,9 +21,6 @@ import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @ForRemote(RemoteType.GITHUB)

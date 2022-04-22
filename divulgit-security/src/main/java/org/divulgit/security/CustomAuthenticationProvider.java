@@ -2,13 +2,15 @@ package org.divulgit.security;
 
 import java.util.Optional;
 
-import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.service.UserService;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
+import org.divulgit.remote.RemoteCallerFacadeFactory;
+import org.divulgit.remote.RemoteFacade;
+import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.remote.model.RemoteUser;
+import org.divulgit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -18,9 +20,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
-
-import org.divulgit.remote.RemoteFacade;
-import org.divulgit.remote.RemoteCallerFacadeFactory;
 
 @Slf4j
 @Component

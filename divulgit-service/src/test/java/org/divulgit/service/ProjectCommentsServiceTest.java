@@ -1,21 +1,24 @@
 package org.divulgit.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.divulgit.model.Project;
+import org.divulgit.model.User.UserProject;
+import org.divulgit.model.User.UserProject.State;
 import org.divulgit.repository.ProjectRepository;
-import org.divulgit.vo.ProjectCommentsSum;
 import org.divulgit.vo.ProjectIdCommentsSum;
+import org.divulgit.vo.UserProjectVO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.lang.reflect.Array;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectCommentsServiceTest {
@@ -28,6 +31,10 @@ class ProjectCommentsServiceTest {
     private static final Project PROJECT_2 = Project.builder().id(PROJECT_ID_2).build();
     final ProjectIdCommentsSum PROJECT_2_COMMENTS_SUM = ProjectIdCommentsSum.builder().id(PROJECT_ID_2).commentsTotal(200).commentsDiscussed(20).build();
 
+    private static final UserProject USER_PROJECT_1 = UserProject.builder().projectId(PROJECT_ID_1).state(State.ACTIVE).build();
+    private static final UserProject USER_PROJECT_2 = UserProject.builder().projectId(PROJECT_ID_2).state(State.ACTIVE).build();
+    
+    private static final List<UserProject> USER_PROJECTS = Arrays.asList(USER_PROJECT_1, USER_PROJECT_2);
 
     @Mock
     private ProjectRepository projectRepository;
@@ -40,13 +47,14 @@ class ProjectCommentsServiceTest {
 
     @Test
     public void testPopulate() {
+    	
         Map<String, ProjectIdCommentsSum> projectIdComments = Map.of(
                 PROJECT_ID_1, PROJECT_1_COMMENTS_SUM,
                 PROJECT_ID_2, PROJECT_2_COMMENTS_SUM);
         List<Project> projects = Arrays.asList(PROJECT_1, PROJECT_2);
         Mockito.when(mergeRequestAggregationService.sumProjectComments(Mockito.anyList())).thenReturn(projectIdComments);
 
-        List<ProjectCommentsSum> projectsCommentsSum = service.populateCommentsSum(projects);
+        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER_PROJECTS, projects);
 
         var project1 = findById(PROJECT_ID_1, projectsCommentsSum);
         assertEquals("1", project1.getId());
@@ -67,12 +75,12 @@ class ProjectCommentsServiceTest {
         List<Project> projects = new ArrayList<>();
         Mockito.when(mergeRequestAggregationService.sumProjectComments(Mockito.anyList())).thenReturn(projectIdComments);
 
-        List<ProjectCommentsSum> projectsCommentsSum = service.populateCommentsSum(projects);
+        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER_PROJECTS, projects);
 
         assertEquals(0, projectsCommentsSum.size());
     }
 
-    private ProjectCommentsSum findById(String id, List<ProjectCommentsSum> projectsCommentsSum) {
+    private UserProjectVO findById(String id, List<UserProjectVO> projectsCommentsSum) {
         return projectsCommentsSum.stream().filter(pc -> pc.getId().equals(id)).findFirst().get();
     }
 }
