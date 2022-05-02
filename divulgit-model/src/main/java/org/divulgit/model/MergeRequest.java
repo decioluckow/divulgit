@@ -3,6 +3,7 @@ package org.divulgit.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,10 +34,14 @@ public class MergeRequest {
 
     private int commentsDiscussed;
 
+    public List<Comment> getValidComments() {
+        return comments.stream().filter(c -> c.isValid()).collect(Collectors.toList());
+    }
+
     protected void calculateComments() {
         if (comments != null) {
-            commentsTotal = comments.size();
-            commentsDiscussed = (int) comments.stream().filter(c -> c.isDiscussed()).count();
+            commentsTotal = (int) comments.stream().filter(c -> c.isValid()).count();
+            commentsDiscussed = (int) comments.stream().filter(c -> c.isDiscussed() && c.isValid()).count();
         } else {
             comments = new ArrayList<>();
             commentsTotal = 0;
@@ -53,8 +58,24 @@ public class MergeRequest {
         private String text;
         private String url;
         private List<String> hashTags;
-        private boolean discussed;
         private LocalDateTime discussedOn;
+        private State state;
+
+        public boolean isDiscussed() {
+            return this.discussedOn != null;
+        }
+
+        public boolean isDeleted() {
+            return this.state == State.DELETED;
+        }
+
+        public boolean isValid() {
+            return this.state == State.VALID;
+        }
+
+        public static enum State {
+            VALID, HIDDEN, DELETED;
+        }
     }
 
     public static enum State {

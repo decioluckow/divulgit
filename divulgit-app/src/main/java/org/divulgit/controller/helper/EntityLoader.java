@@ -35,7 +35,7 @@ public class EntityLoader {
         UserDetails userDetails = getUserDetails(authentication);
         Optional<User> user = userRepository.findById(userDetails.getUser().getId());
         if (!user.isPresent()) {
-            throw new RuntimeException("User not found");
+            throw new IllegalStateException("User not found");
         }
         return user.get();
     }
@@ -47,7 +47,7 @@ public class EntityLoader {
     public Remote loadRemote(String remoteId) {
         Optional<Remote> remote = remoteRepository.findById(remoteId);
         if (!remote.isPresent()) {
-            throw new RuntimeException("Remote not found");
+            throw new IllegalStateException("Remote not found");
         }
         return remote.get();
     }
@@ -55,9 +55,9 @@ public class EntityLoader {
     public Project loadProject(User user, String projectId) {
         final Optional<Project> project = projectRepository.findById(projectId);
         if (!project.isPresent())
-            throw new RuntimeException("Project " + projectId + " not found");
+            throw new IllegalStateException("Project " + projectId + " not found");
         if (user.getUserProjects().stream().noneMatch(up -> up.getProjectId().equals(project.get().getId())))
-            throw new RuntimeException("User don´t have access to the project");
+            throw new IllegalStateException("User don´t have access to the project");
         return project.get();
     }
 
@@ -68,16 +68,16 @@ public class EntityLoader {
     public MergeRequest loadMergeRequest(Project project, String mergeRequestId) {
         Optional<MergeRequest> mergeRequest = mergeRequestRepository.findById(mergeRequestId);
         if (!mergeRequest.isPresent())
-            throw new RuntimeException("Merge Request not found");
+            throw new IllegalStateException("Merge Request not found");
         if (!mergeRequest.get().getProjectId().equals(project.getId()))
-            throw new RuntimeException("Merge request is not owned by the project");
+            throw new IllegalStateException("Merge request is not owned by the project");
         return mergeRequest.get();
     }
 
     public MergeRequest loadMergeRequest(String mergeRequestId) {
         Optional<MergeRequest> mergeRequest = mergeRequestRepository.findById(mergeRequestId);
         if (!mergeRequest.isPresent()) {
-            throw new RuntimeException("Merge Request not found");
+            throw new IllegalStateException("Merge Request not found");
         }
         return mergeRequest.get();
     }

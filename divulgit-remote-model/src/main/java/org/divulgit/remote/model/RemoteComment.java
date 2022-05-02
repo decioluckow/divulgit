@@ -11,5 +11,5 @@ public interface RemoteComment {
      String getAuthor();
      String getUrl();
      
-     MergeRequest.Comment toComment(List<String> hashTags);
+     MergeRequest.Comment.CommentBuilder toComment();
 }

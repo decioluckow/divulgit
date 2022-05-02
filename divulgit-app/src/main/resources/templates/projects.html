@@ -22,13 +22,15 @@
 			</div>
         </span>
         </br>
+        <input type="hidden" id="currentProjectId"/>
         <table class="table table-hover">
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Name</th>
-                <th scope="col">Undiscussed Comments</th>
-                <th scope="col">Total Comments</th>
-                <th scope="col">Last Discussion</th>
+                <th scope="col" class="text-center">Not discussed<br/>Comments</th>
+                  <th scope="col" class="text-center">Mine content<br/>not discussed<br/><span style="font-size: 8pt">(requests + comments)</span></th>
+                <th scope="col" class="text-center">Total<br/>Comments</th>
+                <th scope="col" class="text-center">Last<br/>Discussion</th>
                 <th scope="col">Actions</th>
             </tr>
             <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
@@ -39,55 +41,62 @@
                         <span class="badge bg-success">new</span>
                     </span>
                 </td>
-                <td th:text="${project.commentsTotal} - ${project.commentsDiscussed}"></td>
-                <td th:text="${project.commentsTotal}"></td>
-                <td th:text="${project.commentsTotal}"></td>
+                <th:block th:if="${!project.isActive()}">
+                    <td></td>
+                    <td></td>
+                </th:block>
+                <th:block th:if="${project.isActive()}">
+                  <td class="text-center" th:text="${project.commentsTotal} - ${project.commentsDiscussed}"></td>
+                     <td class="text-center">
+                        <span th:if="${project.mergeRequestsNotDiscussedByAuthor > 0 || project.commentsNotDiscussedByAuthor > 0}"
+                              th:text="${project.mergeRequestsNotDiscussedByAuthor} + ' + ' + ${project.commentsNotDiscussedByAuthor}"></span>
+                     </td>
+                    <td class="text-center" th:text="${project.commentsTotal}"></td>
+                </th:block>
+                <td class="text-center" th:text="${project.durationFromLastDiscussion}"></td>
                 <td th:id="'actions-' + ${project.id}">
                     <span th:if="${project.isNew()}">
-						<div class="row justify-content-end">
-							<div class="col-4">
-								<button type="button" class="btn btn-primary btn-sm">scan</button>
-	                    		<div class="collapse" th:id="'scan-from-' + ${project.id}">
-		                    		<div class="input-group input-group-sm mb-3">
-										<span class="input-group-text" id="inputGroup-sizing-sm">From number</span>
-										<input th:id="'scan-from-' + ${project.id}" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-									</div>
-								</div>
-	                    	</div>
-	                    	<div class="col-4">
-	                    		<button type="button" class="btn btn-outline-warning btn-sm" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
-	                    	</div>
-	                    		<!--
-	                    			<input  type="text"  value="0" size="2" style="font-size: xx-small;" title="Fill with the number of merge request that you started to hash tag comments">
-	                    				<button type="button" class="btn btn-primary btn-sm" onclick="javascript:scanFrom(getProjectId(this))">ok</button>
-	                    			</div>
-								</div>
-							<div class="col-4 text-right">
-								.
-							</div>-->
-						</div>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#startScanModal" onclick="fillCurrentProjectId(getProjectId(this))">start scan</button>
+                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
                     </span>
                     <span th:if="${project.isActive()}">
-                   		<button type="button" class="btn btn-primary btn-sm" onclick="javascript:scanLastest(getProjectId(this))">rescan</button>
-                   		<button type="button" class="btn btn-success btn-sm" th:if="${project.commentsTotal > 0}" onclick="javascript:explore(getProjectId(this))">explore</button>
-                        <!--[<a th:href="@{/in/project/{projectId}/mergeRequests(projectId=${project.id})}">merge requests</a>]-->
-						<!--<div class="dropdown">
-							<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-				    			<i class="bi bi-list"></i>
-							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<li><a class="dropdown-item" href="#">Action</a></li>
-								<li><a class="dropdown-item" href="#">Another action</a></li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
-							</ul>
-						</div>-->
+                        <button type="button" class="btn btn-success btn-sm" th:if="${project.commentsTotal > 0}" onclick="javascript:explore(getProjectId(this))">explore</button>
+                   		<button type="button" class="btn btn-outline-primary btn-sm" onclick="javascript:scanLastest(getProjectId(this))">rescan</button>
                     </span>
-					<span th:if="${project.isIgnored()}">
-                        [<a href="javascript:void(0)" onclick="activateProject(getProjectElement(this), getProjectId(this));">ignore</a>]
+					      <span th:if="${project.isIgnored()}">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="javascript:activateProject(getProjectElement(this), getProjectId(this))">activate</button>
                     </span>
                 </td>
             </tr>
         </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="startScanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Start scan options</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Divulgit will scan all merged code reviews. It could be done from the first code review
+                        or can start on the code review number that your team started using hashtag on comments, it will be faster.
+                        <br/><br/>
+                        <div class="mb-3 row">
+                            <label for="startScanNumberInput" class="col-sm-6 col-form-label">Start on code review number </label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="startScanNumberInput" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="javascript:startScan()">Start scan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             function scanRemoteForProjets(){
                 $.ajax({
@@ -153,8 +162,13 @@
                 });
             }
 
-            function scanFrom(projectId){
-                const scanFrom = $("#scan-from-" + projectId).val();
+            function fillCurrentProjectId(projectId) {
+                $("#currentProjectId").val(projectId);
+            }
+
+            function startScan() {
+                const scanFrom = $("#startScanNumberInput").val();
+                const projectId = $("#currentProjectId").val();
                 if (!scanFrom) {
                     alert('Please, fill the initial merge request number to consider in scanning. This is the mergerequest that your team started hashtagging')
                 } else {
@@ -164,6 +178,7 @@
                         dataType:'json',
                         success:function(data, textStatus, xhr){
                             if (xhr.status == 200) {
+                                $("#startScanModal").modal("hide");
                                 $("#actions-"+projectId).html('scanning...');
                             }
                         },
@@ -205,4 +220,6 @@
 
         </script>
     </main>
+
+
 </body>

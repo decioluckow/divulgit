@@ -32,12 +32,11 @@ public class GitHubComment implements RemoteComment {
         return user.getUsername();
     }
 
-    public MergeRequest.Comment toComment(List<String> hashTags) {
+    public MergeRequest.Comment.CommentBuilder toComment() {
         return MergeRequest.Comment.builder()
                 .externalId(String.valueOf(externalId))
                 .text(text)
                 .url(url)
-                .hashTags(hashTags)
-                .author(user.getUsername()).build();
+                .author(user.getUsername());
     }
 }

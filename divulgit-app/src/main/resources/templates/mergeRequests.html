@@ -1,50 +1,72 @@
 <body th:replace="~{base :: layout (~{:: main})}">
 <main>
    </br>
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location='/in/projects'">back</button>
+        </div>
+        <div class="col-4 text-right">
+        </div>
+    </div>
+    </br>
    <h1 class="display-4" th:text="${project.name}"></h1>
+   <input type="hidden" id="currentProjectId" th:value="${project.id}"/>
    <table class="table">
       <tr>
          <th scope="col"></th>
          <th scope="col"></th>
-         <th scope="col">Author</th>
+         <th scope="col">Author X</th>
          <th scope="col">Title</th>
          <th scope="col">Discussed</th>
+         <th scope="col"></th>
       </tr>
-    </tr>
     <th:block th:each="mergeRequest : ${mergeRequests}">
-      <tr class="mergerequest-item" th:data-mergerequest-id="${mergeRequest.id}">
-        <td><a th:href="${mergeRequest.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
-        <td><span th:class="'mr-state-' + ${mergeRequest.state}" th:text="${mergeRequest.state}"></span></td>
-        <td th:text="${mergeRequest.author}"></td>
-        <td th:text="${mergeRequest.title}"></td>
-        <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
+      <tr class="mergerequest-line"
+          th:if="${mergeRequest.commentsTotal > 0}"
+          th:data-project-id="${project.id}"
+          th:data-mergerequest-id="${mergeRequest.id}">
+         <td><a th:href="${mergeRequest.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+         <td><span th:class="'mr-state-' + ${mergeRequest.state}" th:text="${mergeRequest.state}"></span></td>
+         <td th:class="${mergeRequest.author == user.username ? 'fw-bold' : ''}" th:text="${mergeRequest.author}"></td>
+         <td th:text="${mergeRequest.title}"></td>
+         <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
           <!--
           <a href="javascript:void(0)" onclick="rescan(this, '<%=mergeRequests[i].id%>')"><i class="bi bi-arrow-clockwise"/></a>
           <div class="spinner-border spinner-border-sm" role="status">
               <span class="sr-only">Loading...</span>
           </div>
           -->
-        </td>
+         </td>
+         <td class="align-middle">
+            <a href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
+         </td>
       </tr>
-      <th:block th:if="${mergeRequest.comments.size() > 0}">
-        <tr class="comment-line" th:each="comment : ${mergeRequest.comments}"
-            th:data-merge-request-id="${mergeRequest.id}" th:data-comment-id="${comment.externalId}" th:data-discussed="${comment.discussed}" >
-          <td><!--<a href="javascript:void(0)" onclick="deleteComment(this)"><i class="bi bi-trash comment-delete-button"></i></a>--></td>
-          <td></td>
-          <td style="white-space: nowrap">
-              <a th:href="${comment.url}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
-              <span th:text="${comment.author}"/>
-          </td>
-          <td th:text="${comment.text}"></td>
-          <td class="text-end">
-            <button type="button" class="btn btn-outline-success btn-sm btn-mark-discussed" onclick="markAsDiscussed(this, true)">Discussed</button>
-            <button type="button" class="btn btn-outline-warning btn-sm btn-unmark-discussed" onclick="markAsDiscussed(this, false)">Unmark</button>
-          </td>
-        </tr>
+      <th:block th:if="${mergeRequest.getValidComments().size() > 0}">
+         <tr class="comment-line"
+             th:each="comment : ${mergeRequest.comments}"
+             th:data-mergerequest-id="${mergeRequest.id}"
+             th:data-comment-id="${comment.externalId}"
+             th:data-discussed="${comment.isDiscussed()}">
+            <td></td>
+            <td></td>
+            <td style="white-space: nowrap">
+               <a th:href="${comment.url}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
+               <span th:class="${comment.author == user.username ? 'fw-bold' : ''}" th:text="${comment.author}"/>
+            </td>
+            <td th:text="${comment.text}"></td>
+            <td class="text-end" style="white-space: nowrap">
+               <button type="button" class="btn btn-outline-success btn-sm btn-mark-discussed" onclick="markAsDiscussed(this, true)">Discussed</button>
+               <button type="button" class="btn btn-outline-warning btn-sm btn-unmark-discussed" onclick="markAsDiscussed(this, false)">Unmark</button>
+            </td>
+            <td style="white-space: nowrap" class="align-middle">
+               <a href="javascript:void(0)" class="text-decoration-none comment-delete-button" onclick="javascript:deleteComment(this)"><i class="bi bi-trash"></i></a>
+               <a href="javascript:void(0)" class="text-decoration-none comment-hide-button" onclick="javascript:hideComment(this)"><i class="bi bi-eye-slash"></i></a>
+            </td>
+         </tr>
       </th:block>
-    </th:block>
-  </table>
-  <script>
+   </th:block>
+   </table>
+   <script>
     $(document).ready(function() {
       $('.comment-line').each(function(button) {
         toogleDiscussedButton(this);
@@ -70,7 +92,7 @@
 
     function markAsDiscussed(button, markDiscussed) {
       var commentLine = getParentByClass(button, '.comment-line');
-      var mergeRequestId = commentLine.data('merge-request-id');
+      var mergeRequestId = commentLine.data('mergerequest-id');
       var commentId = commentLine.data('comment-id');
       $.ajax({
         url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/discussed/' + markDiscussed,
@@ -96,31 +118,17 @@
       });
     }
 
-    function rescan(link, mergeRequestId) {
-      $.ajax({
-        url:'/scan/mergerequests/project/<%=project.id%>/mergerequest/' + mergeRequestId + '/',
-        method:'post',
-        dataType:'json',
-        success:function(response) {
-          console.log(response)
-        },
-        error:function(response) {
-          alert('server error occured')
-        }
-      });
-    }
-
     function deleteComment(button) {
-      var commentLine = getParentByClass(button, 'comment-line');
-      var mergeRequestId = commentLine.attr('data-merge-request-id');
-      var commentId = commentLine.attr('data-comment-id');
+      var commentLine = getParentByClass(button, '.comment-line');
+      var mergeRequestId = commentLine.data('mergerequest-id');
+      var commentId = commentLine.data('comment-id');
       $.ajax({
-        url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/',
-        method:'delete',
+        url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/delete/',
+        method:'post',
         success:function(data, textStatus, jqXHR){
           console.log(data);
           if (jqXHR.status == 200) {
-            $(commentLine).hide(250);
+            removeFromView(commentLine);
           } else {
             alert('some error occurred try again');
           }
@@ -133,6 +141,59 @@
         }
       });
     }
+
+    function hideComment(button) {
+      var commentLine = getParentByClass(button, '.comment-line');
+      var mergeRequestId = commentLine.data('mergerequest-id');
+      var commentId = commentLine.data('comment-id');
+      $.ajax({
+        url:'/in/mergeRequest/' + mergeRequestId + '/comment/' + commentId + '/hide/',
+        method:'post',
+        success:function(data, textStatus, jqXHR){
+          console.log(data);
+          if (jqXHR.status == 200) {
+            removeFromView(commentLine);
+          } else {
+            alert('some error occurred try again');
+          }
+        },
+        error:function(jqXHR, textStatus, errorThrown){
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+          alert('server error occured')
+        }
+      });
+    }
+
+    function removeFromView(commentLine) {
+        var mergeRequestId = $(commentLine).data('mergerequest-id');
+        $(commentLine).remove();
+        var mergeRequestCommentsLength = document.querySelectorAll("tr[data-mergerequest-id='" + mergeRequestId + "'].comment-line").length;
+        if (mergeRequestCommentsLength == 0) {
+            var mergeRequestLine = document.querySelector("tr[data-mergerequest-id='" + mergeRequestId + "'].mergerequest-line");
+            if (mergeRequestLine) {
+                $(mergeRequestLine).hide(100);
+            }
+        }
+    }
+
+   function rescan(button) {
+      var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
+      var mergeRequestId = mergeRequestLine.data('mergerequest-id');
+      var projectId = mergeRequestLine.data('project-id');
+      $.ajax({
+         url:'/in/project/' + projectId + '/mergeRequest/' + mergeRequestId + '/rescan',
+         method:'post',
+         dataType:'json',
+         success:function(response) {
+            console.log(response)
+         },
+         error:function(response) {
+            alert('server error occured')
+         }
+      });
+   }
 
     function getParentByClass(element, parentClass) {
       return $(element).parents(parentClass);

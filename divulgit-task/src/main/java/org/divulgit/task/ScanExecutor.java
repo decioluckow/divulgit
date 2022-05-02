@@ -33,7 +33,7 @@ public class ScanExecutor {
     }
 
     public RemoteScan.UniqueKey scanProjectForMergeRequests(Remote remote, User user, Project project, List<String> requestedMergeRequestIds, String token) {
-        RemoteScan remoteScan = MergeRequestIdsRemoteScan.build(remote, project, requestedMergeRequestIds, token);
+        RemoteScan remoteScan = MergeRequestIdsRemoteScan.build(remote, user, project, requestedMergeRequestIds, token);
         remoteScan.run();
         return remoteScan.uniqueKey();
     }

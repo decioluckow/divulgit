@@ -2,6 +2,7 @@ package org.divulgit.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.util.MergeRequestUtil;
@@ -22,17 +23,14 @@ public class MergeRequestCommentService {
     public void markDiscussed(MergeRequest mergeRequest, String commentExternalId, boolean discussed) {
         List<MergeRequest.Comment> comments = mergeRequest.getComments();
         MergeRequest.Comment comment = MergeRequestUtil.getComment(comments, commentExternalId);
-        comment.setDiscussed(discussed);
-        comment.setDiscussedOn(LocalDateTime.now());
+        comment.setDiscussedOn(discussed ? LocalDateTime.now() : null);
         mergeRequestRepository.save(mergeRequest);
     }
 
-    public void delete(MergeRequest mergeRequest, String commentExternalId) {
+    public void updateState(MergeRequest mergeRequest, String commentExternalId, MergeRequest.Comment.State state) {
         List<MergeRequest.Comment> comments = mergeRequest.getComments();
         MergeRequest.Comment comment = MergeRequestUtil.getComment(comments, commentExternalId);
-        comments.remove(comment);
+        comment.setState(state);
         mergeRequestRepository.save(mergeRequest);
     }
-
-
 }

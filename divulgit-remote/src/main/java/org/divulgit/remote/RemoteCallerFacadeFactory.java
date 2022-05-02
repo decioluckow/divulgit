@@ -22,7 +22,7 @@ public class RemoteCallerFacadeFactory {
             case GITLAB: return gitLabCallerFacade;
             case GITHUB: return gitHubCallerFacade;
             default:
-                throw new RuntimeException("Opcao não implementada");
+                throw new RuntimeException("Opcão "+ remote +" não implementada");
         }
     }
 }

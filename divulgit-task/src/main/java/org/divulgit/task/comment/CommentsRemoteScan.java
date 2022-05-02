@@ -26,8 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @Scope("prototype")
 public class CommentsRemoteScan extends AbstractRemoteScan {
 
-
-
     @Autowired
     private RemoteCallerFacadeFactory callerFactory;
 
@@ -100,11 +98,14 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
 
 	private void addNewComment(RemoteComment remoteComment) {
 		List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
-		mergeRequest.getComments().add(remoteComment.toComment(hashTags));
+        mergeRequest.getComments().add(remoteComment
+                .toComment()
+                .hashTags(hashTags)
+                .state(MergeRequest.Comment.State.VALID)
+                .build());
 	}
 
     private Optional<MergeRequest.Comment> findExistingComment(RemoteComment remoteComment) {
         return mergeRequest.getComments().stream().filter(c -> c.getExternalId().equals(remoteComment.getExternalId())).findFirst();
     }
-
 }

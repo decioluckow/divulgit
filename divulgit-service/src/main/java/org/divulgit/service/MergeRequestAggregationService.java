@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.divulgit.repository.MergeRequestRepository;
 import org.divulgit.vo.ProjectIdCommentsSum;
+import org.divulgit.vo.ProjectIdMaxDiscussion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,10 @@ public class MergeRequestAggregationService {
         return projectCommentsCounts.stream()
                 .collect(Collectors.toMap(ProjectIdCommentsSum::getId, Function.identity()));
     }
-    
-    public Map<String, ProjectIdCommentsSum> maxDiscussionProjectComments(List<String> projectIds) {
-        AggregationResults<ProjectIdCommentsSum> projectIdCommentsSums = mergeRequestRepository.sumProjectComments(projectIds);
-        List<ProjectIdCommentsSum> projectCommentsCounts = projectIdCommentsSums.getMappedResults();
+    public Map<String, ProjectIdMaxDiscussion> maxCommentDiscussedOn(List<String> projectIds) {
+        AggregationResults<ProjectIdMaxDiscussion> projectIdMaxDiscussions = mergeRequestRepository.maxCommentDiscussedOn(projectIds);
+        List<ProjectIdMaxDiscussion> projectCommentsCounts = projectIdMaxDiscussions.getMappedResults();
         return projectCommentsCounts.stream()
-                .collect(Collectors.toMap(ProjectIdCommentsSum::getId, Function.identity()));
+                .collect(Collectors.toMap(ProjectIdMaxDiscussion::getId, Function.identity()));
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.divulgit.model.Project;
+import org.divulgit.model.User;
 import org.divulgit.model.User.UserProject;
 import org.divulgit.model.User.UserProject.State;
 import org.divulgit.repository.ProjectRepository;
@@ -36,6 +37,8 @@ class ProjectCommentsServiceTest {
     
     private static final List<UserProject> USER_PROJECTS = Arrays.asList(USER_PROJECT_1, USER_PROJECT_2);
 
+    private static final User USER = User.builder().userProjects(USER_PROJECTS).build();
+
     @Mock
     private ProjectRepository projectRepository;
 
@@ -54,7 +57,7 @@ class ProjectCommentsServiceTest {
         List<Project> projects = Arrays.asList(PROJECT_1, PROJECT_2);
         Mockito.when(mergeRequestAggregationService.sumProjectComments(Mockito.anyList())).thenReturn(projectIdComments);
 
-        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER_PROJECTS, projects);
+        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER, projects);
 
         var project1 = findById(PROJECT_ID_1, projectsCommentsSum);
         assertEquals("1", project1.getId());
@@ -75,7 +78,7 @@ class ProjectCommentsServiceTest {
         List<Project> projects = new ArrayList<>();
         Mockito.when(mergeRequestAggregationService.sumProjectComments(Mockito.anyList())).thenReturn(projectIdComments);
 
-        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER_PROJECTS, projects);
+        List<UserProjectVO> projectsCommentsSum = service.populateCommentsSum(USER, projects);
 
         assertEquals(0, projectsCommentsSum.size());
     }

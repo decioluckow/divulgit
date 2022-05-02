@@ -1,11 +1,15 @@
 package org.divulgit.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
+import org.divulgit.model.User;
 import org.divulgit.repository.MergeRequestRepository;
+import org.divulgit.vo.UserProjectVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +44,7 @@ public class MergeRequestService {
     public List<MergeRequest> findAllWithHashTaggedCommentsByProjectId(Project project) {
         return mergeRequestRepository.findByProjectIdAndAndCommentsTotalGreaterThanOrderByExternalIdDesc(project.getId(), 0);
     }
+
 
     public MergeRequest save(MergeRequest mergeRequest) {
         return mergeRequestRepository.save(mergeRequest);

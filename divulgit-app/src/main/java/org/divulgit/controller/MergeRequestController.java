@@ -31,9 +31,9 @@ public class MergeRequestController {
         User user = loader.loadUser(authentication);
         Project project = loader.loadProject(user, projectId);
         List<MergeRequest> mergeRequests = mergeRequestService.findAllWithHashTaggedCommentsByProjectId(project);
+        model.addAttribute("user", user);
         model.addAttribute("project", project);
         model.addAttribute("mergeRequests", mergeRequests);
         return "mergeRequests";
     }
-
 }

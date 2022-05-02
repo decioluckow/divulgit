@@ -29,13 +29,11 @@ public class GitLabComment implements RemoteComment {
         return author.getUsername();
     }
 
-    public MergeRequest.Comment toComment(List<String> hashTags) {
+    public MergeRequest.Comment.CommentBuilder toComment() {
         return MergeRequest.Comment.builder()
                 .externalId(externalId)
                 .text(text)
                 .url(url)
-                .author(author.getUsername())
-                .hashTags(hashTags)
-                .build();
+                .author(author.getUsername());
     }
 }

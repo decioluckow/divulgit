@@ -14,8 +14,11 @@ public class UserProjectVO {
 
     private Project project;
     private UserProject.State state;
+    private long mergeRequestsNotDiscussedByAuthor;
+    private long commentsNotDiscussedByAuthor;
     private long commentsTotal;
     private long commentsDiscussed;
+    private String durationFromLastDiscussion;
     
     public String getId() {
         return project.getId();

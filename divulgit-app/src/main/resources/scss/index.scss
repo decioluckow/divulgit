@@ -38,3 +38,11 @@
 .comment-delete-button {
   color: $gray-200
 }
+
+.comment-delete-button:hover {
+  color: $red
+}
+
+.comment-hide-button {
+  color: $gray-200
+}

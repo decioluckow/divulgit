@@ -10,11 +10,13 @@ import org.divulgit.gitlab.mergerequest.MergeRequestCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
+import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.service.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
+import org.divulgit.task.comment.CommentsRemoteScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -38,23 +40,27 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
     private UserRepository userRepository;
 
     private final Remote remote;
+    private final User user;
     private final Project project;
     private final List<String> requestedMergeRequestIds;
     private final String token;
 
-    public static MergeRequestIdsRemoteScan build(Remote remote,
+    public static RemoteScan build(Remote remote,
+                        User user,
                         Project project,
                         List<String> requestedMergeRequestIds,
                         String token) {
-        return (MergeRequestIdsRemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestRemoteScan", remote, project, requestedMergeRequestIds, token);
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestIdsRemoteScan", remote, user, project, requestedMergeRequestIds, token);
     }
 
     public MergeRequestIdsRemoteScan(
             Remote remote,
+            User user,
             Project project,
             List<String> requestedMergeRequestIds,
             String token) {
         this.remote = remote;
+        this.user = user;
         this.project = project;
         this.requestedMergeRequestIds = requestedMergeRequestIds;
         this.token = token;
@@ -62,7 +68,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     @Override
     public RemoteScan.UniqueKey uniqueKey() {
-        return new RemoteScan.UniqueKey("project:" + project.getId());
+        return new RemoteScan.UniqueKey("project:" + project.getId() + ", mergeRequests");
     }
 
     @Override
@@ -71,7 +77,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
             log.info("Starting scanning code review ids for remote: {} and project: {}", remote.getId(), project.getId());
             List<MergeRequest> requestedMergeRequests = mergeRequestService.findAllByIds(requestedMergeRequestIds);
             List<Integer> requestedMergeRequestExernalIds = requestedMergeRequests.stream().map(mr -> mr.getExternalId()).collect(Collectors.toList());
-            log.debug("Considering external ids: {}", Joiner.on(",").join(requestedMergeRequestExernalIds));
+            log.trace("Considering external ids: {}", Joiner.on(",").join(requestedMergeRequestExernalIds));
 
             log.debug("Start retrieving merge requests from remote");
             List<GitLabMergeRequest> remoteMergeRequests = caller.retrieveMergeRequests(remote, project, requestedMergeRequestExernalIds, token);
@@ -84,7 +90,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
                     mergeRequest.setTitle(remoteMergeRequest.get().getTitle());
                     mergeRequest.setDescription(remoteMergeRequest.get().getDescription());
                     mergeRequest.setState(GitLabMergeRequest.convertState(remoteMergeRequest.get().getState()));
-                    //TODO trigger comments scanning
+                    scanComments(mergeRequest);
                 }
             }
             log.debug("Finished merge requests merging");
@@ -93,5 +99,11 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
             addErrorStep(message + " - " + e.getMessage());
             log.error(message, e);
         }
+    }
+
+    private void scanComments(MergeRequest mergeRequest) {
+        log.debug("Queueing scan comments for merge request {}", mergeRequest.getId());
+        RemoteScan remoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, token);
+        remoteScan.run();
     }
 }

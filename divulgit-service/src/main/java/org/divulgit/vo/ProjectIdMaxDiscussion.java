@@ -13,5 +13,5 @@ import lombok.Setter;
 @Builder
 public class ProjectIdMaxDiscussion {
     private String id;
-    private LocalDate maxDiscussion;
+    private LocalDate maxDiscussedOn;
 }
