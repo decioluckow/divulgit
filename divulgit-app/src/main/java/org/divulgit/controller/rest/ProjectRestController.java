@@ -8,13 +8,16 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.model.User.UserProject;
 import org.divulgit.model.util.UserProjectUtil;
+import org.divulgit.remote.RemoteCallerFacadeFactory;
+import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.task.RemoteScan;
-import org.divulgit.task.ScanExecutor;
+import org.divulgit.task.executor.ScanExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +37,20 @@ public class ProjectRestController {
 	@Autowired
 	private EntityLoader loader;
 
+	@Autowired
+	private RemoteCallerFacadeFactory remoteCallerFacadeFactory;
+
+	@GetMapping("/in/project/{projectId}/mergerequest/last")
+	public ResponseEntity<Integer> lastMergeRequest(Authentication authentication, @PathVariable String projectId) throws RemoteException {
+		log.info("Ignoring project {}", projectId);
+		User user = loader.loadUser(authentication);
+		Remote remote = loader.loadRemote(user.getRemoteId());
+		Project project = loader.loadProject(user, projectId);
+		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
+		Integer lastMergeRequest = remoteCallerFacadeFactory.build(remote).retrieveLastMergeRequestExternalId(remote, user, project, remoteToken);
+		return ResponseEntity.ok(lastMergeRequest);
+	}
+
 	@PostMapping("/in/project/{projectId}/ignore")
 	public ResponseEntity<String> ignore(Authentication auth, @PathVariable String projectId) {
 		log.info("Ignoring project {}", projectId);
@@ -42,16 +59,16 @@ public class ProjectRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping("/in/project/{projectId}/activate")
-	public ResponseEntity<String> activate(Authentication auth, @PathVariable String projectId) {
+	@PostMapping("/in/project/{projectId}/unignore")
+	public ResponseEntity<String> unIgnore(Authentication auth, @PathVariable String projectId) {
 		log.info("Ignoring project {}", projectId);
 		User user = loader.loadUser(auth);
-		updateUserProjectState(user, projectId, User.UserProject.State.ACTIVE);
+		updateUserProjectState(user, projectId, UserProject.State.NEW);
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/in/project/{projectId}/scanFrom/{scanFrom}")
-	public ResponseEntity<RemoteScan.UniqueKey> scanFrom(Authentication authentication, @PathVariable String projectId,
+	public ResponseEntity<RemoteScan.UniqueId> scanFrom(Authentication authentication, @PathVariable String projectId,
 			@PathVariable int scanFrom) {
 		log.info("Start scanning project {} from scan {}", projectId, scanFrom);
 		User user = loader.loadUser(authentication);
@@ -59,9 +76,9 @@ public class ProjectRestController {
 		Remote remote = loader.loadRemote(user.getRemoteId());
 		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
 		Project project = loader.loadProject(user, projectId);
-		RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, user, project,
+		RemoteScan.UniqueId taskUniqueId = taskExecutor.scanProjectForMergeRequests(remote, user, project,
 				Optional.of(scanFrom), remoteToken);
-		return ResponseEntity.ok(taskUniqueKey);
+		return ResponseEntity.ok(taskUniqueId);
 	}
 
 	private void updateUserProjectState(User user, String projectId, UserProject.State state) {
@@ -71,7 +88,7 @@ public class ProjectRestController {
 	}
 
 	@PostMapping("/in/project/{projectId}/scanFrom/lastest")
-	public ResponseEntity<RemoteScan.UniqueKey> scanLastest(Authentication authentication,
+	public ResponseEntity<RemoteScan.UniqueId> scanLastest(Authentication authentication,
 			@PathVariable String projectId) {
 		log.info("Start scanning project {} from last scan", projectId);
 		User user = loader.loadUser(authentication);
@@ -79,8 +96,8 @@ public class ProjectRestController {
 		Project project = loader.loadProject(user, projectId);
 		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
 		Optional<Integer> emptyScanFrom = Optional.empty();
-		RemoteScan.UniqueKey taskUniqueKey = taskExecutor.scanProjectForMergeRequests(remote, user, project,
+		RemoteScan.UniqueId taskUniqueId = taskExecutor.scanProjectForMergeRequests(remote, user, project,
 				emptyScanFrom, remoteToken);
-		return ResponseEntity.ok(taskUniqueKey);
+		return ResponseEntity.ok(taskUniqueId);
 	}
 }

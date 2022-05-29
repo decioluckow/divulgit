@@ -1,44 +1,39 @@
 package org.divulgit.gitlab.mergerequest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.divulgit.gitlab.error.ErrorMapper;
-import org.divulgit.gitlab.error.ErrorMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.divulgit.annotation.ForRemote;
+import org.divulgit.gitlab.GitLabURLBuilder;
+import org.divulgit.gitlab.util.LinkHeaderUtil;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Strings;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Component
 public class MergeRequestCaller {
 
-    public static final String STARTING_PAGE = "1";
+    @Autowired
+    private HeaderAuthRestCaller gitLabRestCaller;
 
     @Autowired
-    private RestCaller restCaller;
+    private GitLabURLBuilder urlBuilder;
 
     @Autowired
-    private MergeRequestMapper mapper;
+    private MergeRequestResponseHandler responseHandler;
 
     @Autowired
-    private ErrorMapper errorMapper;
-
-    @Autowired
-    private MergeRequestURLGenerator urlGenerator;
-
-    //getForEntity
-    //https://www.baeldung.com/spring-resttemplate-json-list
+    @ForRemote(RemoteType.GITLAB)
+    private ErrorResponseHandler errorResponseHandler;
 
     public List<GitLabMergeRequest> retrieveMergeRequests(
             Remote remote,
@@ -47,7 +42,7 @@ public class MergeRequestCaller {
             String token) throws RemoteException {
         final List<GitLabMergeRequest> mergeRequests = new ArrayList<>();
         Integer emptyScanFrom = 0;
-        retrieveMergeRequests(remote, project, mergeRequests, requestedMergeRequestExternalIds, emptyScanFrom, token, STARTING_PAGE);
+        retrieveMergeRequests(remote, project, mergeRequests, requestedMergeRequestExternalIds, emptyScanFrom, token, GitLabURLBuilder.INITIAL_PAGE);
         return mergeRequests;
     }
 
@@ -58,7 +53,7 @@ public class MergeRequestCaller {
             String token) throws RemoteException {
         final List<GitLabMergeRequest> mergeRequests = new ArrayList<>();
         List<Integer> emptyRequestedMergeRequestExternalIds = Collections.emptyList();
-        retrieveMergeRequests(remote, project, mergeRequests, emptyRequestedMergeRequestExternalIds, scanFrom, token, STARTING_PAGE);
+        retrieveMergeRequests(remote, project, mergeRequests, emptyRequestedMergeRequestExternalIds, scanFrom, token, GitLabURLBuilder.INITIAL_PAGE);
         return mergeRequests;
     }
 
@@ -69,12 +64,12 @@ public class MergeRequestCaller {
             List<Integer> requestedMergeRequestExternalIds,
             Integer scanFrom,
             String token,
-            final String page) throws RemoteException {
-        String url = urlGenerator.build(remote, project, requestedMergeRequestExternalIds, page);
-        ResponseEntity<String> response = restCaller.call(url, token);
+            int page) throws RemoteException {
+        String url = urlBuilder.buildMergeRequestURL(remote, project, requestedMergeRequestExternalIds, page);
+        ResponseEntity<String> response = gitLabRestCaller.call(url, token);
         boolean stopScan = false;
         if (response.getStatusCode().is2xxSuccessful()) {
-            List<GitLabMergeRequest> remoteMergeRequests = handle200Response(response);
+            List<GitLabMergeRequest> remoteMergeRequests = responseHandler.handle200ResponseMultipleResult(response);
             for (GitLabMergeRequest remoteMergeRequest : remoteMergeRequests) {
                 if (remoteMergeRequest.getExternalId() >= scanFrom) {
                     loadedMergeRequests.add(remoteMergeRequest);
@@ -82,33 +77,11 @@ public class MergeRequestCaller {
                     stopScan = true;
                 }
             }
-        } else if (response.getBody().contains("error_description")) {
-            handleErrorResponse(response);
+        } else if (errorResponseHandler.isErrorResponse(response)) {
+            errorResponseHandler.handleErrorResponse(response);
         }
-        String nextPage = response.getHeaders().getFirst("x-next-page");
-        if (!Strings.isNullOrEmpty(nextPage) && !stopScan) {
-            retrieveMergeRequests(remote, project, loadedMergeRequests, requestedMergeRequestExternalIds, scanFrom, token, nextPage);
-        }
-    }
-
-    private List<GitLabMergeRequest> handle200Response(ResponseEntity<String> response) throws RemoteException {
-        try {
-            return mapper.convertoToMergeRequests(response.getBody());
-        } catch (JsonProcessingException e) {
-            String message = "Error on converting json to Object";
-            log.error(message + "[json: " + response.getBody() + "]");
-            throw new RemoteException(message, e);
-        }
-    }
-
-    private void handleErrorResponse(ResponseEntity<String> response) throws RemoteException {
-        try {
-            ErrorMessage errorMessage = errorMapper.convertFrom(response.getBody());
-            throw new RemoteException(errorMessage.getErrorDescription());
-        } catch (JsonProcessingException e) {
-            String message = "Error on converting json to Object";
-            log.error(message + "[json: " + response.getBody() + "]");
-            throw new RemoteException(message, e);
+        if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
+            retrieveMergeRequests(remote, project, loadedMergeRequests, requestedMergeRequestExternalIds, scanFrom, token, ++page);
         }
     }
 }

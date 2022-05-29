@@ -28,6 +28,8 @@ public class GitHubPullRequest implements RemoteMergeRequest {
     @JsonProperty("body")
     private String description;
     private GitHubUser user;
+    @JsonProperty("html_url")
+    private String url;
     private String state;
     @JsonProperty("merged_at")
     private String mergedAt;
@@ -43,6 +45,7 @@ public class GitHubPullRequest implements RemoteMergeRequest {
                 .externalId(externalId)
                 .title(title)
                 .description(description)
+                .url(url)
                 .author(user.getUsername())
                 .state(convertState(state)).build();
     }

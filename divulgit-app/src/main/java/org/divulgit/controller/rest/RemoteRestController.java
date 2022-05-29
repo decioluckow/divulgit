@@ -5,7 +5,7 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.security.UserAuthentication;
 import org.divulgit.task.RemoteScan;
-import org.divulgit.task.ScanExecutor;
+import org.divulgit.task.executor.ScanExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,7 @@ public class RemoteRestController {
     private EntityLoader loader;
 
     @PostMapping("/in/rest/remote/scan")
-    public RemoteScan.UniqueKey scan(Authentication authentication) {
+    public RemoteScan.UniqueId scan(Authentication authentication) {
         User user = loader.loadUser(authentication);
         Remote remote = loader.loadRemote(user.getRemoteId());
         String remoteToken = ((UserAuthentication) authentication).getRemoteToken();

@@ -1,0 +1,68 @@
+<body th:replace="~{base :: layout (~{:: main})}">
+<main>
+   </br>
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location='/in/projects'">back</button>
+        </div>
+        <div class="col-4 text-right">
+           <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload();">refresh</button>
+        </div>
+    </div>
+    </br>
+   <h1 class="display-4">Tasks</h1>
+
+   <table class="table table-sm">
+      <tr>
+         <th scope="col" style="width: 120px"></th>
+         <th scope="col">User</th>
+         <th scope="col">State</th>
+         <th scope="col">Task</th>
+         <th scope="col">Detail</th>
+      </tr>
+    <th:block th:each="task : ${tasks}">
+      <tr>
+         <td th:text="${#temporals.format(task.registeredAt, 'dd/MM HH:mm:ss')}"></td>
+         <td th:text="${task.username}"></td>
+         <td><span th:class="'task-state-badge-' + ${task.currentState}" th:text="${task.currentState}"></span></td>
+         <td th:text="${task.description}"></td>
+         <td th:text="${task.currentStateDescription}"></td>
+      </tr>
+      <th:block th:if="${task.getSubTaskDetail().getSubTasks().size() > 0}">
+         <tr>
+            <td></td>
+            <td></td>
+            <td>
+               <span th:if="${task.getSubTaskDetail().getSubTasks()['RUNNING'] > 0}">
+                  <span th:class="'task-state-badge-RUNNING'">RUNNING</span>
+               </span>
+            </td>
+            <td th:text="${task.getSubTaskDetail().getDescription()}"></td>
+            <td>
+               <table>
+                  <tr>
+                     <td class="text-center">
+                        <span class="task-state-badge-WAITING">WAITING</span><br/>
+                        <span th:text="${task.getSubTaskDetail().getSubTasks()['WAITING']}"></span>
+                     </td>
+                     <td class="text-center">
+                        <span class="task-state-badge-RUNNING">RUNNING</span><br/>
+                        <span th:text="${task.getSubTaskDetail().getSubTasks()['RUNNING']}"></span>
+                     </td>
+                     <td class="text-center">
+                        <span class="task-state-badge-FINISHED">FINISHED</span><br/>
+                        <span th:text="${task.getSubTaskDetail().getSubTasks()['FINISHED']}"></span>
+                     </td>
+                     <td class="text-center">
+                        <span class="task-state-badge-ERROR">ERROR</span><br/>
+                        <span th:text="${task.getSubTaskDetail().getSubTasks()['ERROR']}"></span>
+                     </td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
+      </th:block>
+   </th:block>
+   </table>
+</main>
+</body>

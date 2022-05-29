@@ -2,12 +2,14 @@ package org.divulgit.github.user;
 
 import java.util.Optional;
 
+import org.divulgit.annotation.ForRemote;
 import org.divulgit.github.GitHubURLBuilder;
-import org.divulgit.github.error.ErrorResponseHandler;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
-import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -21,37 +23,27 @@ import lombok.extern.slf4j.Slf4j;
 public class GitHubCurrentUserCaller {
 
     @Autowired
-    private RestCaller restCaller;
+    private HeaderAuthRestCaller gitHubRestCaller;
 
     @Autowired
     private GitHubURLBuilder urlBuilder;
     
     @Autowired
-    private GitHubUserMapper userMapper;
+    private GitHubUserResponseHandler responseHandler;
 
     @Autowired
+    @ForRemote(RemoteType.GITHUB)
     private ErrorResponseHandler errorResponseHandler;
 
     public Optional<RemoteUser> retrieveCurrentUser(Remote remote, String token) throws RemoteException {
-        final String url = urlBuilder.buildUserURL(remote);
-        ResponseEntity<String> response = restCaller.call(url, token);
+        String url = urlBuilder.buildUserURL(remote);
+        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
-            authenticatedUser = handle200Response(response);
-        } else if (response.getBody().contains("error_description")) {
-        	errorResponseHandler.handleErrorResponse(response);
+            authenticatedUser = Optional.ofNullable(responseHandler.handle200Response(response));
+        } else if (errorResponseHandler.isErrorResponse(response)) {
+            errorResponseHandler.handleErrorResponse(response);
         }
         return authenticatedUser;
     }
-
-    private Optional<RemoteUser> handle200Response(ResponseEntity<String> response) throws RemoteException {
-        try {
-            return Optional.ofNullable((RemoteUser) userMapper.convert(response.getBody()));
-        } catch (JsonProcessingException e) {
-            String message = "Error on converting json to Object";
-            log.error(message + "[json: " + response.getBody() +"]");
-            throw new RemoteException(message, e);
-        }
-    }
-
 }

@@ -6,7 +6,7 @@ import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.User;
-import org.divulgit.service.MergeRequestService;
+import org.divulgit.service.mergeRequest.MergeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

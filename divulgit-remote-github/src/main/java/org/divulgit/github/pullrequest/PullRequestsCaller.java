@@ -3,14 +3,16 @@ package org.divulgit.github.pullrequest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.divulgit.annotation.ForRemote;
 import org.divulgit.github.GitHubURLBuilder;
-import org.divulgit.github.error.ErrorResponseHandler;
 import org.divulgit.github.util.LinkHeaderUtil;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,12 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PullRequestsCaller {
 
     @Autowired
-    private RestCaller restCaller;
+    private HeaderAuthRestCaller gitHubRestCaller;
 
     @Autowired
     private PullRequestResponseHandler responseHandler;
 
     @Autowired
+    @ForRemote(RemoteType.GITHUB)
     private ErrorResponseHandler errorResponseHandler;
 
     @Autowired
@@ -68,7 +71,7 @@ public class PullRequestsCaller {
             String token,
             int page) throws RemoteException {
         final String url = urlBuilder.buildPullRequestsURL(remote, user, project, page);
-        ResponseEntity<String> response = restCaller.call(url, token);
+        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
         boolean stopScan = false;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<GitHubPullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
@@ -79,8 +82,8 @@ public class PullRequestsCaller {
                     stopScan = true;
                 }
             }
-        } else if (response.getBody().contains("message")) {
-        	errorResponseHandler.handleErrorResponse(response);
+        } else if (errorResponseHandler.isErrorResponse(response)) {
+            errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
         	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, token, ++page);
@@ -94,12 +97,12 @@ public class PullRequestsCaller {
             Integer externalId,
             String token) throws RemoteException {
         String url = urlBuilder.buildPullRequestURL(remote, user, project, externalId);
-        ResponseEntity<String> response = restCaller.call(url, token);
+        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
         GitHubPullRequest pullRequest = null;
         if (response.getStatusCode().is2xxSuccessful()) {
         	pullRequest = responseHandler.handle200ResponseSingleResult(response);
-        } else if (response.getBody().contains("message")) {
-        	errorResponseHandler.handleErrorResponse(response);
+        } else if (errorResponseHandler.isErrorResponse(response)) {
+            errorResponseHandler.handleErrorResponse(response);
         }
         return pullRequest;
     }

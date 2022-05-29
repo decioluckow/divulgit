@@ -7,18 +7,20 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.divulgit.remote.exception.RemoteException;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 public class MergeRequestMapperTest {
 
-    private MergeRequestMapper mapper = new MergeRequestMapper();
+    private MergeRequestResponseHandler responseHandler = new MergeRequestResponseHandler();
 
     @Test
-    public void testConvertProject() throws IOException {
+    public void testConvertProject() throws IOException, RemoteException {
         InputStream jsonResource = this.getClass().getResourceAsStream("mergerequests.json");
         String json = new String(jsonResource.readAllBytes(), StandardCharsets.UTF_8);
 
-        List<GitLabMergeRequest> mergeRequests = mapper.convertoToMergeRequests(json);
+        List<GitLabMergeRequest> mergeRequests = responseHandler.handle200ResponseMultipleResult(ResponseEntity.ok(json));
 
         assertEquals(2, mergeRequests.size());
         GitLabMergeRequest mergeRequest0 = mergeRequests.get(0);

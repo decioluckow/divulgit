@@ -1,0 +1,62 @@
+<body th:replace="~{base :: layout (~{:: main})}">
+    <main>
+    </br>
+        	<div class="row justify-content-between">
+				<div class="col-4">
+					<button type="button" class="btn btn-secondary btn-sm" onclick="window.location='/in/projects'">back</button>
+				</div>
+				<div class="col-4 text-right">
+				</div>
+			</div>
+        </br>
+        <input type="hidden" id="currentProjectId"/>
+        <table class="table table-hover">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+            <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
+                <td class="align-middle"><a th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+                <td class="align-middle">
+                  <span th:text="${project.name}"></span>
+                </td>
+                <td th:id="'actions-' + ${project.id}">
+                   <button type="button" class="btn btn-primary btn-sm" onclick="javascript:unIgnoreProject(getProjectElement(this), getProjectId(this))">activate</button>
+                </td>
+            </tr>
+        </table>
+
+        <script>
+
+            function unIgnoreProject(projectElement, projectId){
+                $.ajax({
+                    url:'/in/project/'+ projectId +'/unignore',
+                    method:'post',
+                    success:function(data, textStatus, jqXHR){
+                        console.log(data);
+                        if (jqXHR.status == 200) {
+                            $(projectElement).hide(250);
+                        } else {
+                            alert('some error occurred try again');
+                        }
+                    },
+                    error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        alert('server error occured')
+                    }
+                });
+            }
+
+            function getProjectId(element) {
+                return getProjectElement(element).attr("data-project-id");
+            }
+
+            function getProjectElement(actualElement) {
+                return $(actualElement).parents(".project-item")
+            }
+      </script>
+   </main>
+</body>

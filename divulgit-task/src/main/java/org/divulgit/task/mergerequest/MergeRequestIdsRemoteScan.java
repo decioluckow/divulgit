@@ -12,11 +12,13 @@ import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
+import org.divulgit.repository.TaskRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.service.MergeRequestService;
+import org.divulgit.service.mergeRequest.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.task.comment.CommentsRemoteScan;
+import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     private final Remote remote;
     private final User user;
@@ -67,8 +72,19 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
     }
 
     @Override
-    public RemoteScan.UniqueKey uniqueKey() {
-        return new RemoteScan.UniqueKey("project:" + project.getId() + ", mergeRequests");
+    public String mountTitle() {
+        return "Scanning merge requests";
+    }
+
+    @Override
+    public String mountDetail() {
+        return "Scanning " + requestedMergeRequestIds.size() + " merge requests for project " + project.getName();
+    }
+
+    @Override
+    public RemoteScan.UniqueId register() {
+        super.addScanListener(new PersistenceScanListener(taskRepository, remote, user));
+        return super.register();
     }
 
     @Override
@@ -103,7 +119,9 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     private void scanComments(MergeRequest mergeRequest) {
         log.debug("Queueing scan comments for merge request {}", mergeRequest.getId());
-        RemoteScan remoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, token);
-        remoteScan.run();
+        RemoteScan commentRemoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, token);
+        commentRemoteScan.register();
+        registerSubTask(commentRemoteScan.uniqueId());
+        commentRemoteScan.run();
     }
 }

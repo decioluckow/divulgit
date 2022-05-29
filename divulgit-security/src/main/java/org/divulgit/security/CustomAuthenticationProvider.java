@@ -8,9 +8,9 @@ import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
-import org.divulgit.repository.RemoteRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.service.UserService;
+import org.divulgit.service.remote.RemoteDiscoveryService;
+import org.divulgit.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -35,16 +35,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RemoteRepository remoteRepository;
+	private RemoteDiscoveryService remoteDiscoveryService;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		final String remoteURL = authentication.getPrincipal().toString();
 		log.info("Autenticating user on {}", remoteURL);
-		final Remote remote = loadRemote(remoteURL);
-		final String remoteToken = authentication.getCredentials().toString();
 		Authentication authenticatedUser;
 		try {
+			final String remoteToken = authentication.getCredentials().toString();
+			final Remote remote = remoteDiscoveryService.findRemote(remoteURL, remoteToken);
 			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
 			if (remoteUser.isPresent()) {
 				authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
@@ -68,15 +68,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			user = Optional.of(userService.save(remoteUser, remote));
 		}
 		return UserAuthentication.of(user.get(), remoteToken);
-	}
-
-	private Remote loadRemote(String remoteURL) {
-		//TODO cadastrar automaticamente, verificando que tipo de repositorio é por meio de chamada de api
-		final Optional<Remote> remote = remoteRepository.findByUrl(remoteURL);
-		if (!remote.isPresent()) {
-			throw new RemoteNotFoundException("Remote " + remoteURL + " not found");
-		}
-		return remote.get();
 	}
 
 	@Override

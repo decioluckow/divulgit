@@ -11,9 +11,11 @@ import org.divulgit.model.User;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteComment;
-import org.divulgit.service.MergeRequestService;
+import org.divulgit.repository.TaskRepository;
+import org.divulgit.service.mergeRequest.MergeRequestService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
+import org.divulgit.task.listener.PersistenceScanListener;
 import org.divulgit.util.HashTagIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -31,6 +33,9 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
 
     @Autowired
     private MergeRequestService mergeRequestService;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     private final Remote remote;
     private final User user;
@@ -60,8 +65,19 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     }
 
     @Override
-    public RemoteScan.UniqueKey uniqueKey() {
-        return new RemoteScan.UniqueKey("project:" + project.getId() + ", mergeRequest:" + mergeRequest.getId());
+    public String mountTitle() {
+        return "Scanning comments";
+    }
+
+    @Override
+    public String mountDetail() {
+        return "for merge request " + mergeRequest.getExternalId();
+    }
+
+    @Override
+    public RemoteScan.UniqueId register() {
+        super.addScanListener(new PersistenceScanListener(taskRepository, remote, user));
+        return super.register();
     }
 
     @Override

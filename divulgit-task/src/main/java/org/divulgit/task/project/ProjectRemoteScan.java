@@ -12,10 +12,12 @@ import org.divulgit.model.User.UserProject;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteProject;
+import org.divulgit.repository.TaskRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.service.ProjectService;
+import org.divulgit.service.project.ProjectService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
+import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,9 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
     private Remote remote;
     private User user;
     private String token;
@@ -44,6 +49,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
         this.remote = remote;
         this.user = user;
         this.token = token;
+        super.addScanListener(new PersistenceScanListener(taskRepository, remote, user));
     }
 
     public static ProjectRemoteScan build(Remote remote, User user, String token) {
@@ -52,8 +58,19 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
     }
 
     @Override
-    public RemoteScan.UniqueKey uniqueKey() {
-        return new RemoteScan.UniqueKey("remote:" + remote.getId() + "|user:" + user.getId());
+    public RemoteScan.UniqueId register() {
+        super.addScanListener(new PersistenceScanListener(taskRepository, remote, user));
+        return super.register();
+    }
+
+    @Override
+    public String mountTitle() {
+        return "Scanning projects";
+    }
+
+    @Override
+    public String mountDetail() {
+        return "Scanning projects for user " + user.getUsername() + " of remote " + remote.getUrl();
     }
 
     @Override

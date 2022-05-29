@@ -15,7 +15,7 @@
       <tr>
          <th scope="col"></th>
          <th scope="col"></th>
-         <th scope="col">Author X</th>
+         <th scope="col">Author</th>
          <th scope="col">Title</th>
          <th scope="col">Discussed</th>
          <th scope="col"></th>
@@ -27,8 +27,8 @@
           th:data-mergerequest-id="${mergeRequest.id}">
          <td><a th:href="${mergeRequest.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
          <td><span th:class="'mr-state-' + ${mergeRequest.state}" th:text="${mergeRequest.state}"></span></td>
-         <td th:class="${mergeRequest.author == user.username ? 'fw-bold' : ''}" th:text="${mergeRequest.author}"></td>
-         <td th:text="${mergeRequest.title}"></td>
+         <td th:class="${mergeRequest.author == user.username ? 'text-primary' : ''}" th:text="${mergeRequest.author}"></td>
+         <td class="mergeRequest-text-column-width" th:text="${mergeRequest.title}"></td>
          <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
           <!--
           <a href="javascript:void(0)" onclick="rescan(this, '<%=mergeRequests[i].id%>')"><i class="bi bi-arrow-clockwise"/></a>
@@ -51,9 +51,9 @@
             <td></td>
             <td style="white-space: nowrap">
                <a th:href="${comment.url}" target="_blank"><i class="bi bi-arrow-up-right-square"></i></a>
-               <span th:class="${comment.author == user.username ? 'fw-bold' : ''}" th:text="${comment.author}"/>
+               <span th:class="${comment.author == user.username ? 'text-primary' : ''}" th:text="${comment.author}"/>
             </td>
-            <td th:text="${comment.text}"></td>
+            <td class="mergeRequest-text-column-width" th:text="${comment.text}"></td>
             <td class="text-end" style="white-space: nowrap">
                <button type="button" class="btn btn-outline-success btn-sm btn-mark-discussed" onclick="markAsDiscussed(this, true)">Discussed</button>
                <button type="button" class="btn btn-outline-warning btn-sm btn-unmark-discussed" onclick="markAsDiscussed(this, false)">Unmark</button>

@@ -38,6 +38,10 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-security</artifactId>
             <version>${project.version}</version>
@@ -109,9 +113,15 @@
             <artifactId>webjars-locator</artifactId>
             <version>${webjars-locator.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <finalName>divulgit-app</finalName>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>

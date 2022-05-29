@@ -19,6 +19,8 @@ public class GitLabMergeRequest implements RemoteMergeRequest {
     private int externalId;
     private String title;
     private String description;
+    @JsonProperty("web_url")
+    private String url;
     private Author author;
     private String state;
 
@@ -39,6 +41,7 @@ public class GitLabMergeRequest implements RemoteMergeRequest {
                 .title(title)
                 .description(description)
                 .author(author.getUsername())
+                .url(url)
                 .state(convertState(state)).build();
     }
 

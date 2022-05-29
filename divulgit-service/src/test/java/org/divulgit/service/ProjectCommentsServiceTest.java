@@ -12,6 +12,8 @@ import org.divulgit.model.User;
 import org.divulgit.model.User.UserProject;
 import org.divulgit.model.User.UserProject.State;
 import org.divulgit.repository.ProjectRepository;
+import org.divulgit.service.mergeRequest.MergeRequestAggregationService;
+import org.divulgit.service.project.ProjectCommentsService;
 import org.divulgit.vo.ProjectIdCommentsSum;
 import org.divulgit.vo.UserProjectVO;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,9 @@ class ProjectCommentsServiceTest {
 
     @Mock
     private MergeRequestAggregationService mergeRequestAggregationService;
+
+    @Mock
+    private RelatedContentService relatedContentService;
 
     @InjectMocks
     private ProjectCommentsService service;

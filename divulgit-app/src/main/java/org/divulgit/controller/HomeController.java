@@ -12,13 +12,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("currentUsername","decioluckow");
         return "index";
     }
 
     @GetMapping("/start")
     public String start(Model model) {
-        model.addAttribute("currentUsername","decioluckow");
         return "start";
     }
 }

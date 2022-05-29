@@ -1,4 +1,5 @@
 @import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "../../../../node_modules/bootstrap/scss/utilities";
 @import "../../../../node_modules/bootstrap/scss/_variables";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 
@@ -6,13 +7,49 @@
   width: 500px;
 }
 
-.bg-blue-800 {
+.page-footer-text {
+    @extend .dark-background-color;
+    @extend .text-center;
+    @extend .font-color-gold;
+}
+
+.dark-background-color {
   background-color: #212529;
+}
+
+.font-color-gold {
+  color: #cbbcb1 !important;
 }
 
 .logo {
   color: #cbbcb1 !important;
   font-size: xx-large;
+}
+
+.task-state-badge {
+  @extend .badge;
+  @extend .text-white;
+}
+
+.task-state-badge-WAITING {
+  @extend .task-state-badge;
+  @extend .bg-warning;
+  @extend .text-dark;
+}
+
+.task-state-badge-RUNNING {
+  @extend .task-state-badge;
+  @extend .bg-primary;
+}
+
+.task-state-badge-FINISHED {
+  @extend .task-state-badge;
+  @extend .bg-success;
+}
+
+.task-state-badge-ERROR {
+  @extend .task-state-badge;
+  @extend .bg-danger;
 }
 
 .mr-state-bage {
@@ -36,13 +73,18 @@
 }
 
 .comment-delete-button {
-  color: $gray-200
+  color: $gray-200;
 }
 
 .comment-delete-button:hover {
-  color: $red
+  color: $red;
 }
 
 .comment-hide-button {
-  color: $gray-200
+    color: $gray-200;
+}
+
+.mergeRequest-text-column-width {
+    width: 720px;
+    word-wrap: break-word;
 }

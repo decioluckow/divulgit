@@ -1,74 +1,79 @@
 <body th:replace="~{base :: layout (~{:: main})}">
-    <main>
-    </br>
-		<span th:if="${viewMode == 'main'}">
-			<div class="row justify-content-between">
-				<div class="col-4">
-					<button type="button" class="btn btn-dark btn-sm" href="javascript:void(0)" onclick="javascript:scanRemoteForProjets()">scan projets</button>
-				</div>
-				<div class="col-4 text-right">
-					<button type="button" class="btn btn-outline-warning btn-sm" onclick="window.location='/in/projects/ignored'">show ignoreds</button>
-				</div>
-			</div>
-        </span>
-        <span th:if="${viewMode == 'ignored'}">
-        	<div class="row justify-content-between">
-				<div class="col-4">
-					<button type="button" class="btn btn-secondary btn-sm" onclick="window.location='/in/projects'">back</button>
-				</div>
-				<div class="col-4 text-right">
-					.
-				</div>
-			</div>
-        </span>
-        </br>
-        <input type="hidden" id="currentProjectId"/>
-        <table class="table table-hover">
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Name</th>
-                <th scope="col" class="text-center">Not discussed<br/>Comments</th>
-                  <th scope="col" class="text-center">Mine content<br/>not discussed<br/><span style="font-size: 8pt">(requests + comments)</span></th>
-                <th scope="col" class="text-center">Total<br/>Comments</th>
-                <th scope="col" class="text-center">Last<br/>Discussion</th>
-                <th scope="col">Actions</th>
+   <main>
+   <div id="projectsInProgressAlert" class="collapse">
+      <br/>
+      <div class="alert alert-success" role="alert">
+         Projects scan in progress, it may take a while. Go to <a href="/in/tasks" class="alert-link">tasks</a> page or refresh in a few moments.
+      </div>
+   </div>
+   </br>
+   <span th:if="${viewMode == 'main'}">
+      <div class="row justify-content-between">
+         <div class="col-4">
+            <button type="button" class="btn btn-dark btn-sm" href="javascript:void(0)" onclick="javascript:scanRemoteForProjets()">scan projets</button>
+         </div>
+         <div class="col-4 text-right">
+            <button type="button" class="btn btn-outline-warning btn-sm" onclick="window.location='/in/tasks'">show tasks</button>
+            <button type="button" class="btn btn-outline-warning btn-sm" onclick="window.location='/in/projects/ignored'">show ignoreds</button>
+         </div>
+      </div>
+   </span>
+      </br>
+      <input type="hidden" id="currentProjectId"/>
+      <table class="table table-hover">
+         <tr>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col" class="text-center">Not discussed<br/>Comments</th>
+            <th scope="col" class="text-center">Mine content<br/>not discussed<br/><span style="font-size: 8pt">(requests + comments)</span></th>
+            <th scope="col" class="text-center">Total<br/>Comments</th>
+            <th scope="col" class="text-center">Last<br/>Discussion</th>
+            <th scope="col">Actions</th>
+         </tr>
+         <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
+            <td class="align-middle"><a th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
+            <td class="align-middle">
+               <span th:text="${project.name}"></span>
+               <span th:if="${project.isNew()}">
+                  <span class="badge bg-success">new</span>
+               </span>
+            </td>
+            <th:block th:if="${!project.isActive()}">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+            </th:block>
+            <th:block th:if="${project.isActive()}">
+               <td class="text-center">
+                  <span th:if="${project.commentsTotal - project.commentsDiscussed > 0}"
+                        th:text="${project.commentsTotal} - ${project.commentsDiscussed}"></span>
+               </td>
+               <td class="text-center">
+                  <span th:if="${project.mergeRequestsNotDiscussedByAuthor > 0 || project.commentsNotDiscussedByAuthor > 0}"
+                     th:text="${project.mergeRequestsNotDiscussedByAuthor} + ' + ' + ${project.commentsNotDiscussedByAuthor}"></span>
+               </td>
+               <td class="text-center">
+                  <span th:if="${project.commentsTotal > 0}" th:text="${project.commentsTotal}"></span>
+               </td>
+               <td class="text-center" th:text="${project.durationFromLastDiscussion}"></td>
+            </th:block>
+               <td th:id="'actions-' + ${project.id}">
+                  <span th:if="${project.isNew()}">
+                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#startScanModal" onclick="openStartScanModal(this)">start scan</button>
+                     <button type="button" class="btn btn-outline-warning btn-sm" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
+                  </span>
+                  <span th:if="${project.isActive()}">
+                     <button type="button" class="btn btn-success btn-sm" th:if="${project.commentsTotal > 0}" onclick="javascript:explore(getProjectId(this))">explore</button>
+                     <button type="button" class="btn btn-outline-primary btn-sm" onclick="javascript:scanLastest(getProjectId(this))">rescan</button>
+                     <button type="button" class="btn btn-outline-warning btn-sm" th:if="${project.commentsTotal == 0}"  onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
+                  </span>
+                  <span th:if="${project.isIgnored()}">
+                     <button type="button" class="btn btn-primary btn-sm" onclick="javascript:activateProject(getProjectElement(this), getProjectId(this))">activate</button>
+                  </span>
+               </td>
             </tr>
-            <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
-                <td class="align-middle"><a th:href="${project.url}" target="_blank"><i class="bi bi-arrow-up-right-square"/></a></td>
-                <td class="align-middle">
-                	<span th:text="${project.name}"></span>
-                	<span th:if="${project.isNew()}">
-                        <span class="badge bg-success">new</span>
-                    </span>
-                </td>
-                <th:block th:if="${!project.isActive()}">
-                    <td></td>
-                    <td></td>
-                </th:block>
-                <th:block th:if="${project.isActive()}">
-                  <td class="text-center" th:text="${project.commentsTotal} - ${project.commentsDiscussed}"></td>
-                     <td class="text-center">
-                        <span th:if="${project.mergeRequestsNotDiscussedByAuthor > 0 || project.commentsNotDiscussedByAuthor > 0}"
-                              th:text="${project.mergeRequestsNotDiscussedByAuthor} + ' + ' + ${project.commentsNotDiscussedByAuthor}"></span>
-                     </td>
-                    <td class="text-center" th:text="${project.commentsTotal}"></td>
-                </th:block>
-                <td class="text-center" th:text="${project.durationFromLastDiscussion}"></td>
-                <td th:id="'actions-' + ${project.id}">
-                    <span th:if="${project.isNew()}">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#startScanModal" onclick="fillCurrentProjectId(getProjectId(this))">start scan</button>
-                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="ignoreProject(getProjectElement(this), getProjectId(this));">ignore</button>
-                    </span>
-                    <span th:if="${project.isActive()}">
-                        <button type="button" class="btn btn-success btn-sm" th:if="${project.commentsTotal > 0}" onclick="javascript:explore(getProjectId(this))">explore</button>
-                   		<button type="button" class="btn btn-outline-primary btn-sm" onclick="javascript:scanLastest(getProjectId(this))">rescan</button>
-                    </span>
-					      <span th:if="${project.isIgnored()}">
-                        <button type="button" class="btn btn-primary btn-sm" onclick="javascript:activateProject(getProjectElement(this), getProjectId(this))">activate</button>
-                    </span>
-                </td>
-            </tr>
-        </table>
+         </table>
 
         <!-- Modal -->
         <div class="modal fade" id="startScanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -79,45 +84,67 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Divulgit will scan all merged code reviews. It could be done from the first code review
+                        Divulgit will scan all code reviews. It could be done from the first code review
                         or can start on the code review number that your team started using hashtag on comments, it will be faster.
                         <br/><br/>
-                        <div class="mb-3 row">
-                            <label for="startScanNumberInput" class="col-sm-6 col-form-label">Start on code review number </label>
-                            <div class="col-sm-4">
-                                <input type="number" class="form-control" id="startScanNumberInput" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="javascript:startScan()">Start scan</button>
+                       <div class="container">
+                          <div class="row">
+                             <div class="col-4">From first</div>
+                             <div class="col-8">From number</div>
+                          </div>
+                          <div class="row">
+                             <div class="col-4">
+                                <button type="button" class="btn btn-primary" onclick="javascript:startScanFromFirst()">Start scan</button>
+                             </div>
+                             <div class="col-8">
+                                <table>
+                                    <tr>
+                                       <td><input type="number" class="form-control" id="startScanNumberInput" value="0" style="width:100px"></td>
+                                       <td><button type="button" class="btn btn-primary" onclick="javascript:startScanFromNumber()">Start scan</button></td>
+                                    </tr>
+                                </table>
+                             </div>
+                          </div>
+                          <br/>
+                          <div class="form-check">
+                             <input class="form-check-input" type="checkbox" id="redirectTasksPage" value="true" checked/>
+                             <label class="form-check-label" for="redirectTasksPage">
+                                Redirecting to tasks page after start
+                             </label>
+                          </div>
+                       </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <script>
-            function scanRemoteForProjets(){
+            function scanRemoteForProjets() {
                 $.ajax({
                     url:'/in/rest/remote/scan',
                     method:'post',
                     dataType:'json',
                     success:function(data, textStatus, xhr){
                         if (xhr.status == 200) {
-                            alert('Scan queued, refresh later');
+                           $("#projectsInProgressAlert").show(200);
+                           window.setTimeout('$("#projectsInProgressAlert").hide(200)', 5000);
                         } else {
                             alert('some error occurred try again');
                         }
                     },
-                    error:function(response){
-                        alert('server error occured')
+                    error:function(jqXHR, textStatus, errorThrown){
+                        logErrors(jqXHR, textStatus, errorThrown);
                     }
                 });
             }
-            
+
+            function hideProjectScanningAlertAndRefresh() {
+               $("#projectsInProgressAlert").hide(200);
+               window.location.reload();
+            }
+
             function explore(projectId){
-				window.location='/in/project/' + projectId + '/mergeRequests';
+				   window.location='/in/project/' + projectId + '/mergeRequests';
             }
             
             function activateProject(projectElement, projectId){
@@ -133,10 +160,7 @@
                         }
                     },
                     error:function(jqXHR, textStatus, errorThrown){
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                        alert('server error occured')
+                        logErrors(jqXHR, textStatus, errorThrown);
                     }
                 });
             }
@@ -154,10 +178,7 @@
                         }
                     },
                     error:function(jqXHR, textStatus, errorThrown){
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                        alert('server error occured')
+                        logErrors(jqXHR, textStatus, errorThrown);
                     }
                 });
             }
@@ -166,8 +187,21 @@
                 $("#currentProjectId").val(projectId);
             }
 
-            function startScan() {
-                const scanFrom = $("#startScanNumberInput").val();
+            function openStartScanModal(fromComponent) {
+               fillCurrentProjectId(getProjectId(fromComponent));
+               $("#startScanNumberInput").val(0);
+            }
+
+            function startScanFromFirst() {
+               startScan(1);
+            }
+
+            function startScanFromNumber() {
+               const scanFrom = $("#startScanNumberInput").val();
+               startScan(scanFrom);
+            }
+
+            function startScan(scanFrom) {
                 const projectId = $("#currentProjectId").val();
                 if (!scanFrom) {
                     alert('Please, fill the initial merge request number to consider in scanning. This is the mergerequest that your team started hashtagging')
@@ -179,14 +213,13 @@
                         success:function(data, textStatus, xhr){
                             if (xhr.status == 200) {
                                 $("#startScanModal").modal("hide");
-                                $("#actions-"+projectId).html('scanning...');
+                                if ($("#redirectTasksPage").is(":checked")) {
+                                   window.location='/in/tasks';
+                                }
                             }
                         },
                         error:function(jqXHR, textStatus, errorThrown){
-                            console.log(jqXHR);
-                            console.log(textStatus);
-                            console.log(errorThrown);
-                            alert('server error occured')
+                            logErrors(jqXHR, textStatus, errorThrown);
                         }
                     });
                 }
@@ -198,14 +231,11 @@
                     method:'post',
                     success:function(data, textStatus, xhr){
                         if (xhr.status == 200) {
-                            $("#actions-"+projectId).html('scanning...');
+                            $("#actions-"+projectId).html('go to <a href=\'/in/tasks\'>tasks</a> page');
                         }
                     },
                     error:function(jqXHR, textStatus, errorThrown){
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                        alert('server error occured')
+                        logErrors(jqXHR, textStatus, errorThrown);
                     }
                 });
             }
@@ -218,8 +248,13 @@
                 return $(actualElement).parents(".project-item")
             }
 
+            function logErrors(jqXHR, textStatus, errorThrown) {
+               console.log(jqXHR);
+               console.log(textStatus);
+               console.log(errorThrown);
+               alert('Server error occured. Please check browser console.')
+            }
+
         </script>
     </main>
-
-
 </body>
