@@ -18,7 +18,7 @@ Sem trocar a sua atual ferramenta git (GitHub ou GitLab), passe a destacar o que
 interessante usando: `#divulgar`, `#interessante`, `#legal`, `#cuidado` ou qualquer outra palavra
 usando `#`.
 
-##Como utilizar
+## Como utilizar
 
 O DivulGit não está em cloud disponível para uso, você deve compilá-lo e executá-lo 
 dentro de sua infra-estrutura (ou onde quiser).
