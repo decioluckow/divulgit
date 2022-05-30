@@ -116,6 +116,6 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
         RemoteScan commentRemoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, token);
         commentRemoteScan.register();
         registerSubTask(commentRemoteScan.uniqueId());
-        commentRemoteScan.start();
+        commentRemoteScan.run();
     }
 }

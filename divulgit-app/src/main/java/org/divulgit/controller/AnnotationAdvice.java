@@ -13,7 +13,11 @@ public class AnnotationAdvice {
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        return userDetails.getUser();
+        User user = null;
+        Object details = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (details instanceof  UserDetails) {
+            user = ((UserDetails) details).getUser();
+        }
+        return user;
     }
 }

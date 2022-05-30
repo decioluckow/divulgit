@@ -3,7 +3,7 @@ package org.divulgit.task.mergerequest;
 import java.util.Optional;
 
 import org.divulgit.model.Project;
-import org.divulgit.service.MergeRequestService;
+import org.divulgit.service.mergeRequest.MergeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

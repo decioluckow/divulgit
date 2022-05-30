@@ -23,9 +23,6 @@
           <div class="container-fluid">
              <div class="navbar-brand logo"><i class="bi bi-chat-left-quote"></i> DivulGit</div>
              <div th:if="${currentUser != null}">
-                <button th:if="${currentUser != null}" type="button" class="btn btn-secondary ml-3">
-                   ${currentUser.username}
-                </button>
                 <button type="button" class="btn btn-light" onclick="window.location='/logout'">logout</button>
              </div>
           </div>

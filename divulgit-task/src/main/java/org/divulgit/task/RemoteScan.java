@@ -18,8 +18,6 @@ public interface RemoteScan extends Runnable {
 
     void registerSubTask(RemoteScan.UniqueId uniqueId);
 
-    void start();
-
     @Getter
     @AllArgsConstructor
     class UniqueId {
