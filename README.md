@@ -46,6 +46,9 @@ java -jar divulgit-app.jar
 spring.data.mongodb.host=<host>
 spring.data.mongodb.database=<database>
 spring.data.mongodb.port=<porta>
+
+logging.level.org.divulgit=INFO
+logging.file=logs/diVulgit.log
 ```
 
 ## Trust Store
