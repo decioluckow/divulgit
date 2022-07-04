@@ -132,6 +132,7 @@
         <module>divulgit-remote-model</module>
         <module>divulgit-remote-gitlab</module>
         <module>divulgit-remote-github</module>
+		<module>divulgit-remote-azure</module>
         <module>divulgit-security</module>
         <module>divulgit-remote</module>
         <module>divulgit-service</module>
