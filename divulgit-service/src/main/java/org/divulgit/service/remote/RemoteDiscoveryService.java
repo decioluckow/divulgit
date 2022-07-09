@@ -29,8 +29,8 @@ public class RemoteDiscoveryService {
     }
 
     private Remote testAndRegister(RemoteIdentify remoteIdentify, String token) throws RemoteException {
-        Remote remote = Remote.builder().url(remoteIdentify.getDomain()).type(remoteIdentify.getProvider()).build();
-        RemoteFacade remoteFacade = remoteCallerFacadeFactory.build(remoteIdentify.getProvider());
+        Remote remote = Remote.builder().url(remoteIdentify.getDomain()).type(remoteIdentify.getRemoteType()).build();
+        RemoteFacade remoteFacade = remoteCallerFacadeFactory.build(remoteIdentify.getRemoteType());
         if (remoteFacade.testAPI(remote, token)) {
             return remoteRepository.save(remote);
         } else {

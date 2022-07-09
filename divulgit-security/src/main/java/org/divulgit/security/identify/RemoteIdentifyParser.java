@@ -1,18 +1,24 @@
 package org.divulgit.security.identify;
 
+import org.apache.commons.lang3.StringUtils;
+import org.divulgit.type.RemoteType;
 import org.divulgit.util.vo.RemoteIdentify;
+import org.json.JSONObject;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 public class RemoteIdentifyParser {
 
+    private static final String EMPTY_USERNAME = "";
+
     public static RemoteIdentify parsePrincipal(String principal) {
-        String[] remoteIdentifyData = principal.split(" at | of ");
-        if (remoteIdentifyData.length == 3) {
-            return new RemoteIdentify(remoteIdentifyData[0], remoteIdentifyData[1], remoteIdentifyData[2]);
-        } else {
-            throw new InsufficientAuthenticationException("Não foi possível interpretar o principal '" + principal + "'");
-        }
+        JSONObject json = new JSONObject(principal);
+        String username = json.getString("username");
+        String domain = json.getString("domain");
+        String plataform = json.getString("plataform");
+        RemoteIdentify.RemoteIdentifyBuilder builder = RemoteIdentify.builder();
+        if (StringUtils.isNotEmpty(username)) builder.username(username);
+        builder.domain(domain);
+        builder.remoteType(RemoteType.valueOf(plataform));
+        return builder.build();
     }
-
-
 }

@@ -1,5 +1,6 @@
 package org.divulgit.security;
 
+import org.divulgit.type.RemoteType;
 import org.divulgit.util.vo.RemoteIdentify;
 import org.divulgit.security.identify.RemoteIdentifyParser;
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,10 @@ public class RemoteIdentifyParserTest {
 
     @Test
     public void testParseValid() {
-        RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal("decioluckow at api.github.com of github");
+        RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal("{\"username\":\"decioluckow\",\"domain\":\"api.github.com\",\"plataform\":\"GITHUB\"}");
         assertEquals("decioluckow", remoteIdentify.getUsername());
         assertEquals("api.github.com", remoteIdentify.getDomain());
-        assertEquals("github", remoteIdentify.getProvider());
+        assertEquals(RemoteType.GITHUB, remoteIdentify.getRemoteType());
     }
 
     @Test

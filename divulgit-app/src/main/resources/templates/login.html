@@ -4,17 +4,17 @@
     <section class="py-4 text-center container start-width">
         <form id="login-form" method="post" action="/login">
             <input id="principal" name="principal" type="hidden">
-            <input id="type" name="type" type="hidden">
+            <input id="plataform" name="plataform" type="hidden">
             <div class="mb-3">
                 <p>O DivulGit não armazena o seu token, ele sempre será a sua credencial de acesso e deverá sempre ser informado.</p>
 
                 <select id="select-repository-type" name="repositoryType" class="form-select" aria-label="Selecione o seu repositório">
                     <option selected>Selecione o seu repositório</option>
-                    <option value='{"askUrl":"false", "askUsername":"true", "url":"api.bitbucket.org", "provider":"BITBUCKET"}'>Bitbucket Cloud</option>
-                    <option value='{"askUrl":"true", "askUsername":"true", "provider":"BITBUCKET"}'>Bitbucket Server</option>
-                    <option value='{"askUrl":"false", "askUsername":"false", "url":"gitlab.com", "provider":"GITLAB"}'>GitLab - www.gitlab.com</option>
-                    <option value='{"askUrl":"true", "askUsername":"false", "provider":"GITLAB"}'>GitLab - on-premisses</option>
-                    <option value='{"askUrl":"false", "askUsername":"false", "url":"api.github.com", "provider":"GITHUB"}'>GitHub - www.github.com</option>
+                    <option value='{"askUrl":"false", "askUsername":"true", "url":"api.bitbucket.org", "plataform":"BITBUCKET"}'>Bitbucket Cloud</option>
+                    <option value='{"askUrl":"true", "askUsername":"true", "plataform":"BITBUCKET"}'>Bitbucket Server</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "url":"gitlab.com", "plataform":"GITLAB"}'>GitLab - www.gitlab.com</option>
+                    <option value='{"askUrl":"true", "askUsername":"false", "plataform":"GITLAB"}'>GitLab - on-premisses</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "url":"api.github.com", "plataform":"GITHUB"}'>GitHub - www.github.com</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -38,7 +38,6 @@
         </form>
     </section>
     <script>
-        const providerType = "#providertype";
         const remoteUrl = "#remoteurl";
         const remoteUsername = "#remoteusername";
         const selectRepositoryTypeId = "#select-repository-type";
@@ -51,7 +50,7 @@
         $(selectRepositoryTypeId).change(function() {
             var selectedRepository = $(selectRepositoryTypeId).val();
             var repositoryConfig = JSON.parse(selectedRepository);
-            $(providerType).val(repositoryConfig.type);
+            $("#plataform").val(repositoryConfig.plataform);
             if (repositoryConfig.askUrl == 'true') {
                 $(remoteUrl).val('');
                 $(remoteUrl).show(200);
@@ -73,10 +72,11 @@
         });
 
         $("#login-form").submit(function() {
-            $("#principal").val($(remoteUsername).val() + " at " + $(remoteUrl).val() + " of " + $(providerType).val());
+            var username = $(remoteUsername).val();
+            var domain = $(remoteUrl).val();
+            var plataform = $("#plataform").val();
+            $("#principal").val('{"username":"'+ username +'", "domain":"'+ domain +'", "plataform":"'+ plataform +'"}');
         });
-
-        function
     </script>
 </main>
 </body>

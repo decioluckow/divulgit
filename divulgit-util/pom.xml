@@ -18,8 +18,7 @@
         <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-type</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
