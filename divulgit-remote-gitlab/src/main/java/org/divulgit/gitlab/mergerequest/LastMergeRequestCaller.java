@@ -11,6 +11,7 @@ import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,10 +36,10 @@ public class LastMergeRequestCaller {
     public int retrieveLastMergeRequestExternalId(
             Remote remote,
             Project project,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
         log.info("Retrieving last pull request id for project {}", project.getId());
         String url = urlBuilder.buildMergeRequestURL(remote, project);
-        ResponseEntity<String> response = gitLabRestCaller.call(url, token);
+        ResponseEntity<String> response = gitLabRestCaller.call(url, authentication);
         int lastMergeRequestId = 0;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<GitLabMergeRequest> remoteMergeRequests = responseHandler.handle200ResponseMultipleResult(response);

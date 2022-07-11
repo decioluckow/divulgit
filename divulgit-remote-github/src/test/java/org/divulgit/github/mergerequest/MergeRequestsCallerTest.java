@@ -18,6 +18,7 @@ import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +42,7 @@ class MergeRequestsCallerTest {
     private Remote REMOTE = Remote.builder().url("localhost").build();
     private User USER = buildUser();
     private Project PROJECT = Project.builder().build();
-    private String TOKEN = "xpto";
+    private Authentication AUTHENTICATION = TestUtils.mountAuthentication();
 
     private GitHubPullRequest MERGE_REQUEST = GitHubPullRequest.builder().build();
     private List<GitHubPullRequest> MERGE_REQUESTS = Arrays.asList(MERGE_REQUEST);
@@ -63,11 +65,11 @@ class MergeRequestsCallerTest {
     @Test
     void retrieveMergeRequests() throws RemoteException, JsonProcessingException {
         Mockito.when(urlBuilder.buildPullRequestsURL(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn("localhost");
-        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.anyString())).thenReturn(ResponseEntity.ok("{}"));
+        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.any(Authentication.class))).thenReturn(ResponseEntity.ok("{}"));
         Mockito.when(successHandler.handle200ResponseMultipleResult(Mockito.any())).thenReturn(MERGE_REQUESTS);
         Mockito.verify(errorResponseHandler, Mockito.never()).handleErrorResponse(ArgumentMatchers.<ResponseEntity<String>>any());
 
-        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN);
+        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, AUTHENTICATION);
 
         assertTrue(mergeRequests.get(0) == MERGE_REQUEST);
     }
@@ -76,11 +78,11 @@ class MergeRequestsCallerTest {
     void retrieveMergeRequestsPaginating() throws RemoteException, JsonProcessingException {
         Mockito.when(urlBuilder.buildPullRequestsURL(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn("localhost");
         AtomicInteger page = new AtomicInteger();
-        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.anyString())).thenAnswer(i -> callPaginatingRest(page));
+        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.any(Authentication.class))).thenAnswer(i -> callPaginatingRest(page));
         Mockito.when(successHandler.handle200ResponseMultipleResult(Mockito.any())).thenReturn(MERGE_REQUESTS);
         Mockito.verify(errorResponseHandler, Mockito.never()).handleErrorResponse(ArgumentMatchers.<ResponseEntity<String>>any());
 
-        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN);
+        List<GitHubPullRequest> mergeRequests = caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, AUTHENTICATION);
 
         assertTrue(mergeRequests.get(0) == MERGE_REQUEST);
     }
@@ -97,10 +99,10 @@ class MergeRequestsCallerTest {
     @Test
     void retrieveError() throws RemoteException, JsonProcessingException {
         Mockito.when(urlBuilder.buildPullRequestsURL(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn("localhost");
-        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.anyString())).thenReturn(ResponseEntity.status(401).body("{\"message\":\"Bad credentials\",\"documentation_url\":\"https://docs.github.com/rest\"}"));
+        Mockito.when(gitHubRestCaller.call(Mockito.anyString(), Mockito.any(Authentication.class))).thenReturn(ResponseEntity.status(401).body("{\"message\":\"Bad credentials\",\"documentation_url\":\"https://docs.github.com/rest\"}"));
 
         Exception exception = Assertions.assertThrows(RemoteException.class, () ->
-                caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, TOKEN));
+                caller.retrievePullRequests(REMOTE, USER, PROJECT, 0, AUTHENTICATION));
         
         assertEquals("Bad credentials", exception.getMessage());
     }

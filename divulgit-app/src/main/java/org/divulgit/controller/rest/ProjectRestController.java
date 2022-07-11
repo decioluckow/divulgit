@@ -11,7 +11,6 @@ import org.divulgit.model.util.UserProjectUtil;
 import org.divulgit.remote.RemoteCallerFacadeFactory;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.security.UserAuthentication;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.task.executor.ScanExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +45,7 @@ public class ProjectRestController {
 		User user = loader.loadUser(authentication);
 		Remote remote = loader.loadRemote(user.getRemoteId());
 		Project project = loader.loadProject(user, projectId);
-		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
-		Integer lastMergeRequest = remoteCallerFacadeFactory.build(remote).retrieveLastMergeRequestExternalId(remote, user, project, remoteToken);
+		Integer lastMergeRequest = remoteCallerFacadeFactory.build(remote).retrieveLastMergeRequestExternalId(remote, user, project, authentication);
 		return ResponseEntity.ok(lastMergeRequest);
 	}
 
@@ -74,10 +72,9 @@ public class ProjectRestController {
 		User user = loader.loadUser(authentication);
 		updateUserProjectState(user, projectId, User.UserProject.State.ACTIVE);
 		Remote remote = loader.loadRemote(user.getRemoteId());
-		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
 		Project project = loader.loadProject(user, projectId);
 		RemoteScan.UniqueId taskUniqueId = taskExecutor.scanProjectForMergeRequests(remote, user, project,
-				Optional.of(scanFrom), remoteToken);
+				Optional.of(scanFrom), authentication);
 		return ResponseEntity.ok(taskUniqueId);
 	}
 
@@ -94,10 +91,9 @@ public class ProjectRestController {
 		User user = loader.loadUser(authentication);
 		Remote remote = loader.loadRemote(user.getRemoteId());
 		Project project = loader.loadProject(user, projectId);
-		String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
 		Optional<Integer> emptyScanFrom = Optional.empty();
 		RemoteScan.UniqueId taskUniqueId = taskExecutor.scanProjectForMergeRequests(remote, user, project,
-				emptyScanFrom, remoteToken);
+				emptyScanFrom, authentication);
 		return ResponseEntity.ok(taskUniqueId);
 	}
 }

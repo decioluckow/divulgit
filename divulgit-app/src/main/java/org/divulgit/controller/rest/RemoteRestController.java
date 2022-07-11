@@ -3,7 +3,6 @@ package org.divulgit.controller.rest;
 import org.divulgit.controller.helper.EntityLoader;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.security.UserAuthentication;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.task.executor.ScanExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ public class RemoteRestController {
     public RemoteScan.UniqueId scan(Authentication authentication) {
         User user = loader.loadUser(authentication);
         Remote remote = loader.loadRemote(user.getRemoteId());
-        String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
-        return taskExecutor.scanRemoteForProjects(remote, user, remoteToken);
+        return taskExecutor.scanRemoteForProjects(remote, user, authentication);
     }
 }

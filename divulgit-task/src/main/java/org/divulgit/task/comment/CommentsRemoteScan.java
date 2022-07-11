@@ -19,6 +19,7 @@ import org.divulgit.task.listener.PersistenceScanListener;
 import org.divulgit.util.HashTagIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +42,14 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     private final User user;
     private final Project project;
     private final MergeRequest mergeRequest;
-    private final String token;
+    private final Authentication authentication;
 
     public static RemoteScan build(Remote remote,
     		 					   User user,
                                    Project project,
                                    MergeRequest mergeRequest,
-                                   String token) {
-        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, user, project, mergeRequest, token);
+                                   Authentication authentication) {
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, user, project, mergeRequest, authentication);
     }
 
     public CommentsRemoteScan(
@@ -56,12 +57,12 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
             User user,
             Project project,
             MergeRequest mergeRequest,
-            String token) {
+            Authentication authentication) {
         this.remote = remote;
         this.user = user;
         this.project = project;
         this.mergeRequest = mergeRequest;
-        this.token = token;
+        this.authentication = authentication;
     }
 
     @Override
@@ -84,7 +85,7 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.debug("Start retrieving comments from merge request");
-            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, user, project, mergeRequest, token);
+            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, user, project, mergeRequest, authentication);
             log.debug("Finished retrieving comments from merge request, {} retrieved", remoteComments.size());
             log.debug("Start merging comments");
             for (RemoteComment remoteComment : remoteComments) {

@@ -10,6 +10,7 @@ import org.divulgit.task.RemoteScan;
 import org.divulgit.task.mergerequest.MergeRequestIdsRemoteScan;
 import org.divulgit.task.mergerequest.MergeRequestRemoteScan;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,22 +22,22 @@ public class ScanExecutor {
         this.context = context;
     }
 
-    public RemoteScan.UniqueId scanRemoteForProjects(Remote remote, User user, String token) {
-        RemoteScan remoteScan = (RemoteScan) context.getBean("projectRemoteScan", remote, user, token);
+    public RemoteScan.UniqueId scanRemoteForProjects(Remote remote, User user, Authentication authentication) {
+        RemoteScan remoteScan = (RemoteScan) context.getBean("projectRemoteScan", remote, user, authentication);
         remoteScan.register();
         remoteScan.run();
         return remoteScan.uniqueId();
     }
 
-    public RemoteScan.UniqueId scanProjectForMergeRequests(Remote remote, User user, Project project, Optional<Integer> scanFrom, String token) {
-        RemoteScan remoteScan = MergeRequestRemoteScan.build(remote, user, project, scanFrom, token);
+    public RemoteScan.UniqueId scanProjectForMergeRequests(Remote remote, User user, Project project, Optional<Integer> scanFrom, Authentication authentication) {
+        RemoteScan remoteScan = MergeRequestRemoteScan.build(remote, user, project, scanFrom, authentication);
         remoteScan.register();
         remoteScan.run();
         return remoteScan.uniqueId();
     }
 
-    public RemoteScan.UniqueId scanProjectForMergeRequests(Remote remote, User user, Project project, List<String> requestedMergeRequestIds, String token) {
-        RemoteScan remoteScan = MergeRequestIdsRemoteScan.build(remote, user, project, requestedMergeRequestIds, token);
+    public RemoteScan.UniqueId scanProjectForMergeRequests(Remote remote, User user, Project project, List<String> requestedMergeRequestIds, Authentication authentication) {
+        RemoteScan remoteScan = MergeRequestIdsRemoteScan.build(remote, user, project, requestedMergeRequestIds, authentication);
         remoteScan.register();
         remoteScan.run();
         return remoteScan.uniqueId();
