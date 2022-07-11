@@ -9,20 +9,28 @@ import org.springframework.security.core.GrantedAuthority;
 import lombok.Builder;
 
 @Builder
-public class UserAuthentication implements Authentication {
+public class RemoteAuthentication implements Authentication {
 
 	private static final long serialVersionUID = 2860593790255593860L;
 	
 	private String name;
     private String principal;
+    private String credential;
     private UserDetails details;
     private boolean authenticated;
 
-    public static UserAuthentication of(final User user, final String remoteToken) {
-        return UserAuthentication.builder()
+    public static RemoteAuthentication of(final String username, final String credential) {
+        return RemoteAuthentication.builder()
+                .principal(username)
+                .credential(credential).build();
+    }
+
+    public static RemoteAuthentication of(final User user, final String credential) {
+        return RemoteAuthentication.builder()
                 .name(user.getName())
                 .principal(user.getUsername())
-                .details(UserDetails.builder().user(user).remoteToken(remoteToken).build())
+                .credential(credential)
+                .details(UserDetails.builder().user(user).build())
                 .authenticated(true).build();
     }
 
@@ -37,7 +45,7 @@ public class UserAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return credential;
     }
 
     @Override
@@ -64,9 +72,4 @@ public class UserAuthentication implements Authentication {
     public String getName() {
         return name;
     }
-
-    public String getRemoteToken() {
-        return details.getRemoteToken();
-    }
-
 }

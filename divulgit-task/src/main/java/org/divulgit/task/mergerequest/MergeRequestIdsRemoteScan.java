@@ -21,6 +21,7 @@ import org.divulgit.task.comment.CommentsRemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Joiner;
@@ -48,14 +49,14 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
     private final User user;
     private final Project project;
     private final List<String> requestedMergeRequestIds;
-    private final String token;
+    private final Authentication authentication;
 
     public static RemoteScan build(Remote remote,
                         User user,
                         Project project,
                         List<String> requestedMergeRequestIds,
-                        String token) {
-        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestIdsRemoteScan", remote, user, project, requestedMergeRequestIds, token);
+                        Authentication authentication) {
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("mergeRequestIdsRemoteScan", remote, user, project, requestedMergeRequestIds, authentication);
     }
 
     public MergeRequestIdsRemoteScan(
@@ -63,12 +64,12 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
             User user,
             Project project,
             List<String> requestedMergeRequestIds,
-            String token) {
+            Authentication authentication) {
         this.remote = remote;
         this.user = user;
         this.project = project;
         this.requestedMergeRequestIds = requestedMergeRequestIds;
-        this.token = token;
+        this.authentication = authentication;
     }
 
     @Override
@@ -96,7 +97,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
             log.trace("Considering external ids: {}", Joiner.on(",").join(requestedMergeRequestExernalIds));
 
             log.debug("Start retrieving merge requests from remote");
-            List<GitLabMergeRequest> remoteMergeRequests = caller.retrieveMergeRequests(remote, project, requestedMergeRequestExernalIds, token);
+            List<GitLabMergeRequest> remoteMergeRequests = caller.retrieveMergeRequests(remote, project, requestedMergeRequestExernalIds, authentication);
             log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
 
             log.debug("Start merging merge requests");
@@ -119,7 +120,7 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     private void scanComments(MergeRequest mergeRequest) {
         log.debug("Queueing scan comments for merge request {}", mergeRequest.getId());
-        RemoteScan commentRemoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, token);
+        RemoteScan commentRemoteScan = CommentsRemoteScan.build(remote, user, project, mergeRequest, authentication);
         commentRemoteScan.register();
         registerSubTask(commentRemoteScan.uniqueId());
         commentRemoteScan.run();

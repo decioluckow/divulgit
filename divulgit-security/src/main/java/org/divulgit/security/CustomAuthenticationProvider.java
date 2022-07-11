@@ -44,33 +44,34 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		final String principal = authentication.getPrincipal().toString();
 		RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal(principal);
 		log.info("Autenticating user {} on {}", remoteIdentify.getUsername(), remoteIdentify.getDomain());
-		Authentication authenticatedUser;
+		RemoteAuthentication remoteAuthentication;
 		try {
 			final String credential = authentication.getCredentials().toString();
-			final Remote remote = remoteDiscoveryService.findRemote(remoteIdentify, credential);
-			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, credential);
+			remoteAuthentication = RemoteAuthentication.of(remoteIdentify.getUsername(), credential);
+			final Remote remote = remoteDiscoveryService.findRemote(remoteIdentify, remoteAuthentication);
+			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteAuthentication);
 			if (remoteUser.isPresent()) {
-				authenticatedUser = findOrCreateUser(remote, credential, remoteUser.get());
+				remoteAuthentication = findOrCreateUser(remote, remoteAuthentication, remoteUser.get());
 			} else {
 				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
 			}
 		} catch (RemoteException e) {
 			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação", e);
 		}
-		return authenticatedUser;
+		return remoteAuthentication;
 	}
 
-	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) throws RemoteException {
+	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, RemoteAuthentication authentication) throws RemoteException {
 		final RemoteFacade caller = callerFactory.build(remote);
-		return caller.retrieveRemoteUser(remote, remoteToken);
+		return caller.retrieveRemoteUser(remote, authentication);
 	}
 
-	private UserAuthentication findOrCreateUser(Remote remote, String remoteToken, RemoteUser remoteUser) {
+	private RemoteAuthentication findOrCreateUser(Remote remote, Authentication authenticated, RemoteUser remoteUser) {
 		Optional<User> user = userRepository.findByExternalUserIdAndRemoteId(remoteUser.getInternalId(), remote.getId());
 		if (!user.isPresent()) {
 			user = Optional.of(userService.save(remoteUser, remote));
 		}
-		return UserAuthentication.of(user.get(), remoteToken);
+		return RemoteAuthentication.of(user.get(), (String) authenticated.getCredentials());
 	}
 
 	@Override
