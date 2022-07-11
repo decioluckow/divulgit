@@ -14,21 +14,21 @@ public class RemoteAuthentication implements Authentication {
 	private static final long serialVersionUID = 2860593790255593860L;
 	
 	private String name;
-    private String principal;
+    private String username;
     private String credential;
     private UserDetails details;
     private boolean authenticated;
 
     public static RemoteAuthentication of(final String username, final String credential) {
         return RemoteAuthentication.builder()
-                .principal(username)
+                .username(username)
                 .credential(credential).build();
     }
 
     public static RemoteAuthentication of(final User user, final String credential) {
         return RemoteAuthentication.builder()
                 .name(user.getName())
-                .principal(user.getUsername())
+                .username(user.getUsername())
                 .credential(credential)
                 .details(UserDetails.builder().user(user).build())
                 .authenticated(true).build();
@@ -55,7 +55,7 @@ public class RemoteAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return principal;
+        return username;
     }
 
     @Override
