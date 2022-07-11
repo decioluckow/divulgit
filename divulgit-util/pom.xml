@@ -15,5 +15,10 @@
             <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-type</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

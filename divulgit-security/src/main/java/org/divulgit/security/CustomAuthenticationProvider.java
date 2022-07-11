@@ -9,6 +9,8 @@ import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.repository.UserRepository;
+import org.divulgit.util.vo.RemoteIdentify;
+import org.divulgit.security.identify.RemoteIdentifyParser;
 import org.divulgit.service.remote.RemoteDiscoveryService;
 import org.divulgit.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +41,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		final String remoteURL = authentication.getPrincipal().toString();
-		log.info("Autenticating user on {}", remoteURL);
+		final String principal = authentication.getPrincipal().toString();
+		RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal(principal);
+		log.info("Autenticating user {} on {}", remoteIdentify.getUsername(), remoteIdentify.getDomain());
 		Authentication authenticatedUser;
 		try {
-			final String remoteToken = authentication.getCredentials().toString();
-			final Remote remote = remoteDiscoveryService.findRemote(remoteURL, remoteToken);
-			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
+			final String credential = authentication.getCredentials().toString();
+			final Remote remote = remoteDiscoveryService.findRemote(remoteIdentify, credential);
+			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, credential);
 			if (remoteUser.isPresent()) {
-				authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
+				authenticatedUser = findOrCreateUser(remote, credential, remoteUser.get());
 			} else {
 				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
 			}

@@ -18,11 +18,15 @@ public class RemoteCallerFacadeFactory {
     private RemoteFacade gitHubCallerFacade;
 
     public RemoteFacade build(Remote remote) {
-        switch (remote.getType()) {
+        return build(remote.getType());
+    }
+
+    public RemoteFacade build(RemoteType type) {
+        switch (type) {
             case GITLAB: return gitLabCallerFacade;
             case GITHUB: return gitHubCallerFacade;
             default:
-                throw new IllegalArgumentException("Opcão "+ remote +" não implementada");
+                throw new IllegalArgumentException("Opcão "+ type +" não implementada");
         }
     }
 }

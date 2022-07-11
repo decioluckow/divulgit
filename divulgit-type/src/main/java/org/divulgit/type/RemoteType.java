@@ -1,5 +1,6 @@
 package org.divulgit.type;
 
+//todo remonar para 'Provider'
 public enum RemoteType {
-    GITLAB, GITHUB, AZURE;
+    GITLAB, GITHUB, BITBUCKET, AZURE;
 }
