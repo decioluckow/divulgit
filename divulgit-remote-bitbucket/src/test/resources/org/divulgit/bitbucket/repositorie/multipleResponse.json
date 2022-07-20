@@ -1,0 +1,259 @@
+{
+  "values": [
+    {
+      "type": "repository",
+      "full_name": "wesleyeduardocr7/teste",
+      "links": {
+        "self": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste"
+        },
+        "html": {
+          "href": "https://bitbucket.org/wesleyeduardocr7/teste"
+        },
+        "avatar": {
+          "href": "https://bytebucket.org/ravatar/%7B78e90912-6a72-41f7-998b-eb6e42b6d006%7D?ts=default"
+        },
+        "pullrequests": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/pullrequests"
+        },
+        "commits": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/commits"
+        },
+        "forks": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/forks"
+        },
+        "watchers": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/watchers"
+        },
+        "branches": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/refs/branches"
+        },
+        "tags": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/refs/tags"
+        },
+        "downloads": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/downloads"
+        },
+        "source": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/src"
+        },
+        "clone": [
+          {
+            "name": "https",
+            "href": "https://wesleyeduardocr7@bitbucket.org/wesleyeduardocr7/teste.git"
+          },
+          {
+            "name": "ssh",
+            "href": "git@bitbucket.org:wesleyeduardocr7/teste.git"
+          }
+        ],
+        "hooks": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste/hooks"
+        }
+      },
+      "name": "teste",
+      "slug": "teste",
+      "description": "",
+      "scm": "git",
+      "website": null,
+      "owner": {
+        "display_name": "Wesley Eduardo de Oliveira Melo",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/users/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D"
+          },
+          "avatar": {
+            "href": "https://secure.gravatar.com/avatar/64e5828e1a6e7310b1fbf67f536b9bdd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWM-6.png"
+          },
+          "html": {
+            "href": "https://bitbucket.org/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D/"
+          }
+        },
+        "type": "user",
+        "uuid": "{560d4054-a4d6-448c-b1b1-72f445d99bc3}",
+        "account_id": "5c4c6b3c5f6f554665c13317",
+        "nickname": "wesleyeduardocr7"
+      },
+      "workspace": {
+        "type": "workspace",
+        "uuid": "{560d4054-a4d6-448c-b1b1-72f445d99bc3}",
+        "name": "Wesley Eduardo",
+        "slug": "wesleyeduardocr7",
+        "links": {
+          "avatar": {
+            "href": "https://bitbucket.org/workspaces/wesleyeduardocr7/avatar/?ts=1548512225"
+          },
+          "html": {
+            "href": "https://bitbucket.org/wesleyeduardocr7/"
+          },
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/workspaces/wesleyeduardocr7"
+          }
+        }
+      },
+      "is_private": true,
+      "project": {
+        "type": "project",
+        "key": "TES",
+        "uuid": "{6525c64e-1417-4d81-b6f7-6a69bfadc10a}",
+        "name": "teste",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/workspaces/wesleyeduardocr7/projects/TES"
+          },
+          "html": {
+            "href": "https://bitbucket.org/wesleyeduardocr7/workspace/projects/TES"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/account/user/wesleyeduardocr7/projects/TES/avatar/32?ts=1656853761"
+          }
+        }
+      },
+      "fork_policy": "no_public_forks",
+      "created_on": "2022-07-03T13:09:21.137877+00:00",
+      "updated_on": "2022-07-03T13:09:22.898854+00:00",
+      "size": 58918,
+      "language": "",
+      "has_issues": false,
+      "has_wiki": false,
+      "uuid": "{78e90912-6a72-41f7-998b-eb6e42b6d006}",
+      "mainbranch": {
+        "name": "master",
+        "type": "branch"
+      },
+      "override_settings": {
+        "default_merge_strategy": true,
+        "branching_model": true
+      }
+    },
+    {
+      "type": "repository",
+      "full_name": "wesleyeduardocr7/teste_api_bitbucket",
+      "links": {
+        "self": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket"
+        },
+        "html": {
+          "href": "https://bitbucket.org/wesleyeduardocr7/teste_api_bitbucket"
+        },
+        "avatar": {
+          "href": "https://bytebucket.org/ravatar/%7Bd7ea2443-314e-4fd1-a1b3-11fcdd63eb0e%7D?ts=default"
+        },
+        "pullrequests": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/pullrequests"
+        },
+        "commits": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/commits"
+        },
+        "forks": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/forks"
+        },
+        "watchers": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/watchers"
+        },
+        "branches": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/refs/branches"
+        },
+        "tags": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/refs/tags"
+        },
+        "downloads": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/downloads"
+        },
+        "source": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/src"
+        },
+        "clone": [
+          {
+            "name": "https",
+            "href": "https://wesleyeduardocr7@bitbucket.org/wesleyeduardocr7/teste_api_bitbucket.git"
+          },
+          {
+            "name": "ssh",
+            "href": "git@bitbucket.org:wesleyeduardocr7/teste_api_bitbucket.git"
+          }
+        ],
+        "hooks": {
+          "href": "https://api.bitbucket.org/2.0/repositories/wesleyeduardocr7/teste_api_bitbucket/hooks"
+        }
+      },
+      "name": "teste_api_bitbucket",
+      "slug": "teste_api_bitbucket",
+      "description": "",
+      "scm": "git",
+      "website": null,
+      "owner": {
+        "display_name": "Wesley Eduardo de Oliveira Melo",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/users/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D"
+          },
+          "avatar": {
+            "href": "https://secure.gravatar.com/avatar/64e5828e1a6e7310b1fbf67f536b9bdd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWM-6.png"
+          },
+          "html": {
+            "href": "https://bitbucket.org/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D/"
+          }
+        },
+        "type": "user",
+        "uuid": "{560d4054-a4d6-448c-b1b1-72f445d99bc3}",
+        "account_id": "5c4c6b3c5f6f554665c13317",
+        "nickname": "wesleyeduardocr7"
+      },
+      "workspace": {
+        "type": "workspace",
+        "uuid": "{560d4054-a4d6-448c-b1b1-72f445d99bc3}",
+        "name": "Wesley Eduardo",
+        "slug": "wesleyeduardocr7",
+        "links": {
+          "avatar": {
+            "href": "https://bitbucket.org/workspaces/wesleyeduardocr7/avatar/?ts=1548512225"
+          },
+          "html": {
+            "href": "https://bitbucket.org/wesleyeduardocr7/"
+          },
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/workspaces/wesleyeduardocr7"
+          }
+        }
+      },
+      "is_private": true,
+      "project": {
+        "type": "project",
+        "key": "TAB",
+        "uuid": "{b857bd78-67d1-4ebe-88a3-b1949ac67dcf}",
+        "name": "Testando API Bitbucket",
+        "links": {
+          "self": {
+            "href": "https://api.bitbucket.org/2.0/workspaces/wesleyeduardocr7/projects/TAB"
+          },
+          "html": {
+            "href": "https://bitbucket.org/wesleyeduardocr7/workspace/projects/TAB"
+          },
+          "avatar": {
+            "href": "https://bitbucket.org/account/user/wesleyeduardocr7/projects/TAB/avatar/32?ts=1656858733"
+          }
+        }
+      },
+      "fork_policy": "no_public_forks",
+      "created_on": "2022-07-03T14:32:13.659233+00:00",
+      "updated_on": "2022-07-19T14:22:31.067554+00:00",
+      "size": 226210,
+      "language": "",
+      "has_issues": false,
+      "has_wiki": false,
+      "uuid": "{d7ea2443-314e-4fd1-a1b3-11fcdd63eb0e}",
+      "mainbranch": {
+        "name": "master",
+        "type": "branch"
+      },
+      "override_settings": {
+        "default_merge_strategy": true,
+        "branching_model": true
+      }
+    }
+  ],
+  "pagelen": 10,
+  "size": 2,
+  "page": 1
+}

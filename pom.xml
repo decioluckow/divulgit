@@ -66,6 +66,11 @@
             <version>2.23.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
     </dependencies>
     
     <dependencyManagement>
@@ -142,5 +147,6 @@
         <module>divulgit-service</module>
         <module>divulgit-task</module>
         <module>divulgit-util</module>
+        <module>divulgit-remote-bitbucket</module>
     </modules>
 </project>
