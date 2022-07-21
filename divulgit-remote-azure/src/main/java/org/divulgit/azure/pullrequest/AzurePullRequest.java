@@ -17,22 +17,64 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GitHubPullRequest implements RemoteMergeRequest {
+public class AzurePullRequest implements RemoteMergeRequest {
 
-    private static final String STATE_OPENED = "open";
+    private static final String STATE_ACTIVE = "active";
     private static final String STATE_CLOSED = "closed";
 
-    @JsonProperty("number")
+    /*
+abandoned
+string
+Pull request is abandoned.
+
+active
+string
+Pull request is active.
+
+all
+string
+Used in pull request search criteria to include all statuses.
+
+completed
+string
+Pull request is completed.
+
+notSet
+string
+Status not set. Default state.
+*/
+
+
+
+    @JsonProperty("pullRequestId")
     private int externalId;
     private String title;
-    @JsonProperty("body")
     private String description;
     private AzureUser user;
-    @JsonProperty("html_url")
     private String url;
     private String state;
     @JsonProperty("merged_at")
     private String mergedAt;
+
+    /*
+    {
+        "value": [
+        {
+            "pullRequestId": 1,
+                "status": "active",
+                "createdBy": {
+            "uniqueName": "decioluckow@outlook.com",
+        },
+            "creationDate": "2022-07-02T19:46:34.2134471Z",
+                "title": "teste1 1'",
+                "description": "[1] description do pull request",
+                "mergeStatus": "succeeded",
+
+        }
+    ],
+        "count": 1
+    }
+    */
 
     @Override
     public String getAuthor() {
@@ -51,7 +93,8 @@ public class GitHubPullRequest implements RemoteMergeRequest {
     }
 
     public MergeRequest.State convertState(String state) {
-        MergeRequest.State mergeRequestState;
+        MergeRequest.State mergeRequestState = null;
+        /*
         if (STATE_OPENED.equals(state))
             mergeRequestState = MergeRequest.State.OPENED;
         else if (STATE_CLOSED.equals(state) && Strings.isEmpty(mergedAt))
@@ -59,6 +102,8 @@ public class GitHubPullRequest implements RemoteMergeRequest {
         else if (STATE_CLOSED.equals(state) && Strings.isNotEmpty(mergedAt))
             mergeRequestState = MergeRequest.State.MERGED;
         else throw new IllegalArgumentException("MergeRequest.State not found for value " + state);
+
+         */
         return mergeRequestState;
     }
 }

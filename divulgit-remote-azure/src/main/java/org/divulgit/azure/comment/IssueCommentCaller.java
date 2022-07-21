@@ -16,6 +16,7 @@ import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class IssueCommentCaller {
 
     @Autowired
-    private HeaderAuthRestCaller gitHubRestCaller;
+    private HeaderAuthRestCaller azureRestCaller;
 
     @Autowired
     private AzureCommentResponseHandler responseHandler;
 
     @Autowired
-    @ForRemote(RemoteType.GITHUB)
+    @ForRemote(RemoteType.AZURE)
     private ErrorResponseHandler errorResponseHandler;
 
     @Autowired
@@ -42,9 +43,9 @@ public class IssueCommentCaller {
             User user,
             Project project,
             MergeRequest mergeRequest,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
         final List<AzureComment> comments = new ArrayList<>();
-        retrieveComments(remote, user, project, mergeRequest, comments, token, AzureURLBuilder.INITIAL_PAGE);
+        retrieveComments(remote, user, project, mergeRequest, comments, authentication, AzureURLBuilder.INITIAL_PAGE);
         return comments;
     }
 
@@ -54,10 +55,10 @@ public class IssueCommentCaller {
             Project project,
             MergeRequest mergeRequest,
             List<AzureComment> loadedComments,
-            String token,
+            Authentication authentication,
             int page) throws RemoteException {
         final String url = urlBuilder.buildIssueComment(remote, user, project, mergeRequest, page);
-        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
+        ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             List<AzureComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
@@ -65,7 +66,7 @@ public class IssueCommentCaller {
             errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveComments(remote, user, project, mergeRequest, loadedComments, token, ++page);
+            retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);
         }
     }
 }

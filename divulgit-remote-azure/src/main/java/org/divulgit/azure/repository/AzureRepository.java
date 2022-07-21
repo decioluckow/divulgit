@@ -14,12 +14,16 @@ public class AzureRepository implements RemoteProject {
 
     @JsonProperty("id")
     private String externalId;
-    @JsonProperty("html_url")
+    @JsonProperty("webUrl")
     private String url;
     private String name;
-    private String description;
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
 
     public Project convertToProject() {
-        return Project.builder().externalId(externalId).url(url).name(name).description(description).build();
+        return Project.builder().externalId(externalId).url(url).name(name).build();
     }
 }

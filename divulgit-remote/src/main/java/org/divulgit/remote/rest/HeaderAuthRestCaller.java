@@ -2,13 +2,13 @@ package org.divulgit.remote.rest;
 
 import java.util.Collections;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +24,14 @@ public class HeaderAuthRestCaller {
         this.headerAuthFiller = headerAuthFiller;
     }
 
-    public ResponseEntity<String> call(String url, String token) {
+    public ResponseEntity<String> call(String url, Authentication authentication) {
         log.debug("Invoking {}", url);
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplateCustomizer.customize(restTemplate);
 
         HttpHeaders headers = new HttpHeaders();
-        headerAuthFiller.fill(headers, token);
+        headerAuthFiller.fill(headers, authentication);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
@@ -43,6 +43,6 @@ public class HeaderAuthRestCaller {
 
     public static interface HeaderAuthFiller {
 
-        void fill(HttpHeaders headers, String token);
+        void fill(HttpHeaders headers, Authentication authentication);
     }
 }

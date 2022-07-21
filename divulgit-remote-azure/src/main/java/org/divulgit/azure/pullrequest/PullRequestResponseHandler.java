@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class PullRequestResponseHandler {
 	
-    public List<GitHubPullRequest> handle200ResponseMultipleResult(ResponseEntity<String> response) throws RemoteException {
+    public List<AzurePullRequest> handle200ResponseMultipleResult(ResponseEntity<String> response) throws RemoteException {
         try {
             final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
             final ObjectMapper objectMapper = builder.build();
-            final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, GitHubPullRequest.class);
+            final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, AzurePullRequest.class);
             return objectMapper.readValue(response.getBody(), collectionType);
         } catch (JsonProcessingException e) {
             String message = "Error on converting json to Object";
@@ -30,11 +30,11 @@ public class PullRequestResponseHandler {
         }
     }
 
-    public GitHubPullRequest handle200ResponseSingleResult(ResponseEntity<String> response) throws RemoteException {
+    public AzurePullRequest handle200ResponseSingleResult(ResponseEntity<String> response) throws RemoteException {
         try {
             Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
             ObjectMapper objectMapper = builder.build();
-            return objectMapper.readValue(response.getBody(), GitHubPullRequest.class);
+            return objectMapper.readValue(response.getBody(), AzurePullRequest.class);
         } catch (JsonProcessingException e) {
             String message = "Error on converting json to Object";
             log.error(message + "[json: " + response.getBody() + "]");

@@ -66,7 +66,7 @@ public class AzureURLBuilder {
             mergeRequestExternalId);
     }
     
-    public String buildRepository(String organizationId) {
-        return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories?api-version=6.0", organizationId);
+    public String buildRepository(Remote remote, int page) {
+        return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories?api-version=6.0", remote.getOrganizationId());
     }
 }

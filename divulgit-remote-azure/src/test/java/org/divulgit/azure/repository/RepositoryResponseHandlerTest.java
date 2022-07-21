@@ -1,4 +1,4 @@
-package org.divulgit.azure.mergerequest;
+package org.divulgit.azure.repository;
 
 import org.divulgit.azure.pullrequest.AzurePullRequest;
 import org.divulgit.azure.pullrequest.PullRequestResponseHandler;
@@ -10,20 +10,24 @@ import org.springframework.http.ResponseEntity;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MergeRequestMapperTest {
+public class RepositoryResponseHandlerTest {
 
     @Test
     public void testSingleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "singleResponse.json");
-        PullRequestResponseHandler handler = new PullRequestResponseHandler();
+        RepositoryResponseHandler handler = new RepositoryResponseHandler();
 
-        AzurePullRequest mergeRequest = handler.handle200ResponseSingleResult(ResponseEntity.ok(json));
+        List<AzureRepository> azureRepositories = handler.handle200Response(ResponseEntity.ok(json));
 
-        assertEquals(8, mergeRequest.getExternalId());
-        assertEquals("Update README.md", mergeRequest.getTitle());
-        assertEquals("decioluckow", mergeRequest.getAuthor());
+        assertEquals(2, azureRepositories.size());
+        assertEquals("b2dd3659-1920-4a40-a7d8-7c869f7ff140", azureRepositories.get(0).getExternalId());
+        assertEquals("test-project0", azureRepositories.get(0).getName());
+        assertEquals("https://dev.azure.com/decioluckow-teste/test-project/_git/test-project0", azureRepositories.get(0).getUrl());
+        assertEquals("b2dd3659-1920-4a40-a7d8-7c869f7ff141", azureRepositories.get(1).getExternalId());
+        assertEquals("test-project1", azureRepositories.get(1).getName());
+        assertEquals("https://dev.azure.com/decioluckow-teste/test-project/_git/test-project1", azureRepositories.get(1).getUrl());
     }
 
     @Test

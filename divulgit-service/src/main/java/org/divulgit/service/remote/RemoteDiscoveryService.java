@@ -7,6 +7,7 @@ import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.util.vo.RemoteIdentify;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,18 +21,18 @@ public class RemoteDiscoveryService {
     @Autowired
     private RemoteRepository remoteRepository;
 
-    public Remote findRemote(RemoteIdentify remoteIdentify, String token) throws RemoteException {
+    public Remote findRemote(RemoteIdentify remoteIdentify, Authentication authentication) throws RemoteException {
         Optional<Remote> remote = remoteRepository.findByUrl(remoteIdentify.getDomain());
         if (!remote.isPresent()) {
-            remote = Optional.ofNullable(testAndRegister(remoteIdentify, token));
+            remote = Optional.ofNullable(testAndRegister(remoteIdentify, authentication));
         }
         return remote.get();
     }
 
-    private Remote testAndRegister(RemoteIdentify remoteIdentify, String token) throws RemoteException {
+    private Remote testAndRegister(RemoteIdentify remoteIdentify, Authentication authentication) throws RemoteException {
         Remote remote = Remote.builder().url(remoteIdentify.getDomain()).type(remoteIdentify.getRemoteType()).build();
         RemoteFacade remoteFacade = remoteCallerFacadeFactory.build(remoteIdentify.getRemoteType());
-        if (remoteFacade.testAPI(remote, token)) {
+        if (remoteFacade.testAPI(remote, authentication)) {
             return remoteRepository.save(remote);
         } else {
             throw new RemoteException("It was not possible to identify " + remoteIdentify.getDomain() + " as a api git url reconized by Divulgit");

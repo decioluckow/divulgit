@@ -10,8 +10,9 @@ import lombok.Data;
 public class AzureUser implements RemoteUser {
     @JsonProperty("id")
     private String internalId;
+    @JsonProperty("displayName")
     private String name;
-    @JsonProperty("login")
+    @JsonProperty("emailAddress")
     private String username;
     @JsonProperty("avatar_url")
     private String avatarURL;

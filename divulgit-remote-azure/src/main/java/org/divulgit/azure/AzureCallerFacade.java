@@ -22,6 +22,7 @@ import org.divulgit.remote.model.RemoteProject;
 import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -47,35 +48,35 @@ public class AzureCallerFacade implements RemoteFacade {
     private GitHubCommentService commentService;
 
     @Override
-    public boolean testAPI(Remote remote, String token) throws RemoteException {
-        return testCaller.test(remote, token);
+    public boolean testAPI(Remote remote, Authentication authentication) throws RemoteException {
+        return testCaller.test(authentication);
     }
 
     @Override
-    public Optional<RemoteUser> retrieveRemoteUser(Remote remote, String token) throws RemoteException {
-        return currentUserCaller.retrieveCurrentUser(remote, token);
+    public Optional<RemoteUser> retrieveRemoteUser(Remote remote, Authentication authentication) throws RemoteException {
+        return currentUserCaller.retrieveCurrentUser(authentication);
     }
 
     @Override
-    public List<? extends RemoteProject> retrieveRemoteProjects(Remote remote, String token) throws RemoteException {
-        return projectCaller.retrieveRepositories(remote, token);
+    public List<? extends RemoteProject> retrieveRemoteProjects(Remote remote, Authentication authentication) throws RemoteException {
+        return projectCaller.retrieveRepositories(remote, authentication);
     }
 
     @Override
-    public int retrieveLastMergeRequestExternalId(Remote remote, User user, Project project, String token) throws RemoteException {
-        return lastPullRequestCaller.retrieveLastPullRequestExternalId(remote, user, project, token);
+    public int retrieveLastMergeRequestExternalId(Remote remote, User user, Project project, Authentication authentication) throws RemoteException {
+        return lastPullRequestCaller.retrieveLastPullRequestExternalId(remote, user, project, authentication);
     }
 
 
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom,
-    		String token) throws RemoteException {
-    	return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, token);
+                                                                    Authentication authentication) throws RemoteException {
+    	return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
     }
     
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
-    		String token) throws RemoteException {
-    	return commentService.retrieveComments(remote, user, project, mergeRequest, token);
+            Authentication authentication) throws RemoteException {
+    	return commentService.retrieveComments(remote, user, project, mergeRequest, authentication);
     }
 }

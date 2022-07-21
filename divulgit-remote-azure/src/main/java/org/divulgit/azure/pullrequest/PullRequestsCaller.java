@@ -15,6 +15,7 @@ import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,29 +37,29 @@ public class PullRequestsCaller {
     @Autowired
     private AzureURLBuilder urlBuilder;
 
-    public List<GitHubPullRequest> retrievePullRequests(
+    public List<AzurePullRequest> retrievePullRequests(
             Remote remote,
             User user,
             Project project,
             List<Integer> externalIds,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
     	log.info("Retrieving pull requests for {} ids", externalIds.size());
-        final List<GitHubPullRequest> pullRequests = new ArrayList<>();
+        final List<AzurePullRequest> pullRequests = new ArrayList<>();
         for (Integer id : externalIds) {
-        	pullRequests.add(retrievePullRequest(remote, user, project, id, token));
+        	pullRequests.add(retrievePullRequest(remote, user, project, id, authentication));
         }
         return pullRequests;
     }
 
-    public List<GitHubPullRequest> retrievePullRequests(
+    public List<AzurePullRequest> retrievePullRequests(
             Remote remote,
             User user,
             Project project,
             Integer scanFrom,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
     	log.info("Retrieving pull requests from number {}", scanFrom);
-        final List<GitHubPullRequest> pullRequests = new ArrayList<>();
-        retrievePullRequests(remote, user, project, pullRequests, scanFrom, token, AzureURLBuilder.INITIAL_PAGE);
+        final List<AzurePullRequest> pullRequests = new ArrayList<>();
+        retrievePullRequests(remote, user, project, pullRequests, scanFrom, authentication, AzureURLBuilder.INITIAL_PAGE);
         return pullRequests;
     }
 
@@ -66,16 +67,16 @@ public class PullRequestsCaller {
             Remote remote,
             User user,
             Project project,
-            List<GitHubPullRequest> loadedPullRequests,
+            List<AzurePullRequest> loadedPullRequests,
             Integer scanFrom,
-            String token,
+            Authentication authentication,
             int page) throws RemoteException {
         final String url = urlBuilder.buildPullRequestsURL(remote, user, project, page);
-        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
+        ResponseEntity<String> response = gitHubRestCaller.call(url, authentication);
         boolean stopScan = false;
         if (response.getStatusCode().is2xxSuccessful()) {
-            List<GitHubPullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
-            for (GitHubPullRequest pullRequest : pullRequests) {
+            List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
+            for (AzurePullRequest pullRequest : pullRequests) {
                 if (pullRequest.getExternalId() >= scanFrom) {
                 	loadedPullRequests.add(pullRequest);
                 } else {
@@ -86,19 +87,19 @@ public class PullRequestsCaller {
             errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
-        	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, token, ++page);
+        	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, authentication, ++page);
         }
     }
 
-    private GitHubPullRequest retrievePullRequest(
+    private AzurePullRequest retrievePullRequest(
             Remote remote,
             User user,
             Project project,
             Integer externalId,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
         String url = urlBuilder.buildPullRequestURL(remote, user, project, externalId);
-        ResponseEntity<String> response = gitHubRestCaller.call(url, token);
-        GitHubPullRequest pullRequest = null;
+        ResponseEntity<String> response = gitHubRestCaller.call(url, authentication);
+        AzurePullRequest pullRequest = null;
         if (response.getStatusCode().is2xxSuccessful()) {
         	pullRequest = responseHandler.handle200ResponseSingleResult(response);
         } else if (errorResponseHandler.isErrorResponse(response)) {

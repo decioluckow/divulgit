@@ -11,7 +11,9 @@ import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +35,11 @@ public class AzureCurrentUserCaller {
     @ForRemote(RemoteType.AZURE)
     private ErrorResponseHandler errorResponseHandler;
 
-    public Optional<RemoteUser> retrieveCurrentUser(String token) throws RemoteException {
+    public Optional<RemoteUser> retrieveCurrentUser(Authentication authentication) throws RemoteException {
         String url = urlBuilder.buildUserURL();
-        ResponseEntity<String> response = azureRestCaller.call(url, token);
+        ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
-        if (response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             authenticatedUser = Optional.ofNullable(responseHandler.handle200Response(response));
         } else if (errorResponseHandler.isErrorResponse(response)) {
             errorResponseHandler.handleErrorResponse(response);

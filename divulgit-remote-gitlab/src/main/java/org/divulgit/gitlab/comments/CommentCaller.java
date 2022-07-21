@@ -18,6 +18,7 @@ import org.divulgit.util.HashTagIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -44,10 +45,10 @@ public class CommentCaller {
     @Value("${rest.caller.pageSize:50}")
     private int pageSize;
 
-    public List<GitLabComment> retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, String token)
+    public List<GitLabComment> retrieveComments(Remote remote, Project project, MergeRequest mergeRequest, Authentication authentication)
             throws RemoteException {
         List<GitLabComment> comments = new ArrayList<>();
-        retrieveComments(remote, project, mergeRequest, comments, token, GitLabURLBuilder.INITIAL_PAGE);
+        retrieveComments(remote, project, mergeRequest, comments, authentication, GitLabURLBuilder.INITIAL_PAGE);
         comments = removeUseless(comments);
         return comments;
     }
@@ -58,16 +59,16 @@ public class CommentCaller {
     }
 
     private void retrieveComments(Remote remote, Project project, MergeRequest mergeRequest,
-                                  List<GitLabComment> comments, String token, int page) throws RemoteException {
+                                  List<GitLabComment> comments, Authentication authentication, int page) throws RemoteException {
         String url = urlBuilder.buildCommentURL(remote, project, mergeRequest, page);
-        ResponseEntity<String> response = gitLabRestCaller.call(url, token);
+        ResponseEntity<String> response = gitLabRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             comments.addAll(commentResponseHandler.handle200ResponseMultipleResult(response));
         } else if (errorResponseHandler.isErrorResponse(response)) {
             errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveComments(remote, project, mergeRequest, comments, token, ++page);
+            retrieveComments(remote, project, mergeRequest, comments, authentication, ++page);
         }
     }
 }

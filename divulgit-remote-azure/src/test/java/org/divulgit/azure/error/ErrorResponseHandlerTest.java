@@ -3,6 +3,7 @@ package org.divulgit.azure.error;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -15,14 +16,12 @@ class ErrorResponseHandlerTest {
 
     @Test
     void testError() throws IOException, RemoteException {
-        InputStream jsonResource = this.getClass().getResourceAsStream("error.json");
-        String json = new String(jsonResource.readAllBytes(), StandardCharsets.UTF_8);
-        ErrorResponseHandler errorHandler = new GitHubErrorResponseHandler();
+        ErrorResponseHandler errorHandler = new AzureErrorResponseHandler();
 
         try {
-            errorHandler.handleErrorResponse(ResponseEntity.ok(json));
+            errorHandler.handleErrorResponse(ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build());
         } catch (RemoteException e) {
-            assertEquals("Bad credentials", e.getMessage());
+            assertEquals("203 NON_AUTHORITATIVE_INFORMATION", e.getMessage());
         }
     }
 }

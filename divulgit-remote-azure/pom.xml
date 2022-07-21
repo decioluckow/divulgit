@@ -30,6 +30,11 @@
         </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-remote-model</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -67,5 +72,4 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
 </project>

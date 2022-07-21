@@ -15,25 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@ForRemote(RemoteType.GITHUB)
-public class GitHubErrorResponseHandler implements ErrorResponseHandler {
+@ForRemote(RemoteType.AZURE)
+public class AzureErrorResponseHandler implements ErrorResponseHandler {
 	
     @Override
     public boolean isErrorResponse(ResponseEntity<String> response) {
-        return response.getBody().contains("message");
+        return response.getStatusCode().value() != 200;
     }
 
     @Override
     public void handleErrorResponse(ResponseEntity<String> response) throws RemoteException {
-        try {
-            final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-            final ObjectMapper objectMapper = builder.build();
-            ErrorMessage errorMessage =  objectMapper.readValue(response.getBody(), ErrorMessage.class);
-            throw new RemoteException(errorMessage.getMessage());
-        } catch (JsonProcessingException e) {
-            String message = "Error on converting json to Object";
-            log.error(message + "[json: " + response.getBody() +"]");
-            throw new RemoteException(message, e);
-        }
+        throw new RemoteException(response.getStatusCode().toString());
     }
 }

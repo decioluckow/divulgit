@@ -10,6 +10,7 @@ import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteComment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,9 +23,9 @@ public class GitHubCommentService {
 	private IssueCommentCaller issueCommentCaller;
 	
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
-    		String token) throws RemoteException {   	
-    	List<AzureComment> pullRequestComments = pullRequestCommentCaller.retrieveComments(remote, user, project, mergeRequest, token);
-    	List<AzureComment> issueComments = issueCommentCaller.retrieveComments(remote, user, project, mergeRequest, token);
+    		Authentication authentication) throws RemoteException {
+    	List<AzureComment> pullRequestComments = pullRequestCommentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
+    	List<AzureComment> issueComments = issueCommentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
     	List<AzureComment> comments = new ArrayList<>();
     	comments.addAll(pullRequestComments);
     	comments.addAll(issueComments);
