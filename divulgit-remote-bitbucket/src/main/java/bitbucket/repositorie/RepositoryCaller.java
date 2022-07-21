@@ -1,4 +1,4 @@
-package bitbucket.project;
+package bitbucket.repositorie;
 import bitbucket.BitBucketURLBuilder;
 import bitbucket.util.LinkHeaderUtil;
 import lombok.extern.slf4j.Slf4j;

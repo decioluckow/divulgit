@@ -1,4 +1,4 @@
-package bitbucket.project;
+package bitbucket.repositorie;
 import bitbucket.Links;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

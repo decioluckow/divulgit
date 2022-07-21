@@ -1,6 +1,6 @@
 package org.divulgit.bitbucket.repositorie;
-import bitbucket.project.BitBucketRepository;
-import bitbucket.project.RepositoryResponseHandler;
+import bitbucket.repositorie.BitBucketRepository;
+import bitbucket.repositorie.RepositoryResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;

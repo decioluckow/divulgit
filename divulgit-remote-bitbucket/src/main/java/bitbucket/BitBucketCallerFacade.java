@@ -1,6 +1,6 @@
 package bitbucket;
 import bitbucket.comment.BitBucketCommentService;
-import bitbucket.project.RepositoryCaller;
+import bitbucket.repositorie.RepositoryCaller;
 import bitbucket.pullrequest.LastPullRequestCaller;
 import bitbucket.pullrequest.PullRequestsCaller;
 import bitbucket.test.BitBucketTestCaller;
