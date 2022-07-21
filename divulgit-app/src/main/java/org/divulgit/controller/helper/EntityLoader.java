@@ -10,7 +10,7 @@ import org.divulgit.repository.MergeRequestRepository;
 import org.divulgit.repository.ProjectRepository;
 import org.divulgit.repository.RemoteRepository;
 import org.divulgit.repository.UserRepository;
-import org.divulgit.security.UserAuthentication;
+import org.divulgit.security.RemoteAuthentication;
 import org.divulgit.security.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -41,7 +41,7 @@ public class EntityLoader {
     }
 
     public UserDetails getUserDetails(Authentication authentication) {
-        return ((UserAuthentication) authentication).getUserDetails();
+        return ((RemoteAuthentication) authentication).getUserDetails();
     }
 
     public Remote loadRemote(String remoteId) {

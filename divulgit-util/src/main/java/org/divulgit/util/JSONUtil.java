@@ -1,7 +1,6 @@
 package org.divulgit.util;
 import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
-
 @UtilityClass
 public class JSONUtil {
 

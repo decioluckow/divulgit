@@ -27,6 +27,7 @@ public class RemoteService {
     public void populate() {
         ensureRegistred("gitlab.com", RemoteType.GITLAB);
         ensureRegistred("api.github.com", RemoteType.GITHUB);
+        ensureRegistred("dev.azure.com", RemoteType.AZURE);
     }
 
     private void ensureRegistred(String url, RemoteType type) {
