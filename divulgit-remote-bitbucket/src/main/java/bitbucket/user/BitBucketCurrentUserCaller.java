@@ -10,6 +10,7 @@ import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
 @Slf4j
@@ -29,9 +30,9 @@ public class BitBucketCurrentUserCaller {
     @ForRemote(RemoteType.BITBUCKET)
     private ErrorResponseHandler errorResponseHandler;
 
-    public Optional<RemoteUser> retrieveCurrentUser(Remote remote, String token) throws RemoteException {
+    public Optional<RemoteUser> retrieveCurrentUser(Remote remote, Authentication authentication) throws RemoteException {
         String url = urlBuilder.buildUserURL(remote);
-        ResponseEntity<String> response = bitBucketRestCaller.call(url, token);
+        ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
             authenticatedUser = Optional.ofNullable(responseHandler.handle200ResponseSingleResult(response));

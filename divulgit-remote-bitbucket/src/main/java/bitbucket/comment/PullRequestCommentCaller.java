@@ -13,8 +13,8 @@ import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +22,11 @@ import java.util.List;
 @Component
 public class PullRequestCommentCaller {
 
-	@Autowired
-	private BitBucketURLBuilder urlBuilder;
+    @Autowired
+    private BitBucketURLBuilder urlBuilder;
 
     @Autowired
-    private HeaderAuthRestCaller bitBucketRestCaller;
+    private HeaderAuthRestCaller BitBucketRestCaller;
 
     @Autowired
     private BitBucketCommentResponseHandler responseHandler;
@@ -40,9 +40,9 @@ public class PullRequestCommentCaller {
             User user,
             Project project,
             MergeRequest mergeRequest,
-            String token) throws RemoteException {
+            Authentication authentication) throws RemoteException {
         final List<BitBucketComment> loadedComments = new ArrayList<>();
-        retrieveComments(remote, user, project, mergeRequest, loadedComments, token, BitBucketURLBuilder.INITIAL_PAGE);
+        retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, BitBucketURLBuilder.INITIAL_PAGE);
         return loadedComments;
     }
 
@@ -52,10 +52,10 @@ public class PullRequestCommentCaller {
             Project project,
             MergeRequest mergeRequest,
             List<BitBucketComment> loadedComments,
-            String token,
+            Authentication authentication,
             int page) throws RemoteException {
         String url = urlBuilder.buildPullRequestComment(remote, user, project, mergeRequest, page);
-        ResponseEntity<String> response = bitBucketRestCaller.call(url, token);
+        ResponseEntity<String> response = BitBucketRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             List<BitBucketComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
@@ -63,7 +63,7 @@ public class PullRequestCommentCaller {
             errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveComments(remote, user, project, mergeRequest, loadedComments, token, ++page);
+            retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);
         }
     }
 }
