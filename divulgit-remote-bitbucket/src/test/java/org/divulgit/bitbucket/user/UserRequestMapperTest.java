@@ -1,6 +1,4 @@
 package org.divulgit.bitbucket.user;
-import bitbucket.user.BitBucketUser;
-import bitbucket.user.UserResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -14,7 +12,7 @@ class UserRequestMapperTest {
     @Test
     public void testSingleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "singleResponse.json");
-        UserResponseHandler handler = new UserResponseHandler();
+        BitBucketUserResponseHandler handler = new BitBucketUserResponseHandler();
         BitBucketUser userRequest = handler.handle200ResponseSingleResult(ResponseEntity.ok(json));
 
         assertEquals("5c4c6b3c5f6f554665c13317", userRequest.getInternalId());
@@ -27,7 +25,7 @@ class UserRequestMapperTest {
     @Test
     public void testMultipleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "multipleResponse.json");
-        UserResponseHandler handler = new UserResponseHandler();
+        BitBucketUserResponseHandler handler = new BitBucketUserResponseHandler();
 
         List<BitBucketUser> userRequests = handler.handle200ResponseMultipleResult(ResponseEntity.ok(json));
         assertEquals(2, userRequests.size());

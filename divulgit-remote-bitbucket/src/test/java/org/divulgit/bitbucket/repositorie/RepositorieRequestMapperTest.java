@@ -1,6 +1,4 @@
 package org.divulgit.bitbucket.repositorie;
-import bitbucket.repositorie.BitBucketRepository;
-import bitbucket.repositorie.RepositoryResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,7 @@ class RepositorieRequestMapperTest {
     @Test
     public void testSingleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "singleResponse.json");
-        RepositoryResponseHandler handler = new RepositoryResponseHandler();
+        BitBucketRepositoryResponseHandler handler = new BitBucketRepositoryResponseHandler();
         BitBucketRepository bitBucketRepository = handler.handle200ResponseSingleResult(ResponseEntity.ok(json));
 
         assertEquals("{d7ea2443-314e-4fd1-a1b3-11fcdd63eb0e}", bitBucketRepository.getExternalId());
@@ -27,7 +25,7 @@ class RepositorieRequestMapperTest {
     @Test
     public void testMultipleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "multipleResponse.json");
-        RepositoryResponseHandler handler = new RepositoryResponseHandler();
+        BitBucketRepositoryResponseHandler handler = new BitBucketRepositoryResponseHandler();
 
         List<BitBucketRepository> bitBucketRepositories = handler.handle200ResponseMultipleResult(ResponseEntity.ok(json));
         assertEquals(2, bitBucketRepositories.size());

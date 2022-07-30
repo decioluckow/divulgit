@@ -1,5 +1,4 @@
 package org.divulgit.bitbucket.error;
-import bitbucket.error.BitBucketErrorResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.junit.jupiter.api.Test;

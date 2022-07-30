@@ -1,6 +1,5 @@
 package org.divulgit.bitbucket.util;
 
-import bitbucket.util.LinkHeaderUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 

@@ -1,9 +1,5 @@
 package org.divulgit.bitbucket.comment;
 
-import bitbucket.comment.BitBucketComment;
-import bitbucket.comment.BitBucketCommentResponseHandler;
-import bitbucket.user.BitBucketUser;
-import bitbucket.user.UserResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;

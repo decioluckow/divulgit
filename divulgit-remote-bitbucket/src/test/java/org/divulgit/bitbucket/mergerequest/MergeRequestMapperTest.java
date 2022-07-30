@@ -1,6 +1,6 @@
 package org.divulgit.bitbucket.mergerequest;
-import bitbucket.pullrequest.BitBucketPullRequest;
-import bitbucket.pullrequest.PullRequestResponseHandler;
+import org.divulgit.bitbucket.pullrequest.BitBucketPullRequest;
+import org.divulgit.bitbucket.pullrequest.BitBucketPullRequestResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ class MergeRequestMapperTest {
     @Test
     public void testSingleResponse() throws IOException, RemoteException {
         String json = TestUtils.getResourceAsString(this, "singleResponse.json");
-        PullRequestResponseHandler handler = new PullRequestResponseHandler();
+        BitBucketPullRequestResponseHandler handler = new BitBucketPullRequestResponseHandler();
         BitBucketPullRequest mergeRequest = handler.handle200ResponseSingleResult(ResponseEntity.ok(json));
         assertEquals(1, mergeRequest.getExternalId());
         assertEquals("testando PR", mergeRequest.getTitle());
@@ -26,7 +26,7 @@ class MergeRequestMapperTest {
     public void testMultipleResponse() throws IOException, RemoteException {
 
         String json = TestUtils.getResourceAsString(this, "multipleResponse.json");
-        PullRequestResponseHandler handler = new PullRequestResponseHandler();
+        BitBucketPullRequestResponseHandler handler = new BitBucketPullRequestResponseHandler();
         List<BitBucketPullRequest> mergeRequests = handler.handle200ResponseMultipleResult(ResponseEntity.ok(json));
         assertEquals(2, mergeRequests.size());
 

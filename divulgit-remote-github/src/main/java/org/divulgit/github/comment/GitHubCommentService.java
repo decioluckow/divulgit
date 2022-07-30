@@ -3,12 +3,14 @@ package org.divulgit.github.comment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteComment;
+import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class GitHubCommentService {
 	
 	@Autowired
+	@ForRemote(RemoteType.GITHUB)
 	private PullRequestCommentCaller pullRequestCommentCaller;
 	
 	@Autowired
