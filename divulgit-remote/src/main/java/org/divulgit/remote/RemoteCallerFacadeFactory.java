@@ -17,12 +17,17 @@ public class RemoteCallerFacadeFactory {
     @ForRemote(RemoteType.GITHUB)
     private RemoteFacade gitHubCallerFacade;
 
+    @Autowired
+    @ForRemote(RemoteType.AZURE)
+    private RemoteFacade azureCallerFacade;
+
     public RemoteFacade build(Remote remote) {
         return build(remote.getType());
     }
 
     public RemoteFacade build(RemoteType type) {
         switch (type) {
+            case AZURE: return azureCallerFacade;
             case GITLAB: return gitLabCallerFacade;
             case GITHUB: return gitHubCallerFacade;
             default:

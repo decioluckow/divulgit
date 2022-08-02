@@ -9,4 +9,5 @@ import lombok.Getter;
 @Builder
 public class UserDetails {
     private User user;
+    private String organization;
 }

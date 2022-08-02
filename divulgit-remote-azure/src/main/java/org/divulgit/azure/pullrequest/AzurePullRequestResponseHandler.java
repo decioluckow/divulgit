@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class PullRequestResponseHandler {
+public class AzurePullRequestResponseHandler {
 	
     public List<AzurePullRequest> handle200ResponseMultipleResult(ResponseEntity<String> response) throws RemoteException {
         try {

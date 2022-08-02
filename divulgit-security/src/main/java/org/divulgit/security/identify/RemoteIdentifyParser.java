@@ -16,6 +16,7 @@ public class RemoteIdentifyParser {
         String domain = json.getString("domain");
         String plataform = json.getString("plataform");
         RemoteIdentify.RemoteIdentifyBuilder builder = RemoteIdentify.builder();
+        if (! json.isNull("organization")) builder.organization(json.getString("organization"));
         if (StringUtils.isNotEmpty(username)) builder.username(username);
         builder.domain(domain);
         builder.remoteType(RemoteType.valueOf(plataform));

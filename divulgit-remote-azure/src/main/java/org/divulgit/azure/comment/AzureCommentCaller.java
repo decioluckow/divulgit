@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class PullRequestCommentCaller {
+public class AzureCommentCaller {
 
 	@Autowired
 	private AzureURLBuilder urlBuilder;

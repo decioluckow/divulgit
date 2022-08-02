@@ -2,7 +2,7 @@
   "value": [
     {
       "id": "b2dd3659-1920-4a40-a7d8-7c869f7ff140",
-      "name": "test-project",
+      "name": "test-project0",
       "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140",
       "project": {
         "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
@@ -22,7 +22,7 @@
     },
     {
       "id": "b2dd3659-1920-4a40-a7d8-7c869f7ff141",
-      "name": "test-project",
+      "name": "test-project1",
       "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140",
       "project": {
         "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",

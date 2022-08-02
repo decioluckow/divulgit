@@ -80,6 +80,11 @@
                 <artifactId>json</artifactId>
                 <version>20220320</version>
             </dependency>
+            <dependency>
+                <groupId>com.mashape.unirest</groupId>
+                <artifactId>unirest-java</artifactId>
+                <version>1.4.9</version>
+            </dependency>
 	    </dependencies>
     </dependencyManagement>
 
@@ -115,17 +120,6 @@
         </plugin>
         <!-- ... -->
         <!-- we want sources to be processed by a specific 1.6 javac -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
-            <configuration>
-              <verbose>true</verbose>
-              <fork>true</fork>
-              <executable>${JAVA_HOME_11}/bin/javac</executable>
-              <compilerVersion>11</compilerVersion>
-            </configuration>
-        </plugin>
         </plugins>
     </build>
 
@@ -143,5 +137,6 @@
         <module>divulgit-service</module>
         <module>divulgit-task</module>
         <module>divulgit-util</module>
+        <module>divulgit-security-model</module>
     </modules>
 </project>

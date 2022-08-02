@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.divulgit.annotation.ForRemote;
-import org.divulgit.azure.comment.GitHubCommentService;
-import org.divulgit.azure.repository.RepositoryCaller;
-import org.divulgit.azure.pullrequest.LastPullRequestCaller;
-import org.divulgit.azure.pullrequest.PullRequestsCaller;
+import org.divulgit.azure.comment.AzureCommentCaller;
+import org.divulgit.azure.repository.AzureRepositoryCaller;
+import org.divulgit.azure.pullrequest.AzureLastPullRequestCaller;
+import org.divulgit.azure.pullrequest.AzurePullRequestsCaller;
 import org.divulgit.azure.test.AzureTestCaller;
 import org.divulgit.azure.user.AzureCurrentUserCaller;
 import org.divulgit.model.MergeRequest;
@@ -36,16 +36,16 @@ public class AzureCallerFacade implements RemoteFacade {
     private AzureCurrentUserCaller currentUserCaller;
 
     @Autowired
-    private RepositoryCaller projectCaller;
+    private AzureRepositoryCaller projectCaller;
 
     @Autowired
-    private LastPullRequestCaller lastPullRequestCaller;
+    private AzureLastPullRequestCaller lastPullRequestCaller;
 
     @Autowired
-    private PullRequestsCaller pullRequestCaller;
+    private AzurePullRequestsCaller pullRequestCaller;
     
     @Autowired
-    private GitHubCommentService commentService;
+    private AzureCommentCaller commentCaller;
 
     @Override
     public boolean testAPI(Remote remote, Authentication authentication) throws RemoteException {
@@ -77,6 +77,6 @@ public class AzureCallerFacade implements RemoteFacade {
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
             Authentication authentication) throws RemoteException {
-    	return commentService.retrieveComments(remote, user, project, mergeRequest, authentication);
+    	return commentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
     }
 }

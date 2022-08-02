@@ -11,6 +11,8 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.remote.rest.UniRestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class PullRequestsCaller {
+public class AzurePullRequestsCaller {
 
     @Autowired
-    private HeaderAuthRestCaller gitHubRestCaller;
+    private RestCaller azureRestCaller;
 
     @Autowired
-    private PullRequestResponseHandler responseHandler;
+    private AzurePullRequestResponseHandler responseHandler;
 
     @Autowired
     @ForRemote(RemoteType.GITHUB)
@@ -72,7 +74,7 @@ public class PullRequestsCaller {
             Authentication authentication,
             int page) throws RemoteException {
         final String url = urlBuilder.buildPullRequestsURL(remote, user, project, page);
-        ResponseEntity<String> response = gitHubRestCaller.call(url, authentication);
+        ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         boolean stopScan = false;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
@@ -83,8 +85,6 @@ public class PullRequestsCaller {
                     stopScan = true;
                 }
             }
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
         	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, authentication, ++page);
@@ -98,7 +98,7 @@ public class PullRequestsCaller {
             Integer externalId,
             Authentication authentication) throws RemoteException {
         String url = urlBuilder.buildPullRequestURL(remote, user, project, externalId);
-        ResponseEntity<String> response = gitHubRestCaller.call(url, authentication);
+        ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         AzurePullRequest pullRequest = null;
         if (response.getStatusCode().is2xxSuccessful()) {
         	pullRequest = responseHandler.handle200ResponseSingleResult(response);

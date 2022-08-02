@@ -1,5 +1,8 @@
 package org.divulgit.remote.rest;
 
+import org.divulgit.annotation.ForRemote;
+import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.type.RemoteType;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +26,11 @@ public class RestCallerConfiguration {
     }
 
     @Bean
-    public HeaderAuthRestCaller azureRestCaller(RestTemplateCustomizer restTemplateCustomizer) {
-        return new HeaderAuthRestCaller(restTemplateCustomizer,
+    public RestCaller azureRestCaller(@ForRemote(RemoteType.AZURE) ErrorResponseHandler errorResponseHandler) {
+        return new UniRestCaller(errorResponseHandler,
                 ((headers, authentication) -> {
                     String base64Token = Base64.getEncoder().encodeToString((":" + (String) authentication.getCredentials()).getBytes(StandardCharsets.UTF_8)); ;
-                    headers.add("Authorization", "Basic " + base64Token);
+                    headers.put("Authorization", "Basic " + base64Token);
                 }));
     }
 

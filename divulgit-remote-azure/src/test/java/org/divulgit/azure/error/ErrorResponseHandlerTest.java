@@ -16,7 +16,7 @@ class ErrorResponseHandlerTest {
 
     @Test
     void testError() throws IOException, RemoteException {
-        ErrorResponseHandler errorHandler = new AzureErrorResponseHandler();
+        AzureErrorResponseHandler errorHandler = new AzureErrorResponseHandler();
 
         try {
             errorHandler.handleErrorResponse(ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).build());

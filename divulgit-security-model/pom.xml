@@ -5,11 +5,11 @@
     <parent>
         <artifactId>divulgit</artifactId>
         <groupId>br.com.decioluckow</groupId>
-		<version>0.0.2-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>divulgit-task</artifactId>
+    <artifactId>divulgit-security-model</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -24,28 +24,13 @@
         </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-service</artifactId>
+            <artifactId>divulgit-util</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-gitlab</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-github</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-azure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
+
 </project>
