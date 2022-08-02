@@ -1,13 +1,11 @@
 package org.divulgit.util;
-
 import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
-
 @UtilityClass
 public class JSONUtil {
 
-    public static String extractContent(String content, String response) {
+    public static String extractContent(String property, String response) {
         JSONObject json = new JSONObject(response);
-        return json.getString(content);
+        return json.getString(property);
     }
 }

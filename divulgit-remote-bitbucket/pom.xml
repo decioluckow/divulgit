@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>br.com.decioluckow</groupId>
         <artifactId>divulgit</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+        <groupId>br.com.decioluckow</groupId>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>divulgit-service</artifactId>
+    <artifactId>divulgit-remote-bitbucket</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -17,6 +17,16 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-arch</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-remote</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-model</artifactId>
@@ -28,19 +38,13 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-gitlab</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-github</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>br.com.decioluckow</groupId>
-            <artifactId>divulgit-remote-bitbucket</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -48,13 +52,28 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>${bcprov-jdk14.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-util</artifactId>
-            <version>${project.version}</version>
+            <version>0.0.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
