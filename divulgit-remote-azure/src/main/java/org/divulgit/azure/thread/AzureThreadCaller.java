@@ -57,6 +57,10 @@ public class AzureThreadCaller {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzureThread> comments = responseHandler.handle200ResponseMultipleResult(response);
+            //TODO testar
+            comments.stream()
+                    .forEach(t -> t.getComments().stream()
+                            .forEach(comment -> comment.setUrl(urlBuilder.buildPullRequestCommentWebURL(project, mergeRequest, comment))));
             loadedComments.addAll(comments);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {

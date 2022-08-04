@@ -33,7 +33,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
     @JsonProperty("createdBy")
     private AzureAuthor azureAuthor;
 
-    private AzurePullRequestState state;
+    private AzurePullRequestState status;
 
     public String getAuthor() {
         return azureAuthor.getUsername();
@@ -41,7 +41,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
 
     //TODO mudar para enum do divulgit
     public String getState() {
-        return state.getCorrespondingTo().name();
+        return status.getCorrespondingTo().name();
     }
 
     public MergeRequest toMergeRequest(Project project) {
@@ -52,6 +52,6 @@ public class AzurePullRequest implements RemoteMergeRequest {
                 .description(description)
                 .url(repository.getUrl() + "/" + externalId)
                 .author(getAuthor())
-                .state(state.getCorrespondingTo()).build();
+                .state(status.getCorrespondingTo()).build();
     }
 }
