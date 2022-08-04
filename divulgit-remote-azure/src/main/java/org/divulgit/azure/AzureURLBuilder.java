@@ -24,49 +24,26 @@ public class AzureURLBuilder {
     public String buildUserURL() {
         return "https://app.vssps.visualstudio.com/_apis/profile/profiles/me?api-version=6.0";
     }
-    
-    public String buildIssueComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequest.getExternalId(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
-    }
-    
-    public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}/comments?per_page={4}&page={5}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequest.getExternalId(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
+
+    public String buildPullRequestComments(String organization, Project project, MergeRequest mergeRequest) {
+        return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories/{1}/pullRequests/{2}/threads?api-version=6.0",
+            organization,
+            mergeRequest.getExternalId());
     }
 
-    public String buildPullRequestsURL(Remote remote, User user, Project project) {
-        return buildPullRequestsURL(remote, user, project, INITIAL_PAGE);
+    public String buildPullRequestsURL(String organization, Project project) {
+        return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories/{1}/pullrequests?api-version=6.0",
+                organization,
+                project.getExternalId());
     }
 
-    public String buildPullRequestsURL(Remote remote, User user, Project project, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls?per_page={3}&page={4}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
-    }
-
-    public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequestExternalId);
+    public String buildPullRequestURL(String organization, int pullRequestExternalId) {
+        return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/pullrequests/{1}?api-version=6.0",
+                organization,
+                pullRequestExternalId);
     }
     
-    public String buildRepository(Remote remote, String organization, int page) {
+    public String buildRepository(String organization) {
         return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories?api-version=6.0", organization);
     }
 }

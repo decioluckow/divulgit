@@ -4,35 +4,29 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+import com.mashape.unirest.request.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.response.Response;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class UniRestCaller implements RestCaller {
 
-    private HeaderAuthFiller headerAuthFiller;
+    private Customizer customizer;
     private ErrorResponseHandler errorResponseHandler;
 
-    public UniRestCaller(ErrorResponseHandler errorResponseHandler, HeaderAuthFiller headerAuthFiller) {
-        this.headerAuthFiller = headerAuthFiller;
+    public UniRestCaller(ErrorResponseHandler errorResponseHandler, Customizer customizer) {
+        this.customizer = customizer;
         this.errorResponseHandler = errorResponseHandler;
     }
 
     public ResponseEntity<String> call(String url, Authentication authentication) throws RemoteException {
         log.debug("Invoking {}", url);
         GetRequest getRequest = Unirest.get(url);
-        Map<String, String> headers = new HashMap<>();
-        headers.put("accept", "application/json");
-        headerAuthFiller.fill(headers, authentication);
-        getRequest.headers(headers);
+        getRequest.header("accept", "application/json");
+        customizer.apply(getRequest, authentication);
         try {
             HttpResponse<String> jsonResponse = getRequest.asString();
             ResponseEntity<String> responseEntity = ResponseEntity.status(jsonResponse.getStatus()).body(jsonResponse.getBody());
@@ -45,7 +39,7 @@ public class UniRestCaller implements RestCaller {
         }
     }
 
-    public static interface HeaderAuthFiller {
-        void fill(Map<String, String> headers, Authentication authentication);
+    public static interface Customizer {
+        void apply(HttpRequest httpRequest, Authentication authentication);
     }
 }

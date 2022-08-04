@@ -2,13 +2,16 @@ package org.divulgit.azure;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.divulgit.annotation.ForRemote;
-import org.divulgit.azure.comment.AzureCommentCaller;
+import org.divulgit.azure.thread.AzureThread;
+import org.divulgit.azure.thread.AzureThreadCaller;
 import org.divulgit.azure.repository.AzureRepositoryCaller;
 import org.divulgit.azure.pullrequest.AzureLastPullRequestCaller;
 import org.divulgit.azure.pullrequest.AzurePullRequestsCaller;
 import org.divulgit.azure.test.AzureTestCaller;
+import org.divulgit.azure.thread.CommentType;
 import org.divulgit.azure.user.AzureCurrentUserCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -45,7 +48,7 @@ public class AzureCallerFacade implements RemoteFacade {
     private AzurePullRequestsCaller pullRequestCaller;
     
     @Autowired
-    private AzureCommentCaller commentCaller;
+    private AzureThreadCaller commentCaller;
 
     @Override
     public boolean testAPI(Remote remote, Authentication authentication) throws RemoteException {
@@ -67,7 +70,6 @@ public class AzureCallerFacade implements RemoteFacade {
         return lastPullRequestCaller.retrieveLastPullRequestExternalId(remote, user, project, authentication);
     }
 
-
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom,
                                                                     Authentication authentication) throws RemoteException {
@@ -77,6 +79,10 @@ public class AzureCallerFacade implements RemoteFacade {
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
             Authentication authentication) throws RemoteException {
-    	return commentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
+        List<AzureThread> azureThreads = commentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
+        return azureThreads.stream()
+                .flatMap(c -> c.getComments().stream())
+                .filter(c -> c.getCommentType() == CommentType.TEXT)
+                .collect(Collectors.toList());
     }
 }

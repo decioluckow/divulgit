@@ -1,0 +1,9 @@
+{
+  "$id": "1",
+  "innerException": null,
+  "message": "A project name is required in order to reference a Git repository by name.",
+  "typeName": "System.ArgumentException, mscorlib",
+  "typeKey": "ArgumentException",
+  "errorCode": 0,
+  "eventId": 0
+}

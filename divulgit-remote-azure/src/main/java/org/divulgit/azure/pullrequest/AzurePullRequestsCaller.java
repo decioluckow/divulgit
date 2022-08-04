@@ -14,8 +14,10 @@ import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.UniRestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.security.RemoteAuthentication;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -31,10 +33,6 @@ public class AzurePullRequestsCaller {
 
     @Autowired
     private AzurePullRequestResponseHandler responseHandler;
-
-    @Autowired
-    @ForRemote(RemoteType.GITHUB)
-    private ErrorResponseHandler errorResponseHandler;
 
     @Autowired
     private AzureURLBuilder urlBuilder;
@@ -73,10 +71,11 @@ public class AzurePullRequestsCaller {
             Integer scanFrom,
             Authentication authentication,
             int page) throws RemoteException {
-        final String url = urlBuilder.buildPullRequestsURL(remote, user, project, page);
+        String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
+        final String url = urlBuilder.buildPullRequestsURL(organization, project);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         boolean stopScan = false;
-        if (response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
             for (AzurePullRequest pullRequest : pullRequests) {
                 if (pullRequest.getExternalId() >= scanFrom) {
@@ -95,15 +94,14 @@ public class AzurePullRequestsCaller {
             Remote remote,
             User user,
             Project project,
-            Integer externalId,
+            int pullRequestExternalId,
             Authentication authentication) throws RemoteException {
-        String url = urlBuilder.buildPullRequestURL(remote, user, project, externalId);
+        String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
+        String url = urlBuilder.buildPullRequestURL(organization, pullRequestExternalId);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         AzurePullRequest pullRequest = null;
-        if (response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
         	pullRequest = responseHandler.handle200ResponseSingleResult(response);
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         return pullRequest;
     }

@@ -28,9 +28,8 @@ public class RestCallerConfiguration {
     @Bean
     public RestCaller azureRestCaller(@ForRemote(RemoteType.AZURE) ErrorResponseHandler errorResponseHandler) {
         return new UniRestCaller(errorResponseHandler,
-                ((headers, authentication) -> {
-                    String base64Token = Base64.getEncoder().encodeToString((":" + (String) authentication.getCredentials()).getBytes(StandardCharsets.UTF_8)); ;
-                    headers.put("Authorization", "Basic " + base64Token);
+                ((httpHequest, authentication) -> {
+                    httpHequest.basicAuth("", authentication.getCredentials().toString());
                 }));
     }
 

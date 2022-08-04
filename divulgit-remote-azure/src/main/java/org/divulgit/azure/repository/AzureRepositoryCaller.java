@@ -32,11 +32,7 @@ public class AzureRepositoryCaller {
 
     @Autowired
     private AzureURLBuilder urlBuilder;
-    
-    @Autowired
-    @ForRemote(RemoteType.AZURE)
-    private ErrorResponseHandler errorResponseHandler;
-    
+
     @Autowired
     private AzureRepositoryResponseHandler responseHandler;
 
@@ -48,7 +44,7 @@ public class AzureRepositoryCaller {
 
     private void retrieveRepositories(final Remote remote, final Authentication authentication, final List<AzureRepository> projects, int page) throws RemoteException {
         String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
-        String url = urlBuilder.buildRepository(remote, organization, page);
+        String url = urlBuilder.buildRepository(organization);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             projects.addAll(responseHandler.handle200Response(response));

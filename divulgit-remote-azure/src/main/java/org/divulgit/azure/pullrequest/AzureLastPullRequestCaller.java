@@ -12,8 +12,10 @@ import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.UniRestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.security.RemoteAuthentication;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -31,10 +33,6 @@ public class AzureLastPullRequestCaller {
     private AzurePullRequestResponseHandler responseHandler;
 
     @Autowired
-    @ForRemote(RemoteType.AZURE)
-    private ErrorResponseHandler errorResponseHandler;
-
-    @Autowired
     private AzureURLBuilder urlBuilder;
 
     public int retrieveLastPullRequestExternalId(
@@ -43,10 +41,11 @@ public class AzureLastPullRequestCaller {
             Project project,
             Authentication authentication) throws RemoteException {
         log.info("Retrieving last pull request id for project {}", project.getId());
-        String url = urlBuilder.buildPullRequestsURL(remote, user, project);
+        String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
+        String url = urlBuilder.buildPullRequestsURL(organization, project);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         int lastMergeRequestId = 0;
-        if (response.getStatusCode().is2xxSuccessful()) {
+        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
             if (!pullRequests.isEmpty()) {
                 lastMergeRequestId = pullRequests.get(0).getExternalId();

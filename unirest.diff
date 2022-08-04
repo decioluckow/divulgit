@@ -1,0 +1,101 @@
+diff --git a/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCaller.java b/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCaller.java
+new file mode 100644
+index 0000000..04ec789
+--- /dev/null
++++ b/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCaller.java
+@@ -0,0 +1,10 @@
++package org.divulgit.remote.rest;
++
++import org.divulgit.remote.exception.RemoteException;
++import org.springframework.http.ResponseEntity;
++import org.springframework.security.core.Authentication;
++
++public interface RestCaller {
++
++    ResponseEntity<String> call(String url, Authentication authentication) throws RemoteException;
++}
+diff --git a/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCallerConfiguration.java b/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCallerConfiguration.java
+index 368e091..9e29f64 100644
+--- a/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCallerConfiguration.java
++++ b/divulgit-remote/src/main/java/org/divulgit/remote/rest/RestCallerConfiguration.java
+@@ -1,5 +1,8 @@
+ package org.divulgit.remote.rest;
+ 
++import org.divulgit.annotation.ForRemote;
++import org.divulgit.remote.rest.error.ErrorResponseHandler;
++import org.divulgit.type.RemoteType;
+ import org.springframework.boot.web.client.RestTemplateCustomizer;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+@@ -23,11 +26,11 @@ public class RestCallerConfiguration {
+     }
+ 
+     @Bean
+-    public HeaderAuthRestCaller azureRestCaller(RestTemplateCustomizer restTemplateCustomizer) {
+-        return new HeaderAuthRestCaller(restTemplateCustomizer,
++    public RestCaller azureRestCaller(@ForRemote(RemoteType.AZURE) ErrorResponseHandler errorResponseHandler) {
++        return new UniRestCaller(errorResponseHandler,
+                 ((headers, authentication) -> {
+                     String base64Token = Base64.getEncoder().encodeToString((":" + (String) authentication.getCredentials()).getBytes(StandardCharsets.UTF_8)); ;
+-                    headers.add("Authorization", "Basic " + base64Token);
++                    headers.put("Authorization", "Basic " + base64Token);
+                 }));
+     }
+ 
+diff --git a/divulgit-remote/src/main/java/org/divulgit/remote/rest/UniRestCaller.java b/divulgit-remote/src/main/java/org/divulgit/remote/rest/UniRestCaller.java
+new file mode 100644
+index 0000000..40c527d
+--- /dev/null
++++ b/divulgit-remote/src/main/java/org/divulgit/remote/rest/UniRestCaller.java
+@@ -0,0 +1,51 @@
++package org.divulgit.remote.rest;
++
++import com.mashape.unirest.http.HttpResponse;
++import com.mashape.unirest.http.Unirest;
++import com.mashape.unirest.http.exceptions.UnirestException;
++import com.mashape.unirest.request.GetRequest;
++import lombok.extern.slf4j.Slf4j;
++import org.divulgit.remote.exception.RemoteException;
++import org.divulgit.remote.response.Response;
++import org.divulgit.remote.rest.error.ErrorResponseHandler;
++import org.springframework.boot.web.client.RestTemplateCustomizer;
++import org.springframework.http.ResponseEntity;
++import org.springframework.security.core.Authentication;
++
++import java.util.HashMap;
++import java.util.Map;
++
++@Slf4j
++public class UniRestCaller implements RestCaller {
++
++    private HeaderAuthFiller headerAuthFiller;
++    private ErrorResponseHandler errorResponseHandler;
++
++    public UniRestCaller(ErrorResponseHandler errorResponseHandler, HeaderAuthFiller headerAuthFiller) {
++        this.headerAuthFiller = headerAuthFiller;
++        this.errorResponseHandler = errorResponseHandler;
++    }
++
++    public ResponseEntity<String> call(String url, Authentication authentication) throws RemoteException {
++        log.debug("Invoking {}", url);
++        GetRequest getRequest = Unirest.get(url);
++        Map<String, String> headers = new HashMap<>();
++        headers.put("accept", "application/json");
++        headerAuthFiller.fill(headers, authentication);
++        getRequest.headers(headers);
++        try {
++            HttpResponse<String> jsonResponse = getRequest.asString();
++            ResponseEntity<String> responseEntity = ResponseEntity.status(jsonResponse.getStatus()).body(jsonResponse.getBody());
++            if (this.errorResponseHandler.isErrorResponse(responseEntity)) {
++                this.errorResponseHandler.handleErrorResponse(responseEntity);
++            }
++            return responseEntity;
++        } catch (UnirestException e) {
++            throw new RemoteException(e.getMessage(), e);
++        }
++    }
++
++    public static interface HeaderAuthFiller {
++        void fill(Map<String, String> headers, Authentication authentication);
++    }
++}
