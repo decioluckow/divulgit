@@ -64,7 +64,8 @@ public class BitBucketURLBuilder {
     }
     
     public String buildRepository(Remote remote, int page) {
-        return MessageFormat.format("https://{0}/user/repos",
+        //TODO ajustar parece receber meu workspace
+        return MessageFormat.format("https://{0}/repositories/wesleyeduardocr7",
             remote.getUrl(),
             String.valueOf(pageSize),
             String.valueOf(page));

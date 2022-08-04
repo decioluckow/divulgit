@@ -8,6 +8,7 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.util.List;
 public class BitBucketPullRequestsCaller {
 
     @Autowired
-    private HeaderAuthRestCaller bitBucketRestCaller;
+    private RestCaller bitBucketRestCaller;
 
     @Autowired
     private BitBucketPullRequestResponseHandler bitBucketPullRequestResponseHandler;

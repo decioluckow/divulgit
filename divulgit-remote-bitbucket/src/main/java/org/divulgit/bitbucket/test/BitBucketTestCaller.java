@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
+import org.divulgit.remote.rest.UniRestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class BitBucketTestCaller {
 
     @Autowired
-    private HeaderAuthRestCaller bitBucketRestCaller;
+    private RestCaller bitBucketRestCaller;
 
     @Autowired
     private BitBucketURLBuilder urlBuilder;

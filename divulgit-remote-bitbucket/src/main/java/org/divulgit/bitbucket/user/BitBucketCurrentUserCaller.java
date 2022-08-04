@@ -6,6 +6,7 @@ import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class BitBucketCurrentUserCaller {
 
     @Autowired
-    private HeaderAuthRestCaller bitBucketRestCaller;
+    private RestCaller bitBucketRestCaller;
 
     @Autowired
     private BitBucketURLBuilder urlBuilder;
@@ -32,10 +33,6 @@ public class BitBucketCurrentUserCaller {
 
     public Optional<RemoteUser> retrieveCurrentUser(Remote remote, Authentication authentication) throws RemoteException {
         String url = urlBuilder.buildUserURL(remote);
-
-
-
-
         ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
