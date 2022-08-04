@@ -52,11 +52,11 @@ public class BitBucketPullRequest implements RemoteMergeRequest {
 
     public MergeRequest.State convertState(String state) {
         MergeRequest.State mergeRequestState;
-        if (STATE_OPENED.equals(state))
+        if (STATE_OPENED.equalsIgnoreCase(state))
             mergeRequestState = MergeRequest.State.OPENED;
-        else if (STATE_CLOSED.equals(state) && Strings.isEmpty(mergedAt))
+        else if (STATE_CLOSED.equalsIgnoreCase(state) && Strings.isEmpty(mergedAt))
             mergeRequestState = MergeRequest.State.CLOSED;
-        else if (STATE_CLOSED.equals(state) && Strings.isNotEmpty(mergedAt))
+        else if (STATE_CLOSED.equalsIgnoreCase(state) && Strings.isNotEmpty(mergedAt))
             mergeRequestState = MergeRequest.State.MERGED;
         else throw new IllegalArgumentException("MergeRequest.State not found for value " + state);
         return mergeRequestState;

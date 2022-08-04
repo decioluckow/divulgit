@@ -23,7 +23,7 @@ public class BitBucketURLBuilder {
     }
     
     public String buildIssueComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
@@ -33,7 +33,7 @@ public class BitBucketURLBuilder {
     }
     
     public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}/comments?per_page={4}&page={5}",
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}/comments?per_page={4}&page={5}",
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
@@ -47,7 +47,7 @@ public class BitBucketURLBuilder {
     }
 
     public String buildPullRequestsURL(Remote remote, User user, Project project, int page) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls?per_page={3}&page={4}",
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests?per_page={3}&page={4}",
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
@@ -56,18 +56,18 @@ public class BitBucketURLBuilder {
     }
 
     public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
-        return MessageFormat.format("https://{0}/repos/{1}/{2}/pulls/{3}",
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}",
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
             mergeRequestExternalId);
     }
     
-    public String buildRepository(Remote remote, int page) {
-        //TODO ajustar parece receber meu workspace
-        return MessageFormat.format("https://{0}/repositories/wesleyeduardocr7",
+    public String buildRepository(Remote remote, String workspace, int page) {
+        return MessageFormat.format("https://{0}/repositories/{1}",
             remote.getUrl(),
             String.valueOf(pageSize),
+            workspace,
             String.valueOf(page));
     }
 }

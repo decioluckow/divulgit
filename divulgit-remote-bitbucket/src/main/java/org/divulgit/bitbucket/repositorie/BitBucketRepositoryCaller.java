@@ -39,7 +39,8 @@ public class BitBucketRepositoryCaller {
     }
 
     private void retrieveRepositories(final Remote remote, final Authentication authentication, final List<BitBucketRepository> projects, int page) throws RemoteException {
-        String url = urlBuilder.buildRepository(remote, page);
+        //TODO validar se authentication.getPrincipal().toString() eh de fato o workspace
+        String url = urlBuilder.buildRepository(remote, authentication.getPrincipal().toString(), page);
         ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         //TODO validar se fica essa faixa de status code tambem
         if (response.getStatusCode().is2xxSuccessful()) {
