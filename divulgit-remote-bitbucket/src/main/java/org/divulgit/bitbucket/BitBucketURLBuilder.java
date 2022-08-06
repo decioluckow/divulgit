@@ -35,27 +35,21 @@ public class BitBucketURLBuilder {
                 String.valueOf(page));
     }
 
-    public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}/comments?per_page={4}&page={5}",
+    public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest) {
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}/comments?per_page={4}",
                 getUrlApi(remote.getUrl()),
                 user.getUsername(),
                 project.getName(),
                 mergeRequest.getExternalId(),
-                String.valueOf(pageSize),
-                String.valueOf(page));
+                String.valueOf(pageSize));
     }
 
     public String buildPullRequestsURL(Remote remote, User user, Project project) {
-        return buildPullRequestsURL(remote, user, project, INITIAL_PAGE);
-    }
-
-    public String buildPullRequestsURL(Remote remote, User user, Project project, int page) {
-        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests?per_page={3}&page={4}",
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests?per_page={3}",
                 getUrlApi(remote.getUrl()),
                 user.getUsername(),
                 project.getName(),
-                String.valueOf(pageSize),
-                String.valueOf(page));
+                String.valueOf(pageSize));
     }
 
     public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
@@ -66,12 +60,11 @@ public class BitBucketURLBuilder {
                 mergeRequestExternalId);
     }
 
-    public String buildRepository(Remote remote, String workspace, int page) {
-        return MessageFormat.format("https://{0}/repositories/{1}?per_page={2}&page={3}",
+    public String buildRepository(Remote remote, String workspace) {
+        return MessageFormat.format("https://{0}/repositories/{1}?per_page={2}",
                 getUrlApi(remote.getUrl()),
                 workspace,
-                String.valueOf(pageSize),
-                String.valueOf(page));
+                String.valueOf(pageSize));
     }
 
     private String getUrlApi(String urlRemote) {

@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket.repositorie;
+import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import org.divulgit.bitbucket.util.LinkHeaderUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -33,22 +34,21 @@ public class BitBucketRepositoryCaller {
 
     public List<BitBucketRepository> retrieveRepositories(final Remote remote, final Authentication authentication) throws RemoteException {
         final List<BitBucketRepository> projects = new ArrayList<>();
-        retrieveRepositories(remote, authentication, projects, BitBucketURLBuilder.INITIAL_PAGE);
+        String url = urlBuilder.buildRepository(remote, authentication.getPrincipal().toString());
+        retrieveRepositories(authentication, projects, url);
         return projects;
     }
 
-    private void retrieveRepositories(final Remote remote, final Authentication authentication, final List<BitBucketRepository> projects, int page) throws RemoteException {
-        //TODO validar se authentication.getPrincipal().toString() eh de fato o workspace
-        String url = urlBuilder.buildRepository(remote, authentication.getPrincipal().toString(), page);
-        ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
-        //TODO validar se fica essa faixa de status code tambem
+    private void retrieveRepositories(final Authentication authentication, final List<BitBucketRepository> projects, String url) throws RemoteException {
+      ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             projects.addAll(bitBucketRepositoryResponseHandler.handle200ResponseMultipleResult(response));
         } else if (errorResponseHandler.isErrorResponse(response)) {
             errorResponseHandler.handleErrorResponse(response);
         }
-        if (LinkHeaderUtil.hasNextPage(response)) {
-        	retrieveRepositories(remote, authentication, projects, ++page);
+        String nextURL = LinkHeaderUtil.getNextPage(response);
+        if(StringUtils.isNotEmpty(nextURL)){
+            retrieveRepositories(authentication, projects, nextURL);
         }
     }
 }

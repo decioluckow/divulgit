@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket.comment;
+import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import org.divulgit.bitbucket.util.LinkHeaderUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,6 @@ import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,26 +39,20 @@ public class BitBucketPullRequestCommentCaller {
             MergeRequest mergeRequest,
             Authentication authentication) throws RemoteException {
         final List<BitBucketComment> loadedComments = new ArrayList<>();
-        retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, BitBucketURLBuilder.INITIAL_PAGE);
+        String url = urlBuilder.buildPullRequestComment(remote, user, project, mergeRequest);
+        retrieveComments(loadedComments, authentication,url);
         return loadedComments;
     }
 
-    private void retrieveComments(
-            Remote remote,
-            User user,
-            Project project,
-            MergeRequest mergeRequest,
-            List<BitBucketComment> loadedComments,
-            Authentication authentication,
-            int page) throws RemoteException {
-        String url = urlBuilder.buildPullRequestComment(remote, user, project, mergeRequest, page);
+    private void retrieveComments(List<BitBucketComment> loadedComments,Authentication authentication,String url) throws RemoteException {
         ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             List<BitBucketComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
         }
-        if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);
+        String nextURL = LinkHeaderUtil.getNextPage(response);
+        if (StringUtils.isNotEmpty(nextURL)) {
+            retrieveComments(loadedComments, authentication, nextURL);
         }
     }
 }

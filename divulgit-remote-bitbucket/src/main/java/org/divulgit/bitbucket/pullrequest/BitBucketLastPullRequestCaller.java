@@ -26,10 +26,6 @@ public class BitBucketLastPullRequestCaller {
     private BitBucketPullRequestResponseHandler bitBucketPullRequestResponseHandler;
 
     @Autowired
-    @ForRemote(RemoteType.BITBUCKET)
-    private ErrorResponseHandler errorResponseHandler;
-
-    @Autowired
     private BitBucketURLBuilder urlBuilder;
 
     public int retrieveLastPullRequestExternalId(
@@ -46,8 +42,6 @@ public class BitBucketLastPullRequestCaller {
             if (!pullRequests.isEmpty()) {
                 lastMergeRequestId = pullRequests.get(0).getExternalId();
             }
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         return lastMergeRequestId;
     }
