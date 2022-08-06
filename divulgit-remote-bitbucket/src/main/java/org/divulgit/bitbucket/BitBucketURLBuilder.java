@@ -6,40 +6,43 @@ import org.divulgit.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
+
 @Component
 public class BitBucketURLBuilder {
-	
-	public static final int INITIAL_PAGE = 1;
-	
+
+    public static final int INITIAL_PAGE = 1;
+
+    public static final String CURRENT_API_VERSION = "2.0";
+
     @Value("${rest.caller.pageSize:50}")
     private int pageSize;
 
     public String buildTestURL(Remote remote) {
-        return MessageFormat.format("https://{0}/zen", remote.getUrl());
+        return MessageFormat.format("https://{0}/zen", getUrlApi(remote.getUrl()));
     }
 
     public String buildUserURL(Remote remote) {
-        return MessageFormat.format("https://{0}/user", remote.getUrl());
+        return MessageFormat.format("https://{0}/user", getUrlApi(remote.getUrl()));
     }
-    
+
     public String buildIssueComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
         return MessageFormat.format("https://{0}/repositories/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequest.getExternalId(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
+                getUrlApi(remote.getUrl()),
+                user.getUsername(),
+                project.getName(),
+                mergeRequest.getExternalId(),
+                String.valueOf(pageSize),
+                String.valueOf(page));
     }
-    
+
     public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
         return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}/comments?per_page={4}&page={5}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequest.getExternalId(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
+                getUrlApi(remote.getUrl()),
+                user.getUsername(),
+                project.getName(),
+                mergeRequest.getExternalId(),
+                String.valueOf(pageSize),
+                String.valueOf(page));
     }
 
     public String buildPullRequestsURL(Remote remote, User user, Project project) {
@@ -48,26 +51,30 @@ public class BitBucketURLBuilder {
 
     public String buildPullRequestsURL(Remote remote, User user, Project project, int page) {
         return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests?per_page={3}&page={4}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            String.valueOf(pageSize),
-            String.valueOf(page));
+                getUrlApi(remote.getUrl()),
+                user.getUsername(),
+                project.getName(),
+                String.valueOf(pageSize),
+                String.valueOf(page));
     }
 
     public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
         return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}",
-            remote.getUrl(),
-            user.getUsername(),
-            project.getName(),
-            mergeRequestExternalId);
+                getUrlApi(remote.getUrl()),
+                user.getUsername(),
+                project.getName(),
+                mergeRequestExternalId);
     }
-    
+
     public String buildRepository(Remote remote, String workspace, int page) {
-        return MessageFormat.format("https://{0}/repositories/{1}",
-            remote.getUrl(),
-            String.valueOf(pageSize),
-            workspace,
-            String.valueOf(page));
+        return MessageFormat.format("https://{0}/repositories/{1}?per_page={2}&page={3}",
+                getUrlApi(remote.getUrl()),
+                workspace,
+                String.valueOf(pageSize),
+                String.valueOf(page));
+    }
+
+    private String getUrlApi(String urlRemote) {
+        return urlRemote.concat("/").concat(CURRENT_API_VERSION);
     }
 }

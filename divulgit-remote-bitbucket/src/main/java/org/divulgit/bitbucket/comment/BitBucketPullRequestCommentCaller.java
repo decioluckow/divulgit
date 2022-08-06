@@ -8,7 +8,6 @@ import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
@@ -32,10 +31,6 @@ public class BitBucketPullRequestCommentCaller {
 
     @Autowired
     private BitBucketCommentResponseHandler responseHandler;
-
-    @Autowired
-    @ForRemote(RemoteType.BITBUCKET)
-    private ErrorResponseHandler errorResponseHandler;
 
     public List<BitBucketComment> retrieveComments(
             Remote remote,
@@ -61,8 +56,6 @@ public class BitBucketPullRequestCommentCaller {
         if (response.getStatusCode().is2xxSuccessful()) {
             List<BitBucketComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
             retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);

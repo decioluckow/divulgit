@@ -14,7 +14,6 @@ import java.util.List;
 @Component
 public class BitBucketCommentResponseHandler {
 
-
     public BitBucketComment handle200ResponseSingleResult(ResponseEntity<String> response) throws RemoteException {
         try {
             Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();

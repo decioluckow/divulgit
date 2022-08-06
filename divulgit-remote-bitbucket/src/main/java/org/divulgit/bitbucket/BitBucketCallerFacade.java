@@ -1,5 +1,5 @@
 package org.divulgit.bitbucket;
-import org.divulgit.bitbucket.comment.BitBucketCommentService;
+import org.divulgit.bitbucket.comment.BitBucketPullRequestCommentCaller;
 import org.divulgit.bitbucket.repositorie.BitBucketRepositoryCaller;
 import org.divulgit.bitbucket.pullrequest.BitBucketLastPullRequestCaller;
 import org.divulgit.bitbucket.pullrequest.BitBucketPullRequestsCaller;
@@ -43,7 +43,8 @@ public class BitBucketCallerFacade implements RemoteFacade {
     private BitBucketPullRequestsCaller bitBucketPullRequestsCaller;
 
     @Autowired
-    private BitBucketCommentService commentService;
+    @ForRemote(RemoteType.BITBUCKET)
+    private BitBucketPullRequestCommentCaller bitBucketPullRequestCommentCaller;
 
     @Override
     public boolean testAPI(Remote remote, Authentication authentication) throws RemoteException {
@@ -75,6 +76,6 @@ public class BitBucketCallerFacade implements RemoteFacade {
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
                                                           Authentication authentication) throws RemoteException {
-        return commentService.retrieveComments(remote, user, project, mergeRequest, authentication);
+        return bitBucketPullRequestCommentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
     }
 }

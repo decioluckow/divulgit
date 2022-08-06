@@ -28,8 +28,7 @@ public class RemoteService {
         ensureRegistred("gitlab.com", RemoteType.GITLAB);
         ensureRegistred("api.github.com", RemoteType.GITHUB);
         ensureRegistred("dev.azure.com", RemoteType.AZURE);
-        //TODO procurar lugar certo para colocar a versão 2.0 (aki e la no front botei o 2.0)
-        ensureRegistred("api.bitbucket.org/2.0", RemoteType.BITBUCKET);
+        ensureRegistred("api.bitbucket.org", RemoteType.BITBUCKET);
     }
 
     private void ensureRegistred(String url, RemoteType type) {

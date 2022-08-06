@@ -78,20 +78,20 @@
             <version>1.4.9</version>
         </dependency>
     </dependencies>
-    
+
     <dependencyManagement>
-	    <dependencies>
-			<dependency>
-			    <groupId>org.apache.commons</groupId>
-			    <artifactId>commons-lang3</artifactId>
-			    <version>3.12.0</version>
-			</dependency>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.12.0</version>
+            </dependency>
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>20220320</version>
             </dependency>
-	    </dependencies>
+        </dependencies>
     </dependencyManagement>
 
     <build>
@@ -115,28 +115,15 @@
                     </dependency>
                 </dependencies>
             </plugin>
-        <!-- we want JDK 1.6 source and binary compatiblility -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-                <source>11</source>
-                <target>11</target>
-            </configuration>
-        </plugin>
-        <!-- ... -->
-        <!-- we want sources to be processed by a specific 1.6 javac -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
-            <configuration>
-              <verbose>true</verbose>
-              <fork>true</fork>
-              <executable>${JAVA_HOME_11}/bin/javac</executable>
-              <compilerVersion>11</compilerVersion>
-            </configuration>
-        </plugin>
+            <!-- we want JDK 1.6 source and binary compatiblility -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -148,7 +135,7 @@
         <module>divulgit-remote-model</module>
         <module>divulgit-remote-gitlab</module>
         <module>divulgit-remote-github</module>
-	<!--	<module>divulgit-remote-azure</module>-->
+        <module>divulgit-remote-azure</module>
         <module>divulgit-security</module>
         <module>divulgit-remote</module>
         <module>divulgit-service</module>

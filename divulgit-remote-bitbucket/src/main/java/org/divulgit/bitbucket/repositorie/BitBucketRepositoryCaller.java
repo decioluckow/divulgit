@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
@@ -52,5 +51,4 @@ public class BitBucketRepositoryCaller {
         	retrieveRepositories(remote, authentication, projects, ++page);
         }
     }
-
 }
