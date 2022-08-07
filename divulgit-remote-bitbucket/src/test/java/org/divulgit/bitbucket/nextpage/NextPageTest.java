@@ -19,7 +19,7 @@ class NextPageTest {
     @Test
     public void testRepositoriesWithoutNextPage() throws IOException {
         String json = TestUtils.getResourceAsString(this, "rerpositorieWithoutNextPage.json");
-        ResponseEntity<String> response = ResponseEntity .ok(json);
+        ResponseEntity<String> response = ResponseEntity.ok(json);
     	assertFalse(ResponseUtil.hasNextPage(response));
     }
     @Test
@@ -32,7 +32,7 @@ class NextPageTest {
     @Test
     public void testPullRequestsWithoutNextPage() throws IOException {
         String json = TestUtils.getResourceAsString(this, "pullRequestsWithoutNextPage.json");
-        ResponseEntity<String> response = ResponseEntity .ok(json);
+        ResponseEntity<String> response = ResponseEntity.ok(json);
         assertFalse(ResponseUtil.hasNextPage(response));
     }
 
@@ -46,7 +46,7 @@ class NextPageTest {
     @Test
     public void testComentsPullRequestsWithoutNextPage() throws IOException {
         String json = TestUtils.getResourceAsString(this, "comentsPullRequestsWithoutNextPage.json");
-        ResponseEntity<String> response = ResponseEntity .ok(json);
+        ResponseEntity<String> response = ResponseEntity.ok(json);
         assertFalse(ResponseUtil.hasNextPage(response));
     }
 }

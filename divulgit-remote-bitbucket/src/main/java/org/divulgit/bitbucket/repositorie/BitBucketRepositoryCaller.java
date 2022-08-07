@@ -3,12 +3,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import org.divulgit.bitbucket.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,11 +21,8 @@ public class BitBucketRepositoryCaller {
 
     @Autowired
     private BitBucketURLBuilder urlBuilder;
-    
-    @Autowired
-    @ForRemote(RemoteType.BITBUCKET)
-    private ErrorResponseHandler errorResponseHandler;
-    
+
+
     @Autowired
     private BitBucketRepositoryResponseHandler bitBucketRepositoryResponseHandler;
 
