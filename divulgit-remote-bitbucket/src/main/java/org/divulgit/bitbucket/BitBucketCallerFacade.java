@@ -66,7 +66,6 @@ public class BitBucketCallerFacade implements RemoteFacade {
         return bitBucketLastPullRequestCaller.retrieveLastPullRequestExternalId(remote, user, project, authentication);
     }
 
-
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom,
                                                                     Authentication authentication) throws RemoteException {

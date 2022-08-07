@@ -1,14 +1,11 @@
 package org.divulgit.bitbucket.pullrequest;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

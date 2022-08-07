@@ -10,8 +10,6 @@ import java.text.MessageFormat;
 @Component
 public class BitBucketURLBuilder {
 
-    public static final int INITIAL_PAGE = 1;
-
     public static final String CURRENT_API_VERSION = "2.0";
 
     @Value("${rest.caller.pageSize:50}")

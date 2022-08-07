@@ -1,7 +1,7 @@
 package org.divulgit.bitbucket.pullrequest;
 import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
-import org.divulgit.bitbucket.util.LinkHeaderUtil;
+import org.divulgit.bitbucket.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -54,9 +54,8 @@ public class BitBucketPullRequestsCaller {
                 }
             }
         }
-        String nextURL = LinkHeaderUtil.getNextPage(response);
-        if (StringUtils.isNotEmpty(nextURL) && ! stopScan) {
-            retrievePullRequests(loadedPullRequests, scanFrom, authentication, nextURL);
+        if(ResponseUtil.hasNextPage(response) && ! stopScan){
+            retrievePullRequests(loadedPullRequests, scanFrom, authentication, ResponseUtil.getNextPage(response));
         }
     }
 }

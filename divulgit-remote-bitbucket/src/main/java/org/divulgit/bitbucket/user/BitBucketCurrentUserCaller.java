@@ -36,8 +36,6 @@ public class BitBucketCurrentUserCaller {
         Optional<RemoteUser> authenticatedUser = Optional.empty();
         if (response.getStatusCode().is2xxSuccessful()) {
             authenticatedUser = Optional.ofNullable(bitBucketUserResponseHandler.handle200ResponseSingleResult(response));
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         return authenticatedUser;
     }

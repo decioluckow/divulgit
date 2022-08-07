@@ -1,7 +1,7 @@
 package org.divulgit.bitbucket.comment;
 import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
-import org.divulgit.bitbucket.util.LinkHeaderUtil;
+import org.divulgit.bitbucket.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.MergeRequest;
@@ -50,9 +50,8 @@ public class BitBucketPullRequestCommentCaller {
             List<BitBucketComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
         }
-        String nextURL = LinkHeaderUtil.getNextPage(response);
-        if (StringUtils.isNotEmpty(nextURL)) {
-            retrieveComments(loadedComments, authentication, nextURL);
+        if(ResponseUtil.hasNextPage(response)){
+            retrieveComments(loadedComments, authentication, ResponseUtil.getNextPage(response));
         }
     }
 }

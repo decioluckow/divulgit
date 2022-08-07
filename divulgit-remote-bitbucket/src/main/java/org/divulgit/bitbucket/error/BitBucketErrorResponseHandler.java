@@ -25,7 +25,6 @@ public class BitBucketErrorResponseHandler implements ErrorResponseHandler {
     //TODO fazer tratasmento para casos onde nao retorna Json com detalhes do erro
     public void handleErrorResponse(ResponseEntity<String> response) throws RemoteException {
         try {
-            String reasonPhrase = response.getStatusCode().getReasonPhrase();
             final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
             final ObjectMapper objectMapper = builder.build();
             ErrorMessage errorMessage =  objectMapper.readValue(response.getBody(), ErrorMessage.class);

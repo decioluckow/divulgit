@@ -1,7 +1,7 @@
 package org.divulgit.bitbucket.repositorie;
 import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
-import org.divulgit.bitbucket.util.LinkHeaderUtil;
+import org.divulgit.bitbucket.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.model.Remote;
@@ -43,12 +43,9 @@ public class BitBucketRepositoryCaller {
       ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             projects.addAll(bitBucketRepositoryResponseHandler.handle200ResponseMultipleResult(response));
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
-        String nextURL = LinkHeaderUtil.getNextPage(response);
-        if(StringUtils.isNotEmpty(nextURL)){
-            retrieveRepositories(authentication, projects, nextURL);
+        if(ResponseUtil.hasNextPage(response)){
+            retrieveRepositories(authentication, projects, ResponseUtil.getNextPage(response));
         }
     }
 }

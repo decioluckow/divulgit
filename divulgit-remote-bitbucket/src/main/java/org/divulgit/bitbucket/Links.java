@@ -4,7 +4,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//TODO procurar forma de melhorar a navegacao entre nós
 public class Links {
     private Link avatar;
     private Link html;
