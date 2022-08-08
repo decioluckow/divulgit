@@ -5,13 +5,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.divulgit.annotation.ForRemote;
-import org.divulgit.azure.thread.AzureThread;
-import org.divulgit.azure.thread.AzureThreadCaller;
+import org.divulgit.azure.thread.*;
 import org.divulgit.azure.repository.AzureRepositoryCaller;
 import org.divulgit.azure.pullrequest.AzureLastPullRequestCaller;
 import org.divulgit.azure.pullrequest.AzurePullRequestsCaller;
 import org.divulgit.azure.test.AzureTestCaller;
-import org.divulgit.azure.thread.CommentType;
 import org.divulgit.azure.user.AzureCurrentUserCaller;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -46,9 +44,9 @@ public class AzureCallerFacade implements RemoteFacade {
 
     @Autowired
     private AzurePullRequestsCaller pullRequestCaller;
-    
+
     @Autowired
-    private AzureThreadCaller commentCaller;
+    private AzureCommentService commentService;
 
     @Override
     public boolean testAPI(Remote remote, Authentication authentication) throws RemoteException {
@@ -56,33 +54,37 @@ public class AzureCallerFacade implements RemoteFacade {
     }
 
     @Override
-    public Optional<RemoteUser> retrieveRemoteUser(Remote remote, Authentication authentication) throws RemoteException {
+    public Optional<RemoteUser> retrieveRemoteUser(
+            Remote remote, Authentication authentication)
+            throws RemoteException {
         return currentUserCaller.retrieveCurrentUser(authentication);
     }
 
     @Override
-    public List<? extends RemoteProject> retrieveRemoteProjects(Remote remote, Authentication authentication) throws RemoteException {
+    public List<? extends RemoteProject> retrieveRemoteProjects(
+            Remote remote, Authentication authentication)
+            throws RemoteException {
         return projectCaller.retrieveRepositories(remote, authentication);
     }
 
     @Override
-    public int retrieveLastMergeRequestExternalId(Remote remote, User user, Project project, Authentication authentication) throws RemoteException {
+    public int retrieveLastMergeRequestExternalId(
+            Remote remote, User user, Project project, Authentication authentication)
+            throws RemoteException {
         return lastPullRequestCaller.retrieveLastPullRequestExternalId(remote, user, project, authentication);
     }
 
     @Override
-    public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom,
-                                                                    Authentication authentication) throws RemoteException {
-    	return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
+    public List<? extends RemoteMergeRequest> retrieveMergeRequests(
+            Remote remote, User user, Project project, Integer scanFrom,Authentication authentication)
+            throws RemoteException {
+        return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
     }
-    
+
     @Override
-    public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
-            Authentication authentication) throws RemoteException {
-        List<AzureThread> azureThreads = commentCaller.retrieveComments(remote, user, project, mergeRequest, authentication);
-        return azureThreads.stream()
-                .flatMap(c -> c.getComments().stream())
-                .filter(c -> c.getCommentType() == CommentType.TEXT)
-                .collect(Collectors.toList());
+    public List<? extends RemoteComment> retrieveComments(
+            Remote remote, User user, Project project, MergeRequest mergeRequest, Authentication authentication)
+            throws RemoteException {
+        return commentService.retrieveComments(project, mergeRequest, authentication);
     }
 }

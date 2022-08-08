@@ -33,38 +33,30 @@ public class AzureThreadCaller {
     @Autowired
     private AzureThreadResponseHandler responseHandler;
 
-    public List<AzureThread> retrieveComments(
-            Remote remote,
-            User user,
+    public List<AzureThread> retrieveThreads(
             Project project,
             MergeRequest mergeRequest,
             Authentication authentication) throws RemoteException {
-        final List<AzureThread> loadedComments = new ArrayList<>();
-        retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, AzureURLBuilder.INITIAL_PAGE);
-        return loadedComments;
+        final List<AzureThread> loadedThreads = new ArrayList<>();
+        retrieveThreads(project, mergeRequest, loadedThreads, authentication, AzureURLBuilder.INITIAL_PAGE);
+        return loadedThreads;
     }
 
-    private void retrieveComments(
-            Remote remote,
-            User user,
+    private void retrieveThreads(
             Project project,
             MergeRequest mergeRequest,
-            List<AzureThread> loadedComments,
+            List<AzureThread> loadedThreads,
             Authentication authentication,
             int page) throws RemoteException {
         String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
         String url = urlBuilder.buildPullRequestComments(organization, project, mergeRequest);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
-            List<AzureThread> comments = responseHandler.handle200ResponseMultipleResult(response);
-            //TODO testar
-            comments.stream()
-                    .forEach(t -> t.getComments().stream()
-                            .forEach(comment -> comment.setUrl(urlBuilder.buildPullRequestCommentWebURL(project, mergeRequest, comment))));
-            loadedComments.addAll(comments);
+            List<AzureThread> threads = responseHandler.handle200ResponseMultipleResult(response);
+            loadedThreads.addAll(threads);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);
+            retrieveThreads(project, mergeRequest, loadedThreads, authentication, ++page);
         }
     }
 }

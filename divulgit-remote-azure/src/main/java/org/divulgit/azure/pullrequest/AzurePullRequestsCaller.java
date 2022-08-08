@@ -77,6 +77,7 @@ public class AzurePullRequestsCaller {
         boolean stopScan = false;
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
+            //TODO preencher url do merge request baseado na url do projeto
             for (AzurePullRequest pullRequest : pullRequests) {
                 if (pullRequest.getExternalId() >= scanFrom) {
                 	loadedPullRequests.add(pullRequest);

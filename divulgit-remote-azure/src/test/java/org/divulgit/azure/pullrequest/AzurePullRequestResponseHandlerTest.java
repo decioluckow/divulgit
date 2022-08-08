@@ -19,8 +19,6 @@ class AzurePullRequestResponseHandlerTest {
 
         List<AzurePullRequest> azurePullRequests = handler.handle200ResponseMultipleResult(ResponseEntity.ok(json));
 
-        //TODO continuar mapeamento
-
         assertEquals(3, azurePullRequests.size());
 
         AzurePullRequest azurePullRequest0 = azurePullRequests.get(0);

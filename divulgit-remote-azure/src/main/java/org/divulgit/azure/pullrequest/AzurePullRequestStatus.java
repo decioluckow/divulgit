@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.divulgit.model.MergeRequest;
 
 @AllArgsConstructor
-public enum AzurePullRequestState {
+public enum AzurePullRequestStatus {
     ABANDONED(MergeRequest.State.CLOSED),
     ACTIVE(MergeRequest.State.OPENED),
     COMPLETED(MergeRequest.State.MERGED),
@@ -16,8 +16,8 @@ public enum AzurePullRequestState {
     private MergeRequest.State correspondingTo;
 
     @JsonCreator
-    public static AzurePullRequestState getEnumFromValue(String value) {
-        for (AzurePullRequestState state : values()) {
+    public static AzurePullRequestStatus getEnumFromValue(String value) {
+        for (AzurePullRequestStatus state : values()) {
             if (state.name().toLowerCase().equals(value.toLowerCase())) {
                 return state;
             }

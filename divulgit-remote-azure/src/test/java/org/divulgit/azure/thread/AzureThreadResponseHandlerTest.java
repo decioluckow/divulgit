@@ -1,7 +1,5 @@
 package org.divulgit.azure.thread;
 
-import org.divulgit.azure.repository.AzureRepository;
-import org.divulgit.azure.repository.AzureRepositoryResponseHandler;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -23,29 +21,39 @@ class AzureThreadResponseHandlerTest {
 
         assertEquals(5, azureThreads.size());
 
-        Comment azureComment0 = azureThreads.get(0).getComments().get(0);
+        AzureThread azureThread0 = azureThreads.get(0);
+        AzureComment azureComment0 = azureThread0.getComments().get(0);
         assertEquals("1", azureComment0.getExternalId());
         assertEquals("comment 1", azureComment0.getText());
-        assertEquals("https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/11/comments/1", azureComment0.getUrl());
+        assertEquals(CommentType.TEXT, azureComment0.getCommentType());
+        assertEquals("/teste.txt", azureThread0.getThreadContext().getFilePath());
 
-        Comment azureComment1 = azureThreads.get(1).getComments().get(0);
+        AzureThread azureThread1 = azureThreads.get(1);
+        AzureComment azureComment1 = azureThread1.getComments().get(0);
         assertEquals("1", azureComment1.getExternalId());
         assertEquals("comment 2", azureComment1.getText());
-        assertEquals("https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/12/comments/1", azureComment1.getUrl());
+        assertEquals(CommentType.TEXT, azureComment1.getCommentType());
+        assertEquals("/teste.txt", azureThread1.getThreadContext().getFilePath());
 
-        Comment azureComment2 = azureThreads.get(2).getComments().get(0);
+        AzureThread azureThread2 = azureThreads.get(2);
+        AzureComment azureComment2 = azureThread2.getComments().get(0);
         assertEquals("1", azureComment2.getExternalId());
         assertEquals("comment 5", azureComment2.getText());
-        assertEquals("https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/13/comments/1", azureComment2.getUrl());
+        assertEquals(CommentType.TEXT, azureComment2.getCommentType());
+        assertEquals("/teste.txt", azureThread2.getThreadContext().getFilePath());
 
-        Comment azureComment3 = azureThreads.get(3).getComments().get(0);
+        AzureThread azureThread3 = azureThreads.get(3);
+        AzureComment azureComment3 = azureThread3.getComments().get(0);
         assertEquals("1", azureComment3.getExternalId());
         assertEquals("Décio Heinzelmann Luckow joined as a reviewer", azureComment3.getText());
-        assertEquals("https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/14/comments/1", azureComment3.getUrl());
+        assertEquals(CommentType.SYSTEM, azureComment3.getCommentType());
+        assertNull(azureThread3.getThreadContext());
 
-        Comment azureComment4 = azureThreads.get(4).getComments().get(0);
+        AzureThread azureThread4 = azureThreads.get(4);
+        AzureComment azureComment4 = azureThread4.getComments().get(0);
         assertEquals("1", azureComment4.getExternalId());
         assertEquals("Décio Heinzelmann Luckow voted 5", azureComment4.getText());
-        assertEquals("https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/15/comments/1", azureComment4.getUrl());
+        assertEquals(CommentType.SYSTEM, azureComment4.getCommentType());
+        assertNull(azureThread4.getThreadContext());
     }
 }

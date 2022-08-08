@@ -33,6 +33,4 @@ public class RestCallerConfiguration {
                 }));
     }
 
-    //TODO wesley implementar um metodo igual aos outros aqui, mas adicionando a header do jeito que o bitbucket espera
-
 }

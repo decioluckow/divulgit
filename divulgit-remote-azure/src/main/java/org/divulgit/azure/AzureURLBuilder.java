@@ -2,11 +2,10 @@ package org.divulgit.azure;
 
 import java.text.MessageFormat;
 
-import org.divulgit.azure.thread.Comment;
+import org.divulgit.azure.thread.AzureComment;
+import org.divulgit.azure.thread.AzureThread;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
-import org.divulgit.model.Remote;
-import org.divulgit.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,11 +32,11 @@ public class AzureURLBuilder {
                 mergeRequest.getExternalId());
     }
 
-    public String buildPullRequestCommentWebURL(Project project, MergeRequest mergeRequest, Comment comment) {
+    public String buildPullRequestCommentWebURL(Project project, MergeRequest mergeRequest, AzureThread thread, AzureComment comment) {
         return MessageFormat.format("{0}/pullrequest/{1}?_a=files&path={2}&discussionId={3}",
                 project.getUrl(),
                 mergeRequest.getExternalId(),
-                comment.getThreadContext().getFilePath(),
+                thread.getThreadContext().getFilePath(),
                 comment.getExternalId());
     }
 

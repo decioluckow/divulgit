@@ -1,10 +1,8 @@
 package org.divulgit.azure.pullrequest;
 
 import lombok.*;
-import org.apache.logging.log4j.util.Strings;
 import org.divulgit.azure.repository.AzureRepository;
 import org.divulgit.azure.thread.AzureAuthor;
-import org.divulgit.azure.user.AzureUser;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.remote.model.RemoteMergeRequest;
@@ -33,7 +31,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
     @JsonProperty("createdBy")
     private AzureAuthor azureAuthor;
 
-    private AzurePullRequestState status;
+    private AzurePullRequestStatus status;
 
     public String getAuthor() {
         return azureAuthor.getUsername();

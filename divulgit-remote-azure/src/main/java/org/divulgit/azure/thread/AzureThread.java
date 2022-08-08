@@ -1,15 +1,6 @@
 package org.divulgit.azure.thread;
 
-import org.divulgit.azure.user.AzureUser;
-import org.divulgit.model.MergeRequest;
-import org.divulgit.remote.model.RemoteComment;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -19,5 +10,14 @@ import java.util.List;
 @AllArgsConstructor
 public class AzureThread  {
 
-    private List<Comment> comments;
+    private List<AzureComment> comments;
+
+    private ThreadContext threadContext;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class ThreadContext {
+        private String filePath;
+    }
 }
