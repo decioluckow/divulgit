@@ -23,16 +23,6 @@ public class BitBucketURLBuilder {
         return MessageFormat.format("https://{0}/user", getUrlApi(remote.getUrl()));
     }
 
-    public String buildIssueComment(Remote remote, User user, Project project, MergeRequest mergeRequest, int page) {
-        return MessageFormat.format("https://{0}/repositories/{1}/{2}/issues/{3}/comments?per_page={4}&page={5}",
-                getUrlApi(remote.getUrl()),
-                user.getUsername(),
-                project.getName(),
-                mergeRequest.getExternalId(),
-                String.valueOf(pageSize),
-                String.valueOf(page));
-    }
-
     public String buildPullRequestComment(Remote remote, User user, Project project, MergeRequest mergeRequest) {
         return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}/comments?per_page={4}",
                 getUrlApi(remote.getUrl()),
