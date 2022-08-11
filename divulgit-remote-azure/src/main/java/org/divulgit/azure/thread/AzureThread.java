@@ -10,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AzureThread  {
 
+    private String id;
+
     private List<AzureComment> comments;
 
     private ThreadContext threadContext;

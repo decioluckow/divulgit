@@ -37,7 +37,7 @@ public class AzureURLBuilder {
                 project.getUrl(),
                 mergeRequest.getExternalId(),
                 thread.getThreadContext().getFilePath(),
-                comment.getExternalId());
+                thread.getId());
     }
 
     public String buildPullRequestsURL(String organization, Project project) {
@@ -49,6 +49,12 @@ public class AzureURLBuilder {
     public String buildPullRequestURL(String organization, int pullRequestExternalId) {
         return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/pullrequests/{1}?api-version=6.0",
                 organization,
+                pullRequestExternalId);
+    }
+
+    public String buildPullRequestWebURL(String projectURL, int pullRequestExternalId) {
+        return MessageFormat.format("{0}/pullrequest/{1}",
+                projectURL,
                 pullRequestExternalId);
     }
 

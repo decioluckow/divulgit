@@ -27,6 +27,9 @@ public class AzurePullRequest implements RemoteMergeRequest {
     @Getter
     private String description;
 
+    @Setter
+    private String url;
+
     @Getter
     @JsonProperty("createdBy")
     private AzureAuthor azureAuthor;
@@ -48,7 +51,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
                 .externalId(externalId)
                 .title(title)
                 .description(description)
-                .url(repository.getUrl() + "/" + externalId)
+                .url(url)
                 .author(getAuthor())
                 .state(status.getCorrespondingTo()).build();
     }

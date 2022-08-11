@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.divulgit.annotation.ForRemote;
+import org.divulgit.azure.pullrequest.AzurePullRequestService;
 import org.divulgit.azure.thread.*;
 import org.divulgit.azure.repository.AzureRepositoryCaller;
 import org.divulgit.azure.pullrequest.AzureLastPullRequestCaller;
@@ -40,10 +41,10 @@ public class AzureCallerFacade implements RemoteFacade {
     private AzureRepositoryCaller projectCaller;
 
     @Autowired
-    private AzureLastPullRequestCaller lastPullRequestCaller;
+    private AzurePullRequestService pullRequestService;
 
     @Autowired
-    private AzurePullRequestsCaller pullRequestCaller;
+    private AzureLastPullRequestCaller lastPullRequestCaller;
 
     @Autowired
     private AzureCommentService commentService;
@@ -78,7 +79,7 @@ public class AzureCallerFacade implements RemoteFacade {
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(
             Remote remote, User user, Project project, Integer scanFrom,Authentication authentication)
             throws RemoteException {
-        return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
+        return pullRequestService.retrievePullRequests(remote, user, project, scanFrom, authentication);
     }
 
     @Override

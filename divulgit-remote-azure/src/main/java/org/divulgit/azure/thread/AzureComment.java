@@ -10,13 +10,13 @@ import org.divulgit.remote.model.RemoteComment;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AzureComment implements RemoteComment {
+public class AzureComment {
 
     @Getter
-    @JsonProperty("id")
-    private String externalId;
+    private String id;
 
     @JsonProperty("author")
+    @Getter
     private AzureAuthor azureAuthor;
 
     @Getter
@@ -25,22 +25,4 @@ public class AzureComment implements RemoteComment {
 
     @Getter
     private CommentType commentType;
-
-    @JsonIgnore
-    @Getter
-    @Setter
-    private String url;
-
-    @Override
-    public String getAuthor() {
-        return azureAuthor.getUsername();
-    }
-
-    public MergeRequest.Comment.CommentBuilder toComment() {
-        return MergeRequest.Comment.builder()
-                .externalId(String.valueOf(externalId))
-                .text(text)
-                .url(url)
-                .author(azureAuthor.getUsername());
-    }
 }

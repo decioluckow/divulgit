@@ -54,8 +54,7 @@ public class CommentCaller {
     }
     
     private List<GitLabComment> removeUseless(List<GitLabComment> comments) {
-    	return comments.stream().filter(c -> !c.isSystem() && "DiffNote".equals(c.getType())
-                && HashTagIdentifierUtil.containsHashTag(c.getText())).collect(Collectors.toList());
+    	return comments.stream().filter(c -> !c.isSystem() && "DiffNote".equals(c.getType())).collect(Collectors.toList());
     }
 
     private void retrieveComments(Remote remote, Project project, MergeRequest mergeRequest,
