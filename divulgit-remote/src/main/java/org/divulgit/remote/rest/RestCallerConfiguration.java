@@ -1,5 +1,8 @@
 package org.divulgit.remote.rest;
 
+import org.divulgit.annotation.ForRemote;
+import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.divulgit.type.RemoteType;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +34,11 @@ public class RestCallerConfiguration {
                 }));
     }
 
-    //TODO wesley implementar um metodo igual aos outros aqui, mas adicionando a header do jeito que o bitbucket espera
-
+    @Bean
+    public RestCaller bitBucketRestCaller(@ForRemote(RemoteType.BITBUCKET) ErrorResponseHandler errorResponseHandler) {
+        return new UniRestCaller(errorResponseHandler,
+                ((httpHequest, authentication) -> {
+                    httpHequest.basicAuth(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
+                }));
+    }
 }
