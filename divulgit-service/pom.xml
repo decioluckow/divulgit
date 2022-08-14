@@ -39,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-remote-bitbucket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-remote-azure</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -35,6 +35,7 @@ public class UniRestCaller implements RestCaller {
             }
             return responseEntity;
         } catch (UnirestException e) {
+            log.error(e.getMessage(), e.getCause());
             throw new RemoteException(e.getMessage(), e);
         }
     }

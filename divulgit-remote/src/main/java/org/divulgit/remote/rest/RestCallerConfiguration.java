@@ -33,4 +33,11 @@ public class RestCallerConfiguration {
                 }));
     }
 
+    @Bean
+    public RestCaller bitBucketRestCaller(@ForRemote(RemoteType.BITBUCKET) ErrorResponseHandler errorResponseHandler) {
+        return new UniRestCaller(errorResponseHandler,
+                ((httpHequest, authentication) -> {
+                    httpHequest.basicAuth(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
+                }));
+    }
 }

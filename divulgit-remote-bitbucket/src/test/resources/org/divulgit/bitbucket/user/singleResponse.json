@@ -1,0 +1,33 @@
+{
+  "display_name": "Wesley Eduardo de Oliveira Melo",
+  "links": {
+    "self": {
+      "href": "https://api.bitbucket.org/2.0/users/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D"
+    },
+    "avatar": {
+      "href": "https://secure.gravatar.com/avatar/64e5828e1a6e7310b1fbf67f536b9bdd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FWM-6.png"
+    },
+    "repositories": {
+      "href": "https://api.bitbucket.org/2.0/repositories/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D"
+    },
+    "snippets": {
+      "href": "https://api.bitbucket.org/2.0/snippets/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D"
+    },
+    "html": {
+      "href": "https://bitbucket.org/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D/"
+    },
+    "hooks": {
+      "href": "https://api.bitbucket.org/2.0/workspaces/%7B560d4054-a4d6-448c-b1b1-72f445d99bc3%7D/hooks"
+    }
+  },
+  "created_on": "2019-01-26T14:17:05.188379+00:00",
+  "type": "user",
+  "uuid": "{560d4054-a4d6-448c-b1b1-72f445d99bc3}",
+  "has_2fa_enabled": null,
+  "username": "wesleyeduardocr7",
+  "is_staff": false,
+  "account_id": "5c4c6b3c5f6f554665c13317",
+  "nickname": "wesleyeduardocr7",
+  "account_status": "active",
+  "location": null
+}
