@@ -2,13 +2,11 @@ package org.divulgit.azure.thread;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.divulgit.azure.AzureURLBuilder;
-import org.divulgit.azure.util.LinkHeaderUtil;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
-import org.divulgit.model.Remote;
-import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.security.RemoteAuthentication;
@@ -37,8 +35,10 @@ public class AzureThreadCaller {
             Project project,
             MergeRequest mergeRequest,
             Authentication authentication) throws RemoteException {
+        final String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
+        final String url = urlBuilder.buildPullRequestComments(organization, project, mergeRequest);
         final List<AzureThread> loadedThreads = new ArrayList<>();
-        retrieveThreads(project, mergeRequest, loadedThreads, authentication, AzureURLBuilder.INITIAL_PAGE);
+        retrieveThreads(project, mergeRequest, loadedThreads, authentication, url);
         return loadedThreads;
     }
 
@@ -47,16 +47,15 @@ public class AzureThreadCaller {
             MergeRequest mergeRequest,
             List<AzureThread> loadedThreads,
             Authentication authentication,
-            int page) throws RemoteException {
-        String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
-        String url = urlBuilder.buildPullRequestComments(organization, project, mergeRequest);
+            String url) throws RemoteException {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzureThread> threads = responseHandler.handle200ResponseMultipleResult(response);
             loadedThreads.addAll(threads);
         }
-        if (LinkHeaderUtil.hasNextPage(response)) {
-            retrieveThreads(project, mergeRequest, loadedThreads, authentication, ++page);
+        Optional<String> continuationURL = urlBuilder.buildContinuationURL(response, url);
+        if (continuationURL.isPresent()) {
+            retrieveThreads(project, mergeRequest, loadedThreads, authentication, continuationURL.get());
         }
     }
 }

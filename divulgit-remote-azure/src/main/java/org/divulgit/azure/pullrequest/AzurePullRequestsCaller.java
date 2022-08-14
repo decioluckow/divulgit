@@ -2,20 +2,15 @@ package org.divulgit.azure.pullrequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.divulgit.annotation.ForRemote;
-import org.divulgit.azure.util.LinkHeaderUtil;
 import org.divulgit.azure.AzureURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.remote.rest.UniRestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.security.RemoteAuthentication;
-import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +54,9 @@ public class AzurePullRequestsCaller {
             Authentication authentication) throws RemoteException {
     	log.info("Retrieving pull requests from number {}", scanFrom);
         final List<AzurePullRequest> pullRequests = new ArrayList<>();
-        retrievePullRequests(remote, user, project, pullRequests, scanFrom, authentication, AzureURLBuilder.INITIAL_PAGE);
+        final String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
+        final String url = urlBuilder.buildPullRequestsURL(organization, project);
+        retrievePullRequests(remote, user, project, pullRequests, scanFrom, authentication, url);
         return pullRequests;
     }
 
@@ -70,14 +67,11 @@ public class AzurePullRequestsCaller {
             List<AzurePullRequest> loadedPullRequests,
             Integer scanFrom,
             Authentication authentication,
-            int page) throws RemoteException {
-        String organization = ((RemoteAuthentication) authentication).getUserDetails().getOrganization();
-        final String url = urlBuilder.buildPullRequestsURL(organization, project);
+            String url) throws RemoteException {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         boolean stopScan = false;
         if (response.getStatusCode().value() == HttpStatus.OK.value()) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
-            //TODO preencher url do merge request baseado na url do projeto
             for (AzurePullRequest pullRequest : pullRequests) {
                 if (pullRequest.getExternalId() >= scanFrom) {
                 	loadedPullRequests.add(pullRequest);
@@ -86,8 +80,9 @@ public class AzurePullRequestsCaller {
                 }
             }
         }
-        if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
-        	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, authentication, ++page);
+        Optional<String> continuationURL = urlBuilder.buildContinuationURL(response, url);
+        if (continuationURL.isPresent() && !stopScan) {
+        	retrievePullRequests(remote, user, project, loadedPullRequests, scanFrom, authentication, continuationURL.get());
         }
     }
 
