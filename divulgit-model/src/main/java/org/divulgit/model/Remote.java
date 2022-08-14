@@ -18,7 +18,6 @@ public class Remote {
     private String id;
 
     private String url;
-    private String organizationId;
     private RemoteType type;
 
     public Remote(String url) {

@@ -1,0 +1,442 @@
+{
+  "value": [
+    {
+      "pullRequestThreadContext": {
+        "iterationContext": {
+          "firstComparingIteration": 1,
+          "secondComparingIteration": 1
+        },
+        "changeTrackingId": 1
+      },
+      "id": 11,
+      "publishedDate": "2022-08-04T02:36:59.367Z",
+      "lastUpdatedDate": "2022-08-04T02:36:59.367Z",
+      "comments": [
+        {
+          "id": 1,
+          "parentCommentId": 0,
+          "author": {
+            "displayName": "Décio Heinzelmann Luckow",
+            "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+            "_links": {
+              "avatar": {
+                "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+              }
+            },
+            "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+            "uniqueName": "decioluckow@outlook.com",
+            "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+            "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          },
+          "content": "comment 1",
+          "publishedDate": "2022-08-04T02:36:59.367Z",
+          "lastUpdatedDate": "2022-08-04T02:36:59.367Z",
+          "lastContentUpdatedDate": "2022-08-04T02:36:59.367Z",
+          "commentType": "text",
+          "usersLiked": [],
+          "_links": {
+            "self": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/11/comments/1"
+            },
+            "repository": {
+              "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+            },
+            "threads": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/11"
+            },
+            "pullRequests": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/pullRequests/4"
+            }
+          }
+        }
+      ],
+      "status": "active",
+      "threadContext": {
+        "filePath": "/teste.txt",
+        "rightFileStart": {
+          "line": 1,
+          "offset": 1
+        },
+        "rightFileEnd": {
+          "line": 1,
+          "offset": 2
+        }
+      },
+      "properties": {
+        "Microsoft.TeamFoundation.Discussion.SupportsMarkdown": {
+          "$type": "System.Int32",
+          "$value": 1
+        },
+        "Microsoft.TeamFoundation.Discussion.UniqueID": {
+          "$type": "System.String",
+          "$value": "08cdd868-f4e1-4da8-ba76-16fc1bc0bafe"
+        }
+      },
+      "identities": null,
+      "isDeleted": false,
+      "_links": {
+        "self": {
+          "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/11"
+        },
+        "repository": {
+          "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+        }
+      }
+    },
+    {
+      "pullRequestThreadContext": {
+        "iterationContext": {
+          "firstComparingIteration": 1,
+          "secondComparingIteration": 1
+        },
+        "changeTrackingId": 1
+      },
+      "id": 12,
+      "publishedDate": "2022-08-04T02:37:07.35Z",
+      "lastUpdatedDate": "2022-08-04T02:37:07.35Z",
+      "comments": [
+        {
+          "id": 1,
+          "parentCommentId": 0,
+          "author": {
+            "displayName": "Décio Heinzelmann Luckow",
+            "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+            "_links": {
+              "avatar": {
+                "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+              }
+            },
+            "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+            "uniqueName": "decioluckow@outlook.com",
+            "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+            "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          },
+          "content": "comment 2",
+          "publishedDate": "2022-08-04T02:37:07.35Z",
+          "lastUpdatedDate": "2022-08-04T02:37:07.35Z",
+          "lastContentUpdatedDate": "2022-08-04T02:37:07.35Z",
+          "commentType": "text",
+          "usersLiked": [],
+          "_links": {
+            "self": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/12/comments/1"
+            },
+            "repository": {
+              "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+            },
+            "threads": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/12"
+            },
+            "pullRequests": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/pullRequests/4"
+            }
+          }
+        }
+      ],
+      "status": "active",
+      "threadContext": {
+        "filePath": "/teste.txt",
+        "rightFileStart": {
+          "line": 2,
+          "offset": 1
+        },
+        "rightFileEnd": {
+          "line": 2,
+          "offset": 2
+        }
+      },
+      "properties": {
+        "Microsoft.TeamFoundation.Discussion.SupportsMarkdown": {
+          "$type": "System.Int32",
+          "$value": 1
+        },
+        "Microsoft.TeamFoundation.Discussion.UniqueID": {
+          "$type": "System.String",
+          "$value": "8b8b278f-56e5-4eb4-8e3f-3de87d6ca44e"
+        }
+      },
+      "identities": null,
+      "isDeleted": false,
+      "_links": {
+        "self": {
+          "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/12"
+        },
+        "repository": {
+          "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+        }
+      }
+    },
+    {
+      "pullRequestThreadContext": {
+        "iterationContext": {
+          "firstComparingIteration": 1,
+          "secondComparingIteration": 1
+        },
+        "changeTrackingId": 1
+      },
+      "id": 13,
+      "publishedDate": "2022-08-04T02:37:14.377Z",
+      "lastUpdatedDate": "2022-08-04T02:37:14.377Z",
+      "comments": [
+        {
+          "id": 1,
+          "parentCommentId": 0,
+          "author": {
+            "displayName": "Décio Heinzelmann Luckow",
+            "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+            "_links": {
+              "avatar": {
+                "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+              }
+            },
+            "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+            "uniqueName": "decioluckow@outlook.com",
+            "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+            "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          },
+          "content": "comment 5",
+          "publishedDate": "2022-08-04T02:37:14.377Z",
+          "lastUpdatedDate": "2022-08-04T02:37:14.377Z",
+          "lastContentUpdatedDate": "2022-08-04T02:37:14.377Z",
+          "commentType": "text",
+          "usersLiked": [],
+          "_links": {
+            "self": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/13/comments/1"
+            },
+            "repository": {
+              "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+            },
+            "threads": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/13"
+            },
+            "pullRequests": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/pullRequests/4"
+            }
+          }
+        }
+      ],
+      "status": "active",
+      "threadContext": {
+        "filePath": "/teste.txt",
+        "rightFileStart": {
+          "line": 5,
+          "offset": 1
+        },
+        "rightFileEnd": {
+          "line": 5,
+          "offset": 2
+        }
+      },
+      "properties": {
+        "Microsoft.TeamFoundation.Discussion.SupportsMarkdown": {
+          "$type": "System.Int32",
+          "$value": 1
+        },
+        "Microsoft.TeamFoundation.Discussion.UniqueID": {
+          "$type": "System.String",
+          "$value": "7c7b8bf8-a5eb-40ad-bbed-e9156f114431"
+        }
+      },
+      "identities": null,
+      "isDeleted": false,
+      "_links": {
+        "self": {
+          "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/13"
+        },
+        "repository": {
+          "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+        }
+      }
+    },
+    {
+      "pullRequestThreadContext": null,
+      "id": 14,
+      "publishedDate": "2022-08-04T02:37:18.123Z",
+      "lastUpdatedDate": "2022-08-04T02:37:18.123Z",
+      "comments": [
+        {
+          "id": 1,
+          "parentCommentId": 0,
+          "author": {
+            "displayName": "Microsoft.VisualStudio.Services.TFS",
+            "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/00000002-0000-8888-8000-000000000000",
+            "_links": {
+              "avatar": {
+                "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/s2s.MDAwMDAwMDItMDAwMC04ODg4LTgwMDAtMDAwMDAwMDAwMDAwQDJjODk1OTA4LTA0ZTAtNDk1Mi04OWZkLTU0YjAwNDZkNjI4OA"
+              }
+            },
+            "id": "00000002-0000-8888-8000-000000000000",
+            "uniqueName": "",
+            "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/s2s.MDAwMDAwMDItMDAwMC04ODg4LTgwMDAtMDAwMDAwMDAwMDAwQDJjODk1OTA4LTA0ZTAtNDk1Mi04OWZkLTU0YjAwNDZkNjI4OA",
+            "descriptor": "s2s.MDAwMDAwMDItMDAwMC04ODg4LTgwMDAtMDAwMDAwMDAwMDAwQDJjODk1OTA4LTA0ZTAtNDk1Mi04OWZkLTU0YjAwNDZkNjI4OA"
+          },
+          "content": "Décio Heinzelmann Luckow joined as a reviewer",
+          "publishedDate": "2022-08-04T02:37:18.123Z",
+          "lastUpdatedDate": "2022-08-04T02:37:18.123Z",
+          "lastContentUpdatedDate": "2022-08-04T02:37:18.123Z",
+          "commentType": "system",
+          "usersLiked": [],
+          "_links": {
+            "self": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/14/comments/1"
+            },
+            "repository": {
+              "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+            },
+            "threads": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/14"
+            },
+            "pullRequests": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/pullRequests/4"
+            }
+          }
+        }
+      ],
+      "threadContext": null,
+      "properties": {
+        "CodeReviewReviewersUpdatedNumAdded": {
+          "$type": "System.Int32",
+          "$value": 1
+        },
+        "CodeReviewReviewersUpdatedNumChanged": {
+          "$type": "System.Int32",
+          "$value": 0
+        },
+        "CodeReviewReviewersUpdatedNumDeclined": {
+          "$type": "System.Int32",
+          "$value": 0
+        },
+        "CodeReviewReviewersUpdatedNumRemoved": {
+          "$type": "System.Int32",
+          "$value": 0
+        },
+        "CodeReviewThreadType": {
+          "$type": "System.String",
+          "$value": "ReviewersUpdate"
+        },
+        "CodeReviewReviewersUpdatedAddedIdentity": {
+          "$type": "System.String",
+          "$value": "1"
+        },
+        "CodeReviewReviewersUpdatedByIdentity": {
+          "$type": "System.String",
+          "$value": "1"
+        }
+      },
+      "identities": {
+        "1": {
+          "displayName": "Décio Heinzelmann Luckow",
+          "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+          "_links": {
+            "avatar": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+            }
+          },
+          "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+          "uniqueName": "decioluckow@outlook.com",
+          "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+          "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+        }
+      },
+      "isDeleted": false,
+      "_links": {
+        "self": {
+          "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/14"
+        },
+        "repository": {
+          "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+        }
+      }
+    },
+    {
+      "pullRequestThreadContext": null,
+      "id": 15,
+      "publishedDate": "2022-08-04T02:37:18.13Z",
+      "lastUpdatedDate": "2022-08-04T02:37:18.13Z",
+      "comments": [
+        {
+          "id": 1,
+          "parentCommentId": 0,
+          "author": {
+            "displayName": "Décio Heinzelmann Luckow",
+            "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+            "_links": {
+              "avatar": {
+                "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+              }
+            },
+            "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+            "uniqueName": "decioluckow@outlook.com",
+            "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+            "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          },
+          "content": "Décio Heinzelmann Luckow voted 5",
+          "publishedDate": "2022-08-04T02:37:18.13Z",
+          "lastUpdatedDate": "2022-08-04T02:37:18.13Z",
+          "lastContentUpdatedDate": "2022-08-04T02:37:18.13Z",
+          "commentType": "system",
+          "usersLiked": [],
+          "_links": {
+            "self": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/15/comments/1"
+            },
+            "repository": {
+              "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+            },
+            "threads": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/15"
+            },
+            "pullRequests": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/git/pullRequests/4"
+            }
+          }
+        }
+      ],
+      "threadContext": null,
+      "properties": {
+        "CodeReviewThreadType": {
+          "$type": "System.String",
+          "$value": "VoteUpdate"
+        },
+        "CodeReviewVoteResult": {
+          "$type": "System.String",
+          "$value": "5"
+        },
+        "CodeReviewVotedByInitiatorIdentity": {
+          "$type": "System.String",
+          "$value": "1"
+        },
+        "CodeReviewVotedByIdentity": {
+          "$type": "System.String",
+          "$value": "1"
+        }
+      },
+      "identities": {
+        "1": {
+          "displayName": "Décio Heinzelmann Luckow",
+          "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+          "_links": {
+            "avatar": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+            }
+          },
+          "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+          "uniqueName": "decioluckow@outlook.com",
+          "imageUrl": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2",
+          "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+        }
+      },
+      "isDeleted": false,
+      "_links": {
+        "self": {
+          "href": "https://dev.azure.com/decioluckow-teste/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/4/threads/15"
+        },
+        "repository": {
+          "href": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9"
+        }
+      }
+    }
+  ],
+  "count": 5
+}

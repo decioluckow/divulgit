@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class RepositoryResponseHandler {
+public class AzureRepositoryResponseHandler {
 
     public List<AzureRepository> handle200Response(ResponseEntity<String> response) throws RemoteException {
         try {

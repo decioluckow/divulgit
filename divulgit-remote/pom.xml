@@ -51,5 +51,9 @@
         	<artifactId>spring-boot-configuration-processor</artifactId>
         	<optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+        </dependency>
     </dependencies>
 </project>

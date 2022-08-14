@@ -3,6 +3,7 @@ package org.divulgit.security;
 import java.util.Collection;
 
 import org.divulgit.model.User;
+import org.divulgit.util.vo.RemoteIdentify;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -25,12 +26,12 @@ public class RemoteAuthentication implements Authentication {
                 .credential(credential).build();
     }
 
-    public static RemoteAuthentication of(final User user, final String credential) {
+    public static RemoteAuthentication of(RemoteIdentify remoteIdentify, final User user, final String credential) {
         return RemoteAuthentication.builder()
                 .name(user.getName())
                 .username(user.getUsername())
                 .credential(credential)
-                .details(UserDetails.builder().user(user).build())
+                .details(UserDetails.builder().user(user).organization(remoteIdentify.getOrganization()).build())
                 .authenticated(true).build();
     }
 

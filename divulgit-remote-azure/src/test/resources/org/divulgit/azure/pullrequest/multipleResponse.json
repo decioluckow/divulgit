@@ -1,0 +1,198 @@
+{
+  "value": [
+    {
+      "repository": {
+        "id": "e81d5900-0c3a-4685-9529-abef68c973a9",
+        "name": "mais-um-project",
+        "url": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9",
+        "project": {
+          "id": "f6e58354-f345-4e42-b723-03d8511fc44c",
+          "name": "mais-um-project",
+          "state": "unchanged",
+          "visibility": "unchanged",
+          "lastUpdateTime": "0001-01-01T00:00:00"
+        }
+      },
+      "pullRequestId": 3,
+      "codeReviewId": 3,
+      "status": "active",
+      "createdBy": {
+        "displayName": "Décio Heinzelmann Luckow",
+        "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+        "_links": {
+          "avatar": {
+            "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          }
+        },
+        "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+        "uniqueName": "decioluckow@outlook.com",
+        "imageUrl": "https://dev.azure.com/decioluckow-teste/_api/_common/identityImage?id=330bbbdb-668f-629c-877f-08f44fd54116",
+        "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+      },
+      "creationDate": "2022-08-04T02:16:08.3263058Z",
+      "title": "Updated README.md",
+      "description": "Updated README.md",
+      "sourceRefName": "refs/heads/main2",
+      "targetRefName": "refs/heads/main",
+      "mergeStatus": "succeeded",
+      "isDraft": false,
+      "mergeId": "349b88b6-430f-4b99-941d-3aa16bcc638d",
+      "lastMergeSourceCommit": {
+        "commitId": "4836a10c78e51e511d6a60cc8f25a10ab1b55f1a",
+        "url": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/commits/4836a10c78e51e511d6a60cc8f25a10ab1b55f1a"
+      },
+      "lastMergeTargetCommit": {
+        "commitId": "5bb6afa982330f6a1aa9c5537f60a8fe8b7b6866",
+        "url": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/commits/5bb6afa982330f6a1aa9c5537f60a8fe8b7b6866"
+      },
+      "lastMergeCommit": {
+        "commitId": "c8a6a9b3bde0ca080bb9ec9aff1f5afd03193c44",
+        "url": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/commits/c8a6a9b3bde0ca080bb9ec9aff1f5afd03193c44"
+      },
+      "reviewers": [
+        {
+          "reviewerUrl": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/3/reviewers/330bbbdb-668f-629c-877f-08f44fd54116",
+          "vote": 5,
+          "hasDeclined": false,
+          "isFlagged": false,
+          "displayName": "Décio Heinzelmann Luckow",
+          "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+          "_links": {
+            "avatar": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+            }
+          },
+          "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+          "uniqueName": "decioluckow@outlook.com",
+          "imageUrl": "https://dev.azure.com/decioluckow-teste/_api/_common/identityImage?id=330bbbdb-668f-629c-877f-08f44fd54116"
+        }
+      ],
+      "url": "https://dev.azure.com/decioluckow-teste/f6e58354-f345-4e42-b723-03d8511fc44c/_apis/git/repositories/e81d5900-0c3a-4685-9529-abef68c973a9/pullRequests/3",
+      "supportsIterations": true
+    },
+    {
+      "repository": {
+        "id": "e07fa5ab-ee2e-43c1-a8ee-733f5a778740",
+        "name": "test-project-2",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740",
+        "project": {
+          "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+          "name": "test-project",
+          "state": "unchanged",
+          "visibility": "unchanged",
+          "lastUpdateTime": "0001-01-01T00:00:00"
+        }
+      },
+      "pullRequestId": 2,
+      "codeReviewId": 2,
+      "status": "active",
+      "createdBy": {
+        "displayName": "Décio Heinzelmann Luckow",
+        "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+        "_links": {
+          "avatar": {
+            "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          }
+        },
+        "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+        "uniqueName": "decioluckow@outlook.com",
+        "imageUrl": "https://dev.azure.com/decioluckow-teste/_api/_common/identityImage?id=330bbbdb-668f-629c-877f-08f44fd54116",
+        "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+      },
+      "creationDate": "2022-08-04T02:10:43.3550978Z",
+      "title": "Updated README.md",
+      "description": "Updated README.md",
+      "sourceRefName": "refs/heads/teste",
+      "targetRefName": "refs/heads/main",
+      "mergeStatus": "succeeded",
+      "isDraft": false,
+      "mergeId": "6f6835b9-fb74-48bc-8dce-37bd37b45bbc",
+      "lastMergeSourceCommit": {
+        "commitId": "e01e0b7aaeded874a0e3463065707596b3202b6a",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740/commits/e01e0b7aaeded874a0e3463065707596b3202b6a"
+      },
+      "lastMergeTargetCommit": {
+        "commitId": "c0f6668b1365186a7eb0a2c1d851a2b659889bd0",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740/commits/c0f6668b1365186a7eb0a2c1d851a2b659889bd0"
+      },
+      "lastMergeCommit": {
+        "commitId": "e41d203a0215e96bc523c4fb76ba250a5959a90a",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740/commits/e41d203a0215e96bc523c4fb76ba250a5959a90a"
+      },
+      "reviewers": [
+        {
+          "reviewerUrl": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740/pullRequests/2/reviewers/330bbbdb-668f-629c-877f-08f44fd54116",
+          "vote": 5,
+          "hasDeclined": false,
+          "isFlagged": false,
+          "displayName": "Décio Heinzelmann Luckow",
+          "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+          "_links": {
+            "avatar": {
+              "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+            }
+          },
+          "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+          "uniqueName": "decioluckow@outlook.com",
+          "imageUrl": "https://dev.azure.com/decioluckow-teste/_api/_common/identityImage?id=330bbbdb-668f-629c-877f-08f44fd54116"
+        }
+      ],
+      "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/e07fa5ab-ee2e-43c1-a8ee-733f5a778740/pullRequests/2",
+      "supportsIterations": true
+    },
+    {
+      "repository": {
+        "id": "b2dd3659-1920-4a40-a7d8-7c869f7ff140",
+        "name": "test-project",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140",
+        "project": {
+          "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+          "name": "test-project",
+          "state": "unchanged",
+          "visibility": "unchanged",
+          "lastUpdateTime": "0001-01-01T00:00:00"
+        }
+      },
+      "pullRequestId": 1,
+      "codeReviewId": 1,
+      "status": "active",
+      "createdBy": {
+        "displayName": "Décio Heinzelmann Luckow",
+        "url": "https://spsprodsbr1.vssps.visualstudio.com/A93221a2c-6dbe-47df-8795-92f707446783/_apis/Identities/330bbbdb-668f-629c-877f-08f44fd54116",
+        "_links": {
+          "avatar": {
+            "href": "https://dev.azure.com/decioluckow-teste/_apis/GraphProfile/MemberAvatars/msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+          }
+        },
+        "id": "330bbbdb-668f-629c-877f-08f44fd54116",
+        "uniqueName": "decioluckow@outlook.com",
+        "imageUrl": "https://dev.azure.com/decioluckow-teste/_api/_common/identityImage?id=330bbbdb-668f-629c-877f-08f44fd54116",
+        "descriptor": "msa.MzMwYmJiZGItNjY4Zi03MjljLTg3N2YtMDhmNDRmZDU0MTE2"
+      },
+      "creationDate": "2022-07-02T19:46:34.2134471Z",
+      "title": "teste1 1'",
+      "description": "[1] description do pull request",
+      "sourceRefName": "refs/heads/teste1",
+      "targetRefName": "refs/heads/main",
+      "mergeStatus": "succeeded",
+      "isDraft": false,
+      "mergeId": "4e087f20-69f5-469c-a46e-42c713b39a92",
+      "lastMergeSourceCommit": {
+        "commitId": "34f65fef0800743f1ebc4ae6a1d34045db63ba29",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140/commits/34f65fef0800743f1ebc4ae6a1d34045db63ba29"
+      },
+      "lastMergeTargetCommit": {
+        "commitId": "779373984a80b82c3b8306a3cae25b92650185c1",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140/commits/779373984a80b82c3b8306a3cae25b92650185c1"
+      },
+      "lastMergeCommit": {
+        "commitId": "da58237bd1a9e76a0cd73d4c31ae53fa505a4d07",
+        "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140/commits/da58237bd1a9e76a0cd73d4c31ae53fa505a4d07"
+      },
+      "reviewers": [],
+      "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140/pullRequests/1",
+      "supportsIterations": true
+    }
+  ],
+  "count": 3
+}
