@@ -10,6 +10,7 @@
 
                 <select id="select-repository-type" name="repositoryType" class="form-select" aria-label="Selecione o seu repositório">
                     <option selected>Selecione o seu repositório</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "askOrganization":"true", "url":"dev.azure.com", "plataform":"AZURE"}'>Azure DevOps</option>
                     <option value='{"askUrl":"false", "askUsername":"true", "url":"api.bitbucket.org", "plataform":"BITBUCKET"}'>Bitbucket Cloud</option>
                     <option value='{"askUrl":"true", "askUsername":"true", "plataform":"BITBUCKET"}'>Bitbucket Server</option>
                     <option value='{"askUrl":"false", "askUsername":"false", "url":"gitlab.com", "plataform":"GITLAB"}'>GitLab - www.gitlab.com</option>
@@ -19,6 +20,9 @@
             </div>
             <div class="mb-3">
                 <input id="remoteurl" name="remoteurl" class="form-control" type="text" placeholder="Informe a url do seu Git. Ex: git.minhaempresa.com" aria-label="Outro repositório">
+            </div>
+            <div class="mb-3">
+                <input id="organization" name="organization" class="form-control" placeholder="Informe sua organização" type="text">
             </div>
             <div class="mb-3">
                 <input id="remoteusername" name="remoteusername" class="form-control" placeholder="Informe seu nome de usuário" type="text">
@@ -45,6 +49,7 @@
         $(document).ready(function() {
             $(remoteUrl).hide();
             $(remoteUsername).hide();
+            $("#organization").hide();
         });
 
         $(selectRepositoryTypeId).change(function() {
@@ -59,6 +64,15 @@
                 $(remoteUrl).val(repositoryConfig.url);
                 $(remoteUrl).hide(200);
                 $(remoteUrl).prop( "readonly", true );
+            }
+            if (repositoryConfig.askOrganization == 'true') {
+                $("#organization").val('');
+                $("#organization").show(200);
+                $("#organization").prop( "readonly", false );
+            } else {
+                $("#organization").val('');
+                $("#organization").hide(200);
+                $("#organization").prop( "readonly", true );
             }
             if (repositoryConfig.askUsername == 'true') {
                 $(remoteUsername).val('');
@@ -75,7 +89,8 @@
             var username = $(remoteUsername).val();
             var domain = $(remoteUrl).val();
             var plataform = $("#plataform").val();
-            $("#principal").val('{"username":"'+ username +'", "domain":"'+ domain +'", "plataform":"'+ plataform +'"}');
+            var organization = $("#organization").val();
+            $("#principal").val('{"username":"'+ username +'","organization":"' + organization + '", "domain":"'+ domain +'", "plataform":"'+ plataform +'"}');
         });
     </script>
 </main>

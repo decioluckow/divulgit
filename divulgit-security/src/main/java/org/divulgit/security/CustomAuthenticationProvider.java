@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			final Remote remote = remoteDiscoveryService.findRemote(remoteIdentify, remoteAuthentication);
 			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteAuthentication);
 			if (remoteUser.isPresent()) {
-				remoteAuthentication = findOrCreateUser(remote, remoteAuthentication, remoteUser.get());
+				remoteAuthentication = findOrCreateUser(remoteIdentify, remote, remoteAuthentication, remoteUser.get());
 			} else {
 				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
 			}
@@ -66,12 +66,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		return caller.retrieveRemoteUser(remote, authentication);
 	}
 
-	private RemoteAuthentication findOrCreateUser(Remote remote, Authentication authenticated, RemoteUser remoteUser) {
+	private RemoteAuthentication findOrCreateUser(RemoteIdentify remoteIdentify, Remote remote, Authentication authenticated, RemoteUser remoteUser) {
 		Optional<User> user = userRepository.findByExternalUserIdAndRemoteId(remoteUser.getInternalId(), remote.getId());
 		if (!user.isPresent()) {
 			user = Optional.of(userService.save(remoteUser, remote));
 		}
-		return RemoteAuthentication.of(user.get(), (String) authenticated.getCredentials());
+		return RemoteAuthentication.of(remoteIdentify, user.get(), (String) authenticated.getCredentials());
 	}
 
 	@Override

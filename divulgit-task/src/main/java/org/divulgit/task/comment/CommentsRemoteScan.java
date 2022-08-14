@@ -2,6 +2,7 @@ package org.divulgit.task.comment;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.MergeRequest;
@@ -90,11 +91,16 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
             log.debug("Start merging comments");
             for (RemoteComment remoteComment : remoteComments) {
             	Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
-            	if (existingComment.isPresent()) {
-            		updateIfNecessary(remoteComment, existingComment);
-            	} else {
-            		addNewComment(remoteComment);
-            	}
+                List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
+                if (! hashTags.isEmpty()) {
+                    if (existingComment.isPresent()) {
+                        updateIfNecessary(remoteComment, hashTags, existingComment);
+                    } else {
+                        addNewComment(remoteComment, hashTags);
+                    }
+                } else {
+                    removeComment(remoteComment);
+                }
             }
             mergeRequestService.save(mergeRequest);
             log.debug("Finished comments merging");
@@ -105,16 +111,14 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
         }
     }
 
-	private void updateIfNecessary(RemoteComment remoteComment, Optional<MergeRequest.Comment> existingComment) {
+	private void updateIfNecessary(RemoteComment remoteComment, List<String> hashTags, Optional<MergeRequest.Comment> existingComment) {
 		if (!existingComment.get().getText().equals(remoteComment.getText())) {
-			List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
 			existingComment.get().setText(remoteComment.getText());
 		    existingComment.get().setHashTags(hashTags);
 		}
 	}
 
-	private void addNewComment(RemoteComment remoteComment) {
-		List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
+	private void addNewComment(RemoteComment remoteComment, List<String> hashTags) {
         mergeRequest.getComments().add(remoteComment
                 .toComment()
                 .hashTags(hashTags)
@@ -124,5 +128,9 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
 
     private Optional<MergeRequest.Comment> findExistingComment(RemoteComment remoteComment) {
         return mergeRequest.getComments().stream().filter(c -> c.getExternalId().equals(remoteComment.getExternalId())).findFirst();
+    }
+
+    private void removeComment(RemoteComment remoteComment) {
+        mergeRequest.getComments().removeIf(c -> c.getExternalId().equals(remoteComment.getExternalId()));
     }
 }

@@ -62,4 +62,18 @@ public class URLUtilTest {
 
         Assertions.assertEquals("", paramToConcat);
     }
+
+    @Test
+    public void testAppendFirstParameter() {
+        String url = URLUtil.appendParameter("http://localhost:8080/index.jsf","teste", "123");
+
+        Assertions.assertEquals("http://localhost:8080/index.jsf?teste=123", url);
+    }
+
+    @Test
+    public void testAppendSecondParameter() {
+        String url = URLUtil.appendParameter("http://localhost:8080/index.jsf?primeiro=123","teste", "123");
+
+        Assertions.assertEquals("http://localhost:8080/index.jsf?primeiro=123&teste=123", url);
+    }
 }

@@ -7,6 +7,7 @@ import org.divulgit.type.RemoteType;
 @Data
 @Builder
 public class RemoteIdentify {
+    private String organization;
     private String username;
     private String domain;
     private RemoteType remoteType;

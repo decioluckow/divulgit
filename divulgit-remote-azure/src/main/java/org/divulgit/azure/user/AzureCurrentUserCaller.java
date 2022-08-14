@@ -4,10 +4,9 @@ import java.util.Optional;
 
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.azure.AzureURLBuilder;
-import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AzureCurrentUserCaller {
 
     @Autowired
-    private HeaderAuthRestCaller azureRestCaller;
+    private RestCaller azureRestCaller;
 
     @Autowired
     private AzureURLBuilder urlBuilder;
@@ -39,10 +38,8 @@ public class AzureCurrentUserCaller {
         String url = urlBuilder.buildUserURL();
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCodeValue() == HttpStatus.OK.value()) {
             authenticatedUser = Optional.ofNullable(responseHandler.handle200Response(response));
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         return authenticatedUser;
     }
