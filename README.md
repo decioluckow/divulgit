@@ -14,9 +14,16 @@ A resposta é simples e muito usada hoje em dia nas redes sociais...
 
 `#hashtag!`
 
-Sem trocar a sua atual ferramenta git (GitHub ou GitLab), passe a destacar o que for 
+Sem trocar a sua atual ferramenta git, passe a destacar o que for 
 interessante usando: `#divulgar`, `#interessante`, `#legal`, `#cuidado` ou qualquer outra palavra
 usando `#`.
+
+Divulgit trabalha com:
+
+![GitHub](src/main/resources/static/images/github-logo.png)
+![GitLab](src/main/resources/static/images/gitlab-logo.png)
+![Azure DevOps](src/main/resources/static/images/azure-devops-logo.png)
+![Bitbucket](src/main/resources/static/images/bitbucket-logo.png)
 
 ## Como utilizar
 
