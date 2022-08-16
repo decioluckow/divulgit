@@ -1,5 +1,7 @@
 package org.divulgit.bitbucket.comment;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.divulgit.bitbucket.Links;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.divulgit.bitbucket.user.BitBucketUser;
@@ -31,7 +33,8 @@ public class BitBucketComment implements RemoteComment {
 
     public String getText() {
         String raw = getContent().getRaw();
-        return raw.replace("\\#", "#");
+        if (raw != null) raw = raw.replace("\\#", "#");
+        return raw;
     }
 
     @Override
