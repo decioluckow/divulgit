@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket.comment;
+
 import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import org.divulgit.bitbucket.util.ResponseUtil;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,17 +42,17 @@ public class BitBucketPullRequestCommentCaller {
             Authentication authentication) throws RemoteException {
         final List<BitBucketComment> loadedComments = new ArrayList<>();
         String url = urlBuilder.buildPullRequestComment(remote, user, project, mergeRequest);
-        retrieveComments(loadedComments, authentication,url);
+        retrieveComments(loadedComments, authentication, url);
         return loadedComments;
     }
 
-    private void retrieveComments(List<BitBucketComment> loadedComments,Authentication authentication,String url) throws RemoteException {
+    private void retrieveComments(List<BitBucketComment> loadedComments, Authentication authentication, String url) throws RemoteException {
         ResponseEntity<String> response = bitBucketRestCaller.call(url, authentication);
         if (response.getStatusCode().is2xxSuccessful()) {
             List<BitBucketComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
         }
-        if(ResponseUtil.hasNextPage(response)){
+        if (ResponseUtil.hasNextPage(response)) {
             retrieveComments(loadedComments, authentication, ResponseUtil.getNextPage(response));
         }
     }

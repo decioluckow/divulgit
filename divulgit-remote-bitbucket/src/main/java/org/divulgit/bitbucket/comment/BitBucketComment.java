@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket.comment;
+
 import org.divulgit.bitbucket.Links;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.divulgit.bitbucket.user.BitBucketUser;
@@ -14,8 +15,10 @@ import org.divulgit.remote.model.RemoteComment;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BitBucketComment implements RemoteComment {
+
     @JsonProperty("id")
     private String externalId;
+
     private BitBucketUser user;
 
     private Content content;
@@ -27,7 +30,8 @@ public class BitBucketComment implements RemoteComment {
     }
 
     public String getText() {
-        return getContent().getRaw();
+        String raw = getContent().getRaw();
+        return raw.replace("\\#", "#");
     }
 
     @Override

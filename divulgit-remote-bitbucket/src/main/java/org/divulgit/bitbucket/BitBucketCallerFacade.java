@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket;
+
 import org.divulgit.bitbucket.comment.BitBucketPullRequestCommentCaller;
 import org.divulgit.bitbucket.repositorie.BitBucketRepositoryCaller;
 import org.divulgit.bitbucket.pullrequest.BitBucketLastPullRequestCaller;
@@ -20,6 +21,7 @@ import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.Optional;
 
