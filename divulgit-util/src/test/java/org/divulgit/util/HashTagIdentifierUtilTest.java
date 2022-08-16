@@ -16,6 +16,15 @@ public class HashTagIdentifierUtilTest {
 		
 		assertEquals(2, hashTags.size());
 	}
+
+	@Test
+	public void testIdentifingHashTagsInBegin() {
+		String comment = "#teste Este comentário é muito legal";
+
+		List<String> hashTags = HashTagIdentifierUtil.extractHashTag(comment);
+
+		assertEquals(1, hashTags.size());
+	}
 	
 	@Test
 	public void testContainsTwoHashTags() {

@@ -65,7 +65,7 @@
       "updated_on": "2022-07-19T14:22:31.039935+00:00",
       "content": {
         "type": "rendered",
-        "raw": "testar usar outro tipo de autenticação",
+        "raw": "\\#teste1 testar usar outro tipo de autenticação \\#teste2",
         "markup": "markdown",
         "html": "<p>testar usar outro tipo de autenticação</p>"
       },

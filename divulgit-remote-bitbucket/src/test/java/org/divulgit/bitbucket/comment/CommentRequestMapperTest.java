@@ -42,6 +42,6 @@ class CommentRequestMapperTest {
         assertEquals(String.valueOf(11976766), secondBitBucketComment.getExternalId());
         assertEquals("wesleyeduardocr7", secondBitBucketComment.getAuthor());
         assertEquals("https://bitbucket.org/wesleyeduardocr7/teste_api_bitbucket/commits/22f9a7864f9e5e63ef274b4e547dc911728803ed#comment-11976766", secondBitBucketComment.getUrl());
-        assertEquals("testar usar outro tipo de autenticação", secondBitBucketComment.getText());
+        assertEquals("#teste1 testar usar outro tipo de autenticação #teste2", secondBitBucketComment.getText());
     }
 }
