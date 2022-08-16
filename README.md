@@ -20,9 +20,13 @@ usando `#`.
 
 Divulgit trabalha com:
 
-![GitHub](divulgit-app/src/main/resources/static/images/github-logo.png) &nbsp;&nbsp;&nbsp;&nbsp;   ![GitLab](divulgit-app/src/main/resources/static/images/gitlab-logo.png)
+![GitHub](divulgit-app/src/main/resources/static/images/github-200px-logo.png)
+&nbsp;&nbsp;&nbsp;&nbsp;
+![GitLab](divulgit-app/src/main/resources/static/images/gitlab-200px-logo.png)
 
-![Azure DevOps](divulgit-app/src/main/resources/static/images/azure-devops-logo.png)  &nbsp;&nbsp;&nbsp;&nbsp; ![Bitbucket](divulgit-app/src/main/resources/static/images/bitbucket-logo.png)
+![Azure DevOps](divulgit-app/src/main/resources/static/images/azure-devops-200px-logo.png)
+&nbsp;&nbsp;&nbsp;&nbsp; 
+![Bitbucket](divulgit-app/src/main/resources/static/images/bitbucket-200px-logo.png)
 
 ## Como utilizar
 
