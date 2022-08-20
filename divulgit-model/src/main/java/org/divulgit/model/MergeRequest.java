@@ -28,6 +28,7 @@ public class MergeRequest {
     private String description;
     private String author;
     private State state;
+    private LocalDateTime creationDate;
     private List<Comment> comments;
 
     private int commentsTotal;

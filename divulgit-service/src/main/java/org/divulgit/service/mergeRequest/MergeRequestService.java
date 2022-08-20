@@ -1,5 +1,6 @@
 package org.divulgit.service.mergeRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.divulgit.model.User;
 import org.divulgit.repository.MergeRequestRepository;
 import org.divulgit.vo.UserProjectVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.ImmutableList;
@@ -18,11 +20,20 @@ import com.google.common.collect.ImmutableList;
 @Service
 public class MergeRequestService {
 
+    @Value("${mergerequest.reloadopened.lastdays:30}")
+    private int reloadLastDays;
+
     private MergeRequestRepository mergeRequestRepository;
 
     @Autowired
     private MergeRequestService(MergeRequestRepository mergeRequestRepository) {
         this.mergeRequestRepository = mergeRequestRepository;
+    }
+
+    public List<MergeRequest> findLastOpened(String projectId) {
+        LocalDateTime reloadLimitDate = LocalDateTime.now().minusDays(reloadLastDays);
+        return mergeRequestRepository.findByProjectIdAndStateAndCreationDateGreaterThanOrderByExternalIdDesc(
+                        projectId, MergeRequest.State.OPENED, reloadLimitDate);
     }
 
     public Optional<Integer> findLastExternalId(Project project) {
@@ -44,7 +55,6 @@ public class MergeRequestService {
     public List<MergeRequest> findAllWithHashTaggedCommentsByProjectId(Project project) {
         return mergeRequestRepository.findByProjectIdAndAndCommentsTotalGreaterThanOrderByExternalIdDesc(project.getId(), 0);
     }
-
 
     public MergeRequest save(MergeRequest mergeRequest) {
         return mergeRequestRepository.save(mergeRequest);

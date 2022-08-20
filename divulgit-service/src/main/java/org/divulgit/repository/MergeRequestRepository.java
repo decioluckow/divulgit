@@ -1,5 +1,6 @@
 package org.divulgit.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface MergeRequestRepository extends MongoRepository<MergeRequest, String> {
+
+    List<MergeRequest> findByProjectIdAndStateAndCreationDateGreaterThanOrderByExternalIdDesc(String projectId, MergeRequest.State state, LocalDateTime creationDate);
 
     List<MergeRequest> findByProjectIdAndAndCommentsTotalGreaterThanOrderByExternalIdDesc(String projectId, long commentsGreaterThan);
 

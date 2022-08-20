@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -88,6 +91,38 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
 
     @Override
     public void execute() {
+        scanAlreadyLoadedAndStillOpened();
+        scanNew();
+        List<Integer> values = null;
+        String join = Joiner.on("&").join(values);
+    }
+
+    private void scanAlreadyLoadedAndStillOpened() {
+        try {
+            log.info("Starting scanning mergeRequests loaded and opened for remote: {} and project: {}", remote.getId(), project.getId());
+
+            List<MergeRequest> lastOpened = mergeRequestService.findLastOpened(project.getId());
+            List<Integer> lastOpenedIds = lastOpened.stream().mapToInt(MergeRequest::getExternalId).boxed().collect(Collectors.toList());
+
+            log.debug("Start retrieving merge requests from remote");
+            List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, user, project, scanFrom, authentication);
+            log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
+
+            log.debug("Start saving merge requests");
+            List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
+            mergeRequestService.saveAll(mergeRequests);
+            log.debug("Finished merge requests saving");
+            log.debug("Start queueing scan comments");
+            mergeRequests.forEach(mr -> scanComments(mr));
+            log.debug("Finished queueing scan comments");
+        } catch (RemoteException e) {
+            final String message = "Error executing project scanning";
+            addErrorStep(message + " - " + e.getMessage());
+            log.error(message, e);
+        }
+    }
+
+    private void scanNew() {
         try {
             log.info("Starting scanning mergeRequests ids for remote: {} and project: {}", remote.getId(), project.getId());
 
@@ -97,7 +132,7 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
             log.debug("Start retrieving merge requests from remote");
             List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, user, project, scanFrom, authentication);
             log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
-            
+
             log.debug("Start saving merge requests");
             List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
             mergeRequestService.saveAll(mergeRequests);

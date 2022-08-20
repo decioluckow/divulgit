@@ -9,6 +9,8 @@ import org.divulgit.remote.model.RemoteMergeRequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,6 +31,8 @@ public class AzurePullRequest implements RemoteMergeRequest {
 
     @Setter
     private String url;
+
+    private LocalDateTime creationDate;
 
     @Getter
     @JsonProperty("createdBy")
@@ -51,6 +55,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
                 .externalId(externalId)
                 .title(title)
                 .description(description)
+                .creationDate(creationDate)
                 .url(url)
                 .author(getAuthor())
                 .state(status.getCorrespondingTo()).build();
