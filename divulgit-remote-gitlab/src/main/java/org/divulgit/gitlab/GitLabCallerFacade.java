@@ -1,8 +1,6 @@
 package org.divulgit.gitlab;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.gitlab.comments.GitLabCommentService;
 import org.divulgit.gitlab.mergerequest.LastMergeRequestCaller;
@@ -72,7 +70,12 @@ public class GitLabCallerFacade implements RemoteFacade {
                                                                     Authentication authentication) throws RemoteException {
     	return mergeRequestCaller.retrieveMergeRequests(remote, project, scanFrom, authentication);
     }
-    
+
+    @Override
+    public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
+        return mergeRequestCaller.retrieveMergeRequests(remote,project,requestedMergeRequestExternalIds,authentication);
+    }
+
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
                                                           Authentication authentication) throws RemoteException {

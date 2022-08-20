@@ -190,7 +190,9 @@
             console.log(response)
          },
          error:function(response) {
-            alert('server error occured')
+            if(response.status >= 400 && response.status < 600){
+                alert('server error occured')
+            }
          }
       });
    }

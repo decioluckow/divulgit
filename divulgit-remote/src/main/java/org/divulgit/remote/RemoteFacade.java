@@ -1,8 +1,6 @@
 package org.divulgit.remote;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -25,6 +23,8 @@ public interface RemoteFacade {
     int retrieveLastMergeRequestExternalId(Remote remote, User user, Project project, Authentication authentication) throws RemoteException;
 
     List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom, Authentication authentication) throws RemoteException;
+
+    List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote,User user,Project project,List<Integer> requestedMergeRequestExternalIds,Authentication authentication) throws RemoteException ;
     
     List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest, Authentication authentication) throws RemoteException;
 }

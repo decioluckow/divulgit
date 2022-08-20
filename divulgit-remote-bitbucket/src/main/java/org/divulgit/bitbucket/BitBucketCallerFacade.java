@@ -1,5 +1,4 @@
 package org.divulgit.bitbucket;
-
 import org.divulgit.bitbucket.comment.BitBucketPullRequestCommentCaller;
 import org.divulgit.bitbucket.repositorie.BitBucketRepositoryCaller;
 import org.divulgit.bitbucket.pullrequest.BitBucketLastPullRequestCaller;
@@ -21,7 +20,6 @@ import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -72,6 +70,11 @@ public class BitBucketCallerFacade implements RemoteFacade {
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, Integer scanFrom,
                                                                     Authentication authentication) throws RemoteException {
         return bitBucketPullRequestsCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
+    }
+
+    @Override
+    public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
+        return bitBucketPullRequestsCaller.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
     }
 
     @Override

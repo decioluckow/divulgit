@@ -1,15 +1,11 @@
 package org.divulgit.azure;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.azure.pullrequest.AzurePullRequestService;
 import org.divulgit.azure.thread.*;
 import org.divulgit.azure.repository.AzureRepositoryCaller;
 import org.divulgit.azure.pullrequest.AzureLastPullRequestCaller;
-import org.divulgit.azure.pullrequest.AzurePullRequestsCaller;
 import org.divulgit.azure.test.AzureTestCaller;
 import org.divulgit.azure.user.AzureCurrentUserCaller;
 import org.divulgit.model.MergeRequest;
@@ -80,6 +76,11 @@ public class AzureCallerFacade implements RemoteFacade {
             Remote remote, User user, Project project, Integer scanFrom,Authentication authentication)
             throws RemoteException {
         return pullRequestService.retrievePullRequests(remote, user, project, scanFrom, authentication);
+    }
+
+    @Override
+    public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
+        return pullRequestService.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
     }
 
     @Override

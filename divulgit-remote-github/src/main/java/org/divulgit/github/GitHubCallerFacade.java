@@ -73,7 +73,12 @@ public class GitHubCallerFacade implements RemoteFacade {
                                                                     Authentication authentication) throws RemoteException {
     	return pullRequestCaller.retrievePullRequests(remote, user, project, scanFrom, authentication);
     }
-    
+
+    @Override
+    public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
+        return pullRequestCaller.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
+    }
+
     @Override
     public List<? extends RemoteComment> retrieveComments(Remote remote, User user, Project project, MergeRequest mergeRequest,
                                                           Authentication authentication) throws RemoteException {
