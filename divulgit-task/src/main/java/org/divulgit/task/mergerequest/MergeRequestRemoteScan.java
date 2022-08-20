@@ -93,8 +93,6 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
     public void execute() {
         scanAlreadyLoadedAndStillOpened();
         scanNew();
-        List<Integer> values = null;
-        String join = Joiner.on("&").join(values);
     }
 
     private void scanAlreadyLoadedAndStillOpened() {
