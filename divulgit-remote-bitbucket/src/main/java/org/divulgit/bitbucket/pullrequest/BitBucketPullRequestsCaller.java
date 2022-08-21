@@ -36,7 +36,7 @@ public class BitBucketPullRequestsCaller {
         final List<BitBucketPullRequest> pullRequests = new ArrayList<>();
         Integer emptyScanFrom = 0;
         final String url = urlBuilder.buildPullRequestURL(remote, user, project, requestedMergeRequestExternalIds);
-        retrievePullRequests(pullRequests,emptyScanFrom,authentication,url);
+        retrievePullRequests(pullRequests, emptyScanFrom, authentication, url);
         return pullRequests;
     }
 

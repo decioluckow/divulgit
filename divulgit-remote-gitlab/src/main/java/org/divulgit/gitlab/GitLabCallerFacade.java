@@ -73,7 +73,7 @@ public class GitLabCallerFacade implements RemoteFacade {
 
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
-        return mergeRequestCaller.retrieveMergeRequests(remote,project,requestedMergeRequestExternalIds,authentication);
+        return mergeRequestCaller.retrieveMergeRequests(remote, project, requestedMergeRequestExternalIds, authentication);
     }
 
     @Override

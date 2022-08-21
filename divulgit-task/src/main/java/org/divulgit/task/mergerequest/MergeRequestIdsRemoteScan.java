@@ -86,17 +86,16 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
         try {
             log.info("Starting scanning code review ids for remote: {} and project: {}", remote.getId(), project.getId());
             List<MergeRequest> requestedMergeRequests = mergeRequestService.findAllByIds(requestedMergeRequestIds);
-            List<Integer> requestedMergeRequestExernalIds = requestedMergeRequests.stream().map(mr -> mr.getExternalId()).collect(Collectors.toList());
+            List<Integer> requestedMergeRequestExernalIds = requestedMergeRequests.stream().map(MergeRequest::getExternalId).collect(Collectors.toList());
             log.trace("Considering external ids: {}", Joiner.on(",").join(requestedMergeRequestExernalIds));
 
             log.debug("Start retrieving merge requests from remote");
-            List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote,user,project,requestedMergeRequestExernalIds,authentication);
-            List<RemoteMergeRequest> mergeRequests = new ArrayList<>(remoteMergeRequests);
+            List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, user, project, requestedMergeRequestExernalIds, authentication);
             log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
 
             log.debug("Start merging merge requests");
             for (MergeRequest mergeRequest : requestedMergeRequests) {
-                Optional<RemoteMergeRequest> remoteMergeRequest = mergeRequests.stream().filter(rmr -> rmr.getExternalId() == mergeRequest.getExternalId()).findFirst();
+                Optional<? extends RemoteMergeRequest> remoteMergeRequest = remoteMergeRequests.stream().filter(rmr -> rmr.getExternalId() == mergeRequest.getExternalId()).findFirst();
                 if (remoteMergeRequest.isPresent()) {
                     mergeRequest.setTitle(remoteMergeRequest.get().getTitle());
                     mergeRequest.setDescription(remoteMergeRequest.get().getDescription());

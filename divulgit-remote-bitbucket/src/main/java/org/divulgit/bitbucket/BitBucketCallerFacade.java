@@ -74,7 +74,7 @@ public class BitBucketCallerFacade implements RemoteFacade {
 
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
-        return bitBucketPullRequestsCaller.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
+        return bitBucketPullRequestsCaller.retrievePullRequests(remote, user, project, requestedMergeRequestExternalIds, authentication);
     }
 
     @Override

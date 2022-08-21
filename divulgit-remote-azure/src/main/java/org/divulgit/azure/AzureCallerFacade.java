@@ -80,7 +80,7 @@ public class AzureCallerFacade implements RemoteFacade {
 
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
-        return pullRequestService.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
+        return pullRequestService.retrievePullRequests(remote, user, project, requestedMergeRequestExternalIds, authentication);
     }
 
     @Override

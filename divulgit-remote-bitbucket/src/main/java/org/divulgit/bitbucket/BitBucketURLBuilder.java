@@ -1,9 +1,9 @@
 package org.divulgit.bitbucket;
+import com.google.common.base.Joiner;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.util.URLUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
@@ -47,7 +47,7 @@ public class BitBucketURLBuilder {
                 getUrlApi(remote.getUrl()),
                 user.getUsername(),
                 project.getName(),
-                URLUtil.concatIds(requestedMergeRequestExternalIds));
+                Joiner.on("&").join(requestedMergeRequestExternalIds));
     }
 
     public String buildRepository(Remote remote, String workspace) {

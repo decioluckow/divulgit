@@ -76,7 +76,7 @@ public class GitHubCallerFacade implements RemoteFacade {
 
     @Override
     public List<? extends RemoteMergeRequest> retrieveMergeRequests(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds, Authentication authentication) throws RemoteException {
-        return pullRequestCaller.retrievePullRequests(remote,user,project,requestedMergeRequestExternalIds,authentication);
+        return pullRequestCaller.retrievePullRequests(remote, user, project, requestedMergeRequestExternalIds, authentication);
     }
 
     @Override

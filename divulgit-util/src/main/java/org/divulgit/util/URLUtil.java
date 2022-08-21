@@ -21,8 +21,4 @@ public class URLUtil {
     public static String appendParameter(String url, String name, String value) {
         return url + (url.contains("?") ? "&" : "?") + name + "=" + value;
     }
-
-    public String concatIds(List<Integer> values){
-        return values.stream().map(Object::toString).collect(Collectors.joining("&"));
-    }
 }
