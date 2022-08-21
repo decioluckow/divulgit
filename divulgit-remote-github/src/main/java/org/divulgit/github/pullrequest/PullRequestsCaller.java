@@ -43,10 +43,10 @@ public class PullRequestsCaller {
             Project project,
             List<Integer> externalIds,
             Authentication authentication) throws RemoteException {
-    	log.info("Retrieving pull requests for {} ids", externalIds.size());
+        log.info("Retrieving pull requests for {} ids", externalIds.size());
         final List<GitHubPullRequest> pullRequests = new ArrayList<>();
         for (Integer id : externalIds) {
-        	pullRequests.add(retrievePullRequest(remote, user, project, id, authentication));
+            pullRequests.add(retrievePullRequest(remote, user, project, id, authentication));
         }
         return pullRequests;
     }

@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket;
+import com.google.common.base.Joiner;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -6,6 +7,7 @@ import org.divulgit.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.text.MessageFormat;
+import java.util.List;
 
 @Component
 public class BitBucketURLBuilder {
@@ -40,12 +42,12 @@ public class BitBucketURLBuilder {
                 String.valueOf(pageSize));
     }
 
-    public String buildPullRequestURL(Remote remote, User user, Project project, Integer mergeRequestExternalId) {
-        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests/{3}",
+    public String buildPullRequestURL(Remote remote, User user, Project project, List<Integer> requestedMergeRequestExternalIds) {
+        return MessageFormat.format("https://{0}/repositories/{1}/{2}/pullrequests?{3}",
                 getUrlApi(remote.getUrl()),
                 user.getUsername(),
                 project.getName(),
-                mergeRequestExternalId);
+                Joiner.on("&").join(requestedMergeRequestExternalIds));
     }
 
     public String buildRepository(Remote remote, String workspace) {
