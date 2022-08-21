@@ -1,5 +1,4 @@
 package org.divulgit.azure.pullrequest;
-
 import org.divulgit.azure.AzureURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -8,7 +7,6 @@ import org.divulgit.remote.exception.RemoteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -16,9 +14,6 @@ public class AzurePullRequestService {
 
     @Autowired
     private AzurePullRequestsCaller azurePullRequestsCaller;
-
-    @Autowired
-    private AzureLastPullRequestCaller azureLastPullRequestCaller;
 
     @Autowired
     private AzureURLBuilder urlBuilder;

@@ -1,5 +1,4 @@
 package org.divulgit.gitlab.mergerequest;
-
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.annotation.ForRemote;
 import org.divulgit.gitlab.GitLabURLBuilder;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

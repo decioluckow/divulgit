@@ -1,11 +1,7 @@
 package org.divulgit.util;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.util.Strings;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

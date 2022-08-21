@@ -1,5 +1,4 @@
 package org.divulgit.bitbucket.pullrequest;
-import org.apache.commons.lang3.StringUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import org.divulgit.bitbucket.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +26,19 @@ public class BitBucketPullRequestsCaller {
 
     @Autowired
     private BitBucketURLBuilder urlBuilder;
+
+    public List<BitBucketPullRequest> retrievePullRequests(
+            Remote remote,
+            User user,
+            Project project,
+            List<Integer> requestedMergeRequestExternalIds,
+            Authentication authentication) throws RemoteException {
+        final List<BitBucketPullRequest> pullRequests = new ArrayList<>();
+        Integer emptyScanFrom = 0;
+        final String url = urlBuilder.buildPullRequestURL(remote, user, project, requestedMergeRequestExternalIds);
+        retrievePullRequests(pullRequests, emptyScanFrom, authentication, url);
+        return pullRequests;
+    }
 
     public List<BitBucketPullRequest> retrievePullRequests(
             Remote remote,

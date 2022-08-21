@@ -189,8 +189,11 @@
          success:function(response) {
             console.log(response)
          },
-         error:function(response) {
-            alert('server error occured')
+         error:function(response, errorThrown) {
+            if(response.status >= 400 && response.status < 600){
+                console.log(errorThrown);
+                alert('server error occured')
+            }
          }
       });
    }
