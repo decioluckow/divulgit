@@ -22,6 +22,7 @@ import org.divulgit.task.RemoteScan;
 import org.divulgit.task.comment.CommentsRemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MergeRequestRemoteScan extends AbstractRemoteScan {
 
     @Autowired
@@ -91,36 +92,6 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
 
     @Override
     public void execute() {
-        scanAlreadyLoadedAndStillOpened();
-        scanNew();
-    }
-
-    private void scanAlreadyLoadedAndStillOpened() {
-        try {
-            log.info("Starting scanning mergeRequests loaded and opened for remote: {} and project: {}", remote.getId(), project.getId());
-
-            List<MergeRequest> lastOpened = mergeRequestService.findLastOpened(project.getId());
-            List<Integer> lastOpenedIds = lastOpened.stream().mapToInt(MergeRequest::getExternalId).boxed().collect(Collectors.toList());
-
-            log.debug("Start retrieving merge requests from remote");
-            List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, user, project, scanFrom, authentication);
-            log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
-
-            log.debug("Start saving merge requests");
-            List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
-            mergeRequestService.saveAll(mergeRequests);
-            log.debug("Finished merge requests saving");
-            log.debug("Start queueing scan comments");
-            mergeRequests.forEach(mr -> scanComments(mr));
-            log.debug("Finished queueing scan comments");
-        } catch (RemoteException e) {
-            final String message = "Error executing project scanning";
-            addErrorStep(message + " - " + e.getMessage());
-            log.error(message, e);
-        }
-    }
-
-    private void scanNew() {
         try {
             log.info("Starting scanning mergeRequests ids for remote: {} and project: {}", remote.getId(), project.getId());
 

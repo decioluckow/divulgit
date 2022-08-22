@@ -20,9 +20,6 @@ import com.google.common.collect.ImmutableList;
 @Service
 public class MergeRequestService {
 
-    @Value("${mergerequest.reloadopened.lastdays:30}")
-    private int reloadLastDays;
-
     private MergeRequestRepository mergeRequestRepository;
 
     @Autowired
@@ -30,8 +27,8 @@ public class MergeRequestService {
         this.mergeRequestRepository = mergeRequestRepository;
     }
 
-    public List<MergeRequest> findLastOpened(String projectId) {
-        LocalDateTime reloadLimitDate = LocalDateTime.now().minusDays(reloadLastDays);
+    public List<MergeRequest> findLastOpened(String projectId, int lastDays) {
+        LocalDateTime reloadLimitDate = LocalDateTime.now().minusDays(lastDays);
         return mergeRequestRepository.findByProjectIdAndStateAndCreationDateGreaterThanOrderByExternalIdDesc(
                         projectId, MergeRequest.State.OPENED, reloadLimitDate);
     }

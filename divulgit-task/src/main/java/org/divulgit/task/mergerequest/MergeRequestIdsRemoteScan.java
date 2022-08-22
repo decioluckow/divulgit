@@ -18,6 +18,7 @@ import org.divulgit.task.RemoteScan;
 import org.divulgit.task.comment.CommentsRemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     @Autowired
