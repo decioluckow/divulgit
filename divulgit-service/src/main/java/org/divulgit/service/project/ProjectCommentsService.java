@@ -1,12 +1,10 @@
 package org.divulgit.service.project;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import org.divulgit.model.Project;
 import org.divulgit.model.User;
 import org.divulgit.model.User.UserProject;
@@ -45,7 +43,6 @@ public class ProjectCommentsService {
             NotDiscussedByAuthorVO notDiscussedByAuthorVO = projectAuthorCount.get(project.getId());
             ProjectIdMaxDiscussion projectIdMaxDiscussion = projectCommentsMaxDiscussion.get(project.getId());
             UserProjectVO.UserProjectVOBuilder userProjectVOBuilder = UserProjectVO.builder().project(project).state(userProjectState);
-
 
             if (projectCommentsSum != null) {
                 userProjectVOBuilder.commentsDiscussed(projectCommentsSum.getCommentsDiscussed()).commentsTotal(projectCommentsSum.getCommentsTotal());
