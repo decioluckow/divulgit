@@ -45,6 +45,7 @@ public class ProjectCommentsService {
             ProjectIdMaxDiscussion projectIdMaxDiscussion = projectCommentsMaxDiscussion.get(project.getId());
             UserProjectVO.UserProjectVOBuilder userProjectVOBuilder = UserProjectVO.builder().project(project).state(userProjectState);
 
+
             if (projectCommentsSum != null) {
                 userProjectVOBuilder.commentsDiscussed(projectCommentsSum.getCommentsDiscussed()).commentsTotal(projectCommentsSum.getCommentsTotal());
             }
@@ -59,6 +60,8 @@ public class ProjectCommentsService {
                 userProjectVOBuilder.mergeRequestsNotDiscussedByAuthor(notDiscussedByAuthorVO.getMergeRequestCount());
                 userProjectVOBuilder.commentsNotDiscussedByAuthor(notDiscussedByAuthorVO.getCommentCount());
             }
+
+            userProjectVOBuilder.lastScan(project.getLastScan());
 
             projectComments.add(userProjectVOBuilder.build());
         }
