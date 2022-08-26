@@ -59,11 +59,10 @@ public class ProjectCommentsService {
                 userProjectVOBuilder.commentsNotDiscussedByAuthor(notDiscussedByAuthorVO.getCommentCount());
             }
 
-            if(Objects.nonNull(project.getLastScan())){
+            if (Objects.nonNull(project.getLastScan())) {
                 Period period = Period.between(project.getLastScan().toLocalDate(), LocalDate.now());
                 userProjectVOBuilder.durationFromLastScan(PeriodUtil.formatDuration(period));
             }
-
             projectComments.add(userProjectVOBuilder.build());
         }
         return projectComments;
