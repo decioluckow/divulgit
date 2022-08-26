@@ -4,7 +4,6 @@ import org.divulgit.model.User.UserProject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -18,8 +17,8 @@ public class UserProjectVO {
     private long commentsTotal;
     private long commentsDiscussed;
     private String durationFromLastDiscussion;
-    private LocalDateTime lastScan;
-    
+    private String durationFromLastScan;
+
     public String getId() {
         return project.getId();
     }
@@ -58,9 +57,5 @@ public class UserProjectVO {
     
     public boolean isIgnored() {
     	return state == UserProject.State.IGNORED;
-    }
-
-    public LocalDateTime getLastScan() {
-        return project.getLastScan();
     }
 }

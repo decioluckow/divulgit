@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.divulgit.model.Project;
@@ -61,7 +62,10 @@ public class ProjectCommentsService {
                 userProjectVOBuilder.commentsNotDiscussedByAuthor(notDiscussedByAuthorVO.getCommentCount());
             }
 
-            userProjectVOBuilder.lastScan(project.getLastScan());
+            if(Objects.nonNull(project.getLastScan())){
+                Period period = Period.between(project.getLastScan().toLocalDate(), LocalDate.now());
+                userProjectVOBuilder.durationFromLastScan(PeriodUtil.formatDuration(period));
+            }
 
             projectComments.add(userProjectVOBuilder.build());
         }

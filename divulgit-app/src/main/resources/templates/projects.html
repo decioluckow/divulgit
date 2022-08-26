@@ -58,7 +58,7 @@
                   <span th:if="${project.commentsTotal > 0}" th:text="${project.commentsTotal}"></span>
                </td>
                <td class="text-center" th:text="${project.durationFromLastDiscussion}"></td>
-               <td th:text="${#temporals.format(project.lastScan, 'dd/MM HH:mm:ss')}"></td>
+               <td class="text-center" th:text="${project.durationFromLastScan}"></td>
             </th:block>
                <td th:id="'actions-' + ${project.id}">
                   <span th:if="${project.isNew()}">
