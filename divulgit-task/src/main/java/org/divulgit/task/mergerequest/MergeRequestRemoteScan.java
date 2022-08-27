@@ -1,5 +1,6 @@
 package org.divulgit.task.mergerequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteMergeRequest;
 import org.divulgit.repository.TaskRepository;
 import org.divulgit.service.mergeRequest.MergeRequestService;
+import org.divulgit.service.project.ProjectService;
 import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.task.comment.CommentsRemoteScan;
@@ -41,6 +43,9 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
 
     @Autowired
     private ScanFromResolver scanFromResolver;
+
+    @Autowired
+    private ProjectService projectService;
 
     private final Remote remote;
     private final User user;
@@ -105,6 +110,8 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
             log.debug("Start queueing scan comments");
             mergeRequests.forEach(mr -> scanComments(mr));
             log.debug("Finished queueing scan comments");
+            log.debug("Updating last project scan date");
+            updateLastScanProject();
         } catch (RemoteException e) {
             final String message = "Error executing project scanning";
             addErrorStep(message + " - " + e.getMessage());
@@ -118,5 +125,10 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
         commentRemoteScan.register();
         registerSubTask(commentRemoteScan.uniqueId());
         commentRemoteScan.run();
+    }
+
+    private void updateLastScanProject(){
+        project.setLastScan(LocalDateTime.now());
+        projectService.save(project);
     }
 }

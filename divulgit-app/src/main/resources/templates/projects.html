@@ -28,6 +28,7 @@
             <th scope="col" class="text-center">My content<br/>not discussed<br/><span style="font-size: 8pt">(requests + comments)</span></th>
             <th scope="col" class="text-center">Total<br/>Comments</th>
             <th scope="col" class="text-center">Last<br/>Discussion</th>
+            <th scope="col" class="text-center">Last<br/>Scan</th>
             <th scope="col">Actions</th>
          </tr>
          <tr th:each="project : ${projects}" class="project-item" th:data-project-id="${project.id}">
@@ -57,6 +58,7 @@
                   <span th:if="${project.commentsTotal > 0}" th:text="${project.commentsTotal}"></span>
                </td>
                <td class="text-center" th:text="${project.durationFromLastDiscussion}"></td>
+               <td class="text-center" th:text="${project.durationFromLastScan}"></td>
             </th:block>
                <td th:id="'actions-' + ${project.id}">
                   <span th:if="${project.isNew()}">
