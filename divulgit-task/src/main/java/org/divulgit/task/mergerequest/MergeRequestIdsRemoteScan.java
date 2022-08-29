@@ -68,12 +68,12 @@ public class MergeRequestIdsRemoteScan extends AbstractRemoteScan {
 
     @Override
     public String mountTitle() {
-        return "Scanning merge requests";
+        return "Rescanning merge requests";
     }
 
     @Override
     public String mountDetail() {
-        return "Scanning " + requestedMergeRequestIds.size() + " merge requests for project " + project.getName();
+        return "Rescanning " + requestedMergeRequestIds.size() + " merge requests for project " + project.getName();
     }
 
     @Override

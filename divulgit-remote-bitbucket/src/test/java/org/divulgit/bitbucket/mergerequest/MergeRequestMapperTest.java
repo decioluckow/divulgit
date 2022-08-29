@@ -20,6 +20,7 @@ class MergeRequestMapperTest {
         assertEquals("testando PR", mergeRequest.getTitle());
         assertEquals("wesleyeduardocr7", mergeRequest.getAuthor());
         assertEquals("https://bitbucket.org/wesleyeduardocr7/teste_api_bitbucket/pull-requests/1", mergeRequest.getUrl());
+        assertNotNull(mergeRequest.getCreatedAt());
     }
 
     @Test
@@ -35,11 +36,13 @@ class MergeRequestMapperTest {
         assertEquals("testando PR", firstMergeRequest.getTitle());
         assertEquals("wesleyeduardocr7", firstMergeRequest.getAuthor());
         assertEquals("https://bitbucket.org/wesleyeduardocr7/teste_api_bitbucket/pull-requests/1", firstMergeRequest.getUrl());
+        assertNotNull(firstMergeRequest.getCreatedAt());
 
         BitBucketPullRequest secondMergeRequest = mergeRequests.get(0);
         assertEquals(2, secondMergeRequest.getExternalId());
         assertEquals("testando reposta em String", secondMergeRequest.getTitle());
         assertEquals("wesleyeduardocr7", secondMergeRequest.getAuthor());
         assertEquals("https://bitbucket.org/wesleyeduardocr7/teste_api_bitbucket/pull-requests/2", secondMergeRequest.getUrl());
+        assertNotNull(secondMergeRequest.getCreatedAt());
     }
 }

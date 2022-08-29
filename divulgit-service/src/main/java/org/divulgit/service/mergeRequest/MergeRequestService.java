@@ -29,7 +29,7 @@ public class MergeRequestService {
 
     public List<MergeRequest> findLastOpened(String projectId, int lastDays) {
         LocalDateTime reloadLimitDate = LocalDateTime.now().minusDays(lastDays);
-        return mergeRequestRepository.findByProjectIdAndStateAndCreationDateGreaterThanOrderByExternalIdDesc(
+        return mergeRequestRepository.findByProjectIdAndStateAndCreatedAtGreaterThanOrderByExternalIdDesc(
                         projectId, MergeRequest.State.OPENED, reloadLimitDate);
     }
 

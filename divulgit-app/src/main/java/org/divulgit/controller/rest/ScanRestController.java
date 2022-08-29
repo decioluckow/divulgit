@@ -65,7 +65,7 @@ public class ScanRestController {
 		Remote remote = loader.loadRemote(user.getRemoteId());
 		Project project = loader.loadProject(user, projectId);
 		Optional<Integer> emptyScanFrom = Optional.empty();
-		RemoteScan.UniqueId rescanOpenedUniqueId = taskExecutor.rescanProjectForOpenedMergeRequests(
+		RemoteScan.UniqueId rescanOpenedUniqueId = taskExecutor.rescanOpenedMergeRequests(
 				remote, user, project, authentication);
 		RemoteScan.UniqueId scanLastUniqueId = taskExecutor.scanProjectForMergeRequests(
 				remote, user, project, emptyScanFrom, authentication);

@@ -1,5 +1,6 @@
 package org.divulgit.gitlab.mergerequest;
 
+import org.apache.http.client.utils.DateUtils;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.remote.model.RemoteMergeRequest;
@@ -7,6 +8,9 @@ import org.divulgit.remote.model.RemoteMergeRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
+import org.divulgit.util.DateUtil;
+
+import java.time.LocalDateTime;
 
 @Data
 public class GitLabMergeRequest implements RemoteMergeRequest {
@@ -23,6 +27,9 @@ public class GitLabMergeRequest implements RemoteMergeRequest {
     private String url;
     private Author author;
     private String state;
+    @JsonProperty("created_at")
+    private String createdAt;
+
 
     @Override
     public String getAuthor() {
@@ -42,6 +49,7 @@ public class GitLabMergeRequest implements RemoteMergeRequest {
                 .description(description)
                 .author(author.getUsername())
                 .url(url)
+                .createdAt(DateUtil.parseDateFromDateTime(createdAt))
                 .state(convertState(state)).build();
     }
 

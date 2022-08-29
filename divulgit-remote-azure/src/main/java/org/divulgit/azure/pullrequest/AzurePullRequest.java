@@ -8,6 +8,7 @@ import org.divulgit.model.Project;
 import org.divulgit.remote.model.RemoteMergeRequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.divulgit.util.DateUtil;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +33,8 @@ public class AzurePullRequest implements RemoteMergeRequest {
     @Setter
     private String url;
 
-    private LocalDateTime creationDate;
+    @JsonProperty("creationDate")
+    private String createdAt;
 
     @Getter
     @JsonProperty("createdBy")
@@ -44,7 +46,6 @@ public class AzurePullRequest implements RemoteMergeRequest {
         return azureAuthor.getUsername();
     }
 
-    //TODO mudar para enum do divulgit
     public String getState() {
         return status.getCorrespondingTo().name();
     }
@@ -55,7 +56,7 @@ public class AzurePullRequest implements RemoteMergeRequest {
                 .externalId(externalId)
                 .title(title)
                 .description(description)
-                .creationDate(creationDate)
+                .createdAt(DateUtil.parseDateFromDateTime(createdAt))
                 .url(url)
                 .author(getAuthor())
                 .state(status.getCorrespondingTo()).build();
