@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -21,6 +24,7 @@ import org.divulgit.task.RemoteScan;
 import org.divulgit.task.comment.CommentsRemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -29,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MergeRequestRemoteScan extends AbstractRemoteScan {
 
     @Autowired
@@ -102,7 +106,7 @@ public class MergeRequestRemoteScan extends AbstractRemoteScan {
             log.debug("Start retrieving merge requests from remote");
             List<? extends RemoteMergeRequest> remoteMergeRequests = callerFactory.build(remote).retrieveMergeRequests(remote, user, project, scanFrom, authentication);
             log.debug("Finished retrieving merge requests from remote, {} retrieved", remoteMergeRequests.size());
-            
+
             log.debug("Start saving merge requests");
             List<MergeRequest> mergeRequests = remoteMergeRequests.stream().map(rmr -> rmr.toMergeRequest(project)).collect(Collectors.toList());
             mergeRequestService.saveAll(mergeRequests);

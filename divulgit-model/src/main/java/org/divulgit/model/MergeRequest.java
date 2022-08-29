@@ -1,5 +1,6 @@
 package org.divulgit.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class MergeRequest {
     private String description;
     private String author;
     private State state;
+    private LocalDate createdAt;
     private List<Comment> comments;
 
     private int commentsTotal;

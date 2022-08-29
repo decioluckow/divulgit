@@ -27,6 +27,7 @@ class AzurePullRequestResponseHandlerTest {
         assertEquals("Updated README.md", azurePullRequest0.getTitle());
         assertEquals("decioluckow@outlook.com", azurePullRequest0.getAuthor());
         assertEquals("OPENED", azurePullRequest0.getState());
+        assertNotNull(azurePullRequest0.getCreatedAt());
 
         AzurePullRequest azurePullRequest1 = azurePullRequests.get(1);
         assertEquals(2, azurePullRequest1.getExternalId());
@@ -34,6 +35,7 @@ class AzurePullRequestResponseHandlerTest {
         assertEquals("Updated README.md", azurePullRequest1.getTitle());
         assertEquals("decioluckow@outlook.com", azurePullRequest1.getAuthor());
         assertEquals("OPENED", azurePullRequest1.getState());
+        assertNotNull(azurePullRequest1.getCreatedAt());
 
         AzurePullRequest azurePullRequest2 = azurePullRequests.get(2);
         assertEquals(1, azurePullRequest2.getExternalId());
@@ -41,5 +43,6 @@ class AzurePullRequestResponseHandlerTest {
         assertEquals("teste1 1'", azurePullRequest2.getTitle());
         assertEquals("decioluckow@outlook.com", azurePullRequest2.getAuthor());
         assertEquals("OPENED", azurePullRequest2.getState());
+        assertNotNull(azurePullRequest2.getCreatedAt());
     }
 }

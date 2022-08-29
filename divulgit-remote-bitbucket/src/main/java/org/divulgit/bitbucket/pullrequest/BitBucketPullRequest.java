@@ -1,4 +1,8 @@
 package org.divulgit.bitbucket.pullrequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.commons.lang3.time.FastDateParser;
 import org.divulgit.bitbucket.Links;
 import org.divulgit.bitbucket.user.BitBucketUser;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +14,12 @@ import org.apache.logging.log4j.util.Strings;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.remote.model.RemoteMergeRequest;
+import org.divulgit.util.DateUtil;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.TimeZone;
 
 @Data
 @Builder
@@ -19,14 +29,23 @@ public class BitBucketPullRequest implements RemoteMergeRequest {
 
     private static final String STATE_OPENED = "open";
     private static final String STATE_CLOSED = "closed";
+
     @JsonProperty("id")
     private int externalId;
+
     private String title;
+
     private String description;
+
     private BitBucketUser author;
+
     private String state;
+
     @JsonProperty("merge_commit")
     private String mergedAt;
+
+    @JsonProperty("created_on")
+    private String createdAt;
 
     private Links links;
 
@@ -47,6 +66,7 @@ public class BitBucketPullRequest implements RemoteMergeRequest {
                 .description(description)
                 .url(getUrl())
                 .author(author.getNickName())
+                .createdAt(DateUtil.parseDateFromDateTime(createdAt))
                 .state(convertState(state)).build();
     }
 
