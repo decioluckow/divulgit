@@ -14,15 +14,19 @@ import java.util.Base64;
 public class RestCallerConfiguration {
 
     @Bean
-    public HeaderAuthRestCaller gitLabRestCaller(RestTemplateCustomizer restTemplateCustomizer) {
-        return new HeaderAuthRestCaller(restTemplateCustomizer,
-            ((headers, authentication) -> headers.add("Private-Token", (String) authentication.getCredentials())));
+    public RestCaller gitLabRestCaller(@ForRemote(RemoteType.GITLAB) ErrorResponseHandler errorResponseHandler) {
+        return new UniRestCaller(errorResponseHandler,
+                ((httpHequest, authentication) -> {
+                    httpHequest.header("Private-Token", authentication.getCredentials().toString());
+                }));
     }
 
     @Bean
-    public HeaderAuthRestCaller gitHubRestCaller(RestTemplateCustomizer restTemplateCustomizer) {
-        return new HeaderAuthRestCaller(restTemplateCustomizer,
-                ((headers, authentication) -> headers.add("Authorization","token " + (String) authentication.getCredentials())));
+    public RestCaller gitHubRestCaller(@ForRemote(RemoteType.GITHUB) ErrorResponseHandler errorResponseHandler) {
+        return new UniRestCaller(errorResponseHandler,
+                ((httpHequest, authentication) -> {
+                    httpHequest.header("Authorization", "token " + authentication.getCredentials().toString());
+                }));
     }
 
     @Bean

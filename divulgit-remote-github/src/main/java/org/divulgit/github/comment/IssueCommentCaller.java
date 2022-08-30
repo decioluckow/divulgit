@@ -3,7 +3,6 @@ package org.divulgit.github.comment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.divulgit.annotation.ForRemote;
 import org.divulgit.github.GitHubURLBuilder;
 import org.divulgit.github.util.LinkHeaderUtil;
 import org.divulgit.model.MergeRequest;
@@ -11,9 +10,7 @@ import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.divulgit.type.RemoteType;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,14 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 public class IssueCommentCaller {
 
     @Autowired
-    private HeaderAuthRestCaller gitHubRestCaller;
+    private RestCaller gitHubRestCaller;
 
     @Autowired
     private GitHubCommentResponseHandler responseHandler;
-
-    @Autowired
-    @ForRemote(RemoteType.GITHUB)
-    private ErrorResponseHandler errorResponseHandler;
 
     @Autowired
     private GitHubURLBuilder urlBuilder;
@@ -62,8 +55,6 @@ public class IssueCommentCaller {
         if (response.getStatusCode().is2xxSuccessful()) {
             List<GitHubComment> comments = responseHandler.handle200ResponseMultipleResult(response);
             loadedComments.addAll(comments);
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response)) {
             retrieveComments(remote, user, project, mergeRequest, loadedComments, authentication, ++page);

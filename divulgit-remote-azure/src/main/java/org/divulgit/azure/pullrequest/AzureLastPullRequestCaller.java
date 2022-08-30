@@ -1,19 +1,13 @@
 package org.divulgit.azure.pullrequest;
 
-import com.mashape.unirest.http.Unirest;
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.annotation.ForRemote;
 import org.divulgit.azure.AzureURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
 import org.divulgit.remote.rest.RestCaller;
-import org.divulgit.remote.rest.UniRestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.security.RemoteAuthentication;
-import org.divulgit.type.RemoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

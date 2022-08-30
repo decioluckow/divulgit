@@ -1,14 +1,12 @@
 package org.divulgit.gitlab.mergerequest;
+
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.annotation.ForRemote;
 import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.gitlab.util.LinkHeaderUtil;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
-import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.divulgit.type.RemoteType;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,17 +20,13 @@ import java.util.List;
 public class MergeRequestCaller {
 
     @Autowired
-    private HeaderAuthRestCaller gitLabRestCaller;
+    private RestCaller gitLabRestCaller;
 
     @Autowired
     private GitLabURLBuilder urlBuilder;
 
     @Autowired
     private MergeRequestResponseHandler responseHandler;
-
-    @Autowired
-    @ForRemote(RemoteType.GITLAB)
-    private ErrorResponseHandler errorResponseHandler;
 
     public List<GitLabMergeRequest> retrieveMergeRequests(
             Remote remote,
@@ -76,8 +70,6 @@ public class MergeRequestCaller {
                     stopScan = true;
                 }
             }
-        } else if (errorResponseHandler.isErrorResponse(response)) {
-            errorResponseHandler.handleErrorResponse(response);
         }
         if (LinkHeaderUtil.hasNextPage(response) && !stopScan) {
             retrieveMergeRequests(remote, project, loadedMergeRequests, requestedMergeRequestExternalIds, scanFrom, authentication, ++page);
