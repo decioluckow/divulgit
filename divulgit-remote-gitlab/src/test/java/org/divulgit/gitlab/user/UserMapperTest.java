@@ -6,18 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import org.divulgit.remote.exception.RemoteException;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 public class UserMapperTest {
 
-    private UserMapper mapper = new UserMapper();
+    private UserResponseHandler handler = new UserResponseHandler();
 
     @Test
-    public void testConvertUser() throws IOException {
+    public void testConvertUser() throws IOException, RemoteException {
         InputStream jsonResource = this.getClass().getResourceAsStream("user.json");
         String json = new String(jsonResource.readAllBytes(), StandardCharsets.UTF_8);
 
-        GitLabUser authenticatedUser = mapper.convertToUser(json);
+        GitLabUser authenticatedUser = handler.handle200Response(ResponseEntity.ok(json));
 
         assertEquals("john_smith", authenticatedUser.getUsername());
         assertEquals("John Smith", authenticatedUser.getName());

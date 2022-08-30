@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ProjectMapperTest {
+public class ProjectResponseHandlerTest {
 
     private ProjectResponseHandler responseHandler = new ProjectResponseHandler();
 

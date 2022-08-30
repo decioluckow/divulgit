@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.remote.rest.HeaderAuthRestCaller;
+import org.divulgit.remote.rest.RestCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class GitLabTestCaller {
 
     @Autowired
-    private HeaderAuthRestCaller gitLabRestCaller;
+    private RestCaller gitLabRestCaller;
 
     @Autowired
     private GitLabURLBuilder urlBuilder;

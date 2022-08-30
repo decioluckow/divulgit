@@ -6,10 +6,18 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 @Slf4j
 public class UniRestCaller implements RestCaller {
@@ -29,7 +37,8 @@ public class UniRestCaller implements RestCaller {
         customizer.apply(getRequest, authentication);
         try {
             HttpResponse<String> jsonResponse = getRequest.asString();
-            ResponseEntity<String> responseEntity = ResponseEntity.status(jsonResponse.getStatus()).body(jsonResponse.getBody());
+            ResponseEntity<String> responseEntity = new ResponseEntity(
+                    jsonResponse.getBody(), convertHeaders(jsonResponse), jsonResponse.getStatus());
             if (this.errorResponseHandler.isErrorResponse(responseEntity)) {
                 this.errorResponseHandler.handleErrorResponse(responseEntity);
             }
@@ -38,6 +47,12 @@ public class UniRestCaller implements RestCaller {
             log.error(e.getMessage(), e.getCause());
             throw new RemoteException(e.getMessage(), e);
         }
+    }
+
+    private HttpHeaders convertHeaders(HttpResponse<String> jsonResponse) {
+        HttpHeaders headers = new HttpHeaders();
+        jsonResponse.getHeaders().forEach((key, values) -> headers.put(key, values));
+        return headers;
     }
 
     public static interface Customizer {
