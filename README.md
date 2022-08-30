@@ -60,20 +60,6 @@ spring.data.mongodb.port=<porta>
 logging.level.org.divulgit=INFO
 logging.file=logs/diVulgit.log
 ```
-
-## Trust Store
-
-O Divulgit possui uma trustStore embarcada já com os certificados para o GitLab e GitHub.
-Caso seja necessário adicionar ou atualizar algum certificado, adicione 
-as seguintes linhas ao arquivo `application.properties`
-
-```
-http.client.ssl.trust-store=file:///trustStore.jks
-http.client.ssl.trust-store-password=changeit
-```
-
-:warning: Estaremos monitoramento o vencimentos do certificados e atualizando no repositório.
-
 ## Thread Executor
 
 O processo de scan dos repositórios git é assíncrono e configurado para trabalhar com 
