@@ -5,8 +5,10 @@ name: CI main
 
 on:
   push:
-    branches: [ "main" ]
-
+    branches: [ "main", "development" ]
+  pull_request:
+    branches: [ "development" ]
+    
 jobs:
   build:
 
