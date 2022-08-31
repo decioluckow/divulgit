@@ -27,5 +27,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: artifact
-        path: divulgit-app/target/divulgit*.jar
+        name: divulgit-app.jar
+        path: divulgit-app/target/divulgit-app.jar
