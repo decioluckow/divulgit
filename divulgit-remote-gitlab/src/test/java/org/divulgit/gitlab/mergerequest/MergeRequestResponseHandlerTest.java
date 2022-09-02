@@ -8,12 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.divulgit.remote.exception.RemoteException;
-import org.gitlab.gitlab.mergerequest.GitLabMergeRequest;
-import org.gitlab.gitlab.mergerequest.MergeRequestResponseHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-public class MergeRequestMapperTest {
+public class MergeRequestResponseHandlerTest {
 
     private MergeRequestResponseHandler responseHandler = new MergeRequestResponseHandler();
 

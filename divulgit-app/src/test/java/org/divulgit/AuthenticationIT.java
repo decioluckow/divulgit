@@ -1,6 +1,5 @@
 package org.divulgit;
 
-import com.mongodb.client.MongoClients;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.ImmutableMongodConfig;
@@ -8,51 +7,36 @@ import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
-import org.divulgit.DivulgitApplication;
+import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Remote;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.security.CustomAuthenticationProvider;
 import org.divulgit.util.TestUtil;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
-import org.springframework.test.context.event.annotation.AfterTestExecution;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-import org.springframework.test.context.event.annotation.BeforeTestExecution;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 
-//@DataMongoTest()
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        properties = {
-            "spring.data.mongodb.host=localhost",
-            "spring.data.mongodb.database=divulgit",
-            "spring.data.mongodb.port=7070"
-        })
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK
+)
 @ContextConfiguration(classes = DivulgitApplication.class)
-@ActiveProfiles("integration-test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthenticationIT {
 
@@ -73,7 +57,6 @@ public class AuthenticationIT {
 
     @BeforeEach
     public void startServer() throws IOException {
-
         mockExternalServer();
         mockDatabase();
     }
@@ -106,17 +89,14 @@ public class AuthenticationIT {
                         .withStatusCode(200)
                         .withBody(TestUtil.getResourceAsString(this, "user.json"))
                         .withDelay(TimeUnit.SECONDS, 1));
-
         String principal = "{\"username\":\"\",\"organization\":\"\", \"domain\":\"gitlab.com\", \"plataform\":\"GITLAB\"}";
         String credential = "xpto123token";
-
         Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(principal, credential);
 
         Authentication authenticateResponse = customAuthenticationProvider.authenticate(authenticationRequest);
 
         Assertions.assertTrue(authenticateResponse.isAuthenticated());
         Assertions.assertNotNull(userRepository.findById("john@example.com"));
-
     }
 
     @AfterEach

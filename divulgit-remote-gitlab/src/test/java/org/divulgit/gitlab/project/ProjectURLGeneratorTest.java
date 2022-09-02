@@ -1,6 +1,6 @@
 package org.divulgit.gitlab.project;
 
-import org.divulgit.GitLabURLBuilder;
+import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Remote;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

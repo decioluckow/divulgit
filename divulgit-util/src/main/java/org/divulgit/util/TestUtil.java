@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 public class TestUtil {
 
     public static String getResourceAsString(Object source, String file) throws IOException {
-        InputStream jsonResource = source.getClass().getResourceAsStream("/user.json");
+        InputStream jsonResource = source.getClass().getResourceAsStream(file);
         return new String(jsonResource.readAllBytes(), StandardCharsets.UTF_8);
     }
 }

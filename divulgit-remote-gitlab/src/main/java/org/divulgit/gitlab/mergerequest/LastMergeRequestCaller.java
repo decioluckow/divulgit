@@ -1,7 +1,7 @@
 package org.divulgit.gitlab.mergerequest;
 
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.GitLabURLBuilder;
+import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;
@@ -36,7 +36,7 @@ public class LastMergeRequestCaller {
         int lastMergeRequestId = 0;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<GitLabMergeRequest> remoteMergeRequests = responseHandler.handle200ResponseMultipleResult(response);
-            if (! remoteMergeRequests.isEmpty()) {
+            if (!remoteMergeRequests.isEmpty()) {
                 lastMergeRequestId = remoteMergeRequests.get(0).getExternalId();
             }
         }

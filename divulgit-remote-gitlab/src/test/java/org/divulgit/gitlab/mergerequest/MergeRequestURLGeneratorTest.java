@@ -1,6 +1,6 @@
 package org.divulgit.gitlab.mergerequest;
 
-import org.divulgit.GitLabURLBuilder;
+import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.junit.jupiter.api.Assertions;
@@ -38,5 +38,4 @@ class MergeRequestURLGeneratorTest {
 
         Assertions.assertEquals("https://git.company.com/api/v4/projects/2250/merge_requests?per_page=5050&page=5000&iids[]=5&iids[]=7&iids[]=9", url);
     }
-
 }
