@@ -37,7 +37,6 @@ import static org.mockserver.integration.ClientAndServer.startClientAndServer;
         webEnvironment = SpringBootTest.WebEnvironment.MOCK
 )
 @ContextConfiguration(classes = DivulgitApplication.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthenticationIT {
 
     private static final String CONNECTION_STRING = "mongodb://%s:%d";
