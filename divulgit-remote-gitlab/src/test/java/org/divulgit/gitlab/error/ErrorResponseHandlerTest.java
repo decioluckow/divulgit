@@ -2,6 +2,7 @@ package org.divulgit.gitlab.error;
 
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
+import org.gitlab.gitlab.error.GitLabErrorResponseHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 

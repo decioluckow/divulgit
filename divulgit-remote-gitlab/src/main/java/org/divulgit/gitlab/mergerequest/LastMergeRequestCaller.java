@@ -1,7 +1,7 @@
 package org.divulgit.gitlab.mergerequest;
 
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.gitlab.GitLabURLBuilder;
+import org.divulgit.GitLabURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.remote.exception.RemoteException;

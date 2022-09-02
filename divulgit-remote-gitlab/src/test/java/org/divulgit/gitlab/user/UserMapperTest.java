@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.divulgit.remote.exception.RemoteException;
+import org.gitlab.gitlab.user.GitLabUser;
+import org.gitlab.gitlab.user.UserResponseHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 

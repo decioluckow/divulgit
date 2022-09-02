@@ -1,6 +1,6 @@
 package org.divulgit.gitlab.mergerequest;
 
-import org.divulgit.gitlab.GitLabURLBuilder;
+import org.divulgit.GitLabURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.junit.jupiter.api.Assertions;

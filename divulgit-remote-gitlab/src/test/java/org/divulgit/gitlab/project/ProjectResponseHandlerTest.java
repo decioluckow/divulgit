@@ -1,6 +1,8 @@
 package org.divulgit.gitlab.project;
 
 import org.divulgit.remote.exception.RemoteException;
+import org.gitlab.gitlab.project.GitLabProject;
+import org.gitlab.gitlab.project.ProjectResponseHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
