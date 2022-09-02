@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class TestUtil {
+public class TestUtils {
 
     public static String getResourceAsString(Object source, String file) throws IOException {
         InputStream jsonResource = source.getClass().getResourceAsStream(file);
