@@ -11,11 +11,11 @@
     <div class="position-fixed bottom-1 end-0 p-3" style="z-index: 150">
         <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-                <strong class="me-auto">Reload Merge Request...</strong>
+                <strong class="me-auto">Reloading Merge Request...</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                Refresh the page to view the result.
+                Wait a few seconds and reload the page.
             </div>
         </div>
     </div>
@@ -190,8 +190,8 @@
     }
 
     function rescan(button) {
-        hideButtonReloadMr('btreloadmr');
-        generateWarningReescanMergeRequest();
+        hideButtonReloadMr(button);
+        generateWarningRescanMergeRequest();
         var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
         var mergeRequestId = mergeRequestLine.data('mergerequest-id');
         var projectId = mergeRequestLine.data('project-id');
@@ -209,23 +209,18 @@
                 }
             }
         });
-        /*showButtonReloadMr("btreloadmr");*/
     }
 
-    function generateWarningReescanMergeRequest() {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        var toastList = toastElList.map(function (toastEl) {
+    function generateWarningRescanMergeRequest() {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        const toastList = toastElList.map(function (toastEl) {
             return new bootstrap.Toast(toastEl)
-        })
+        });
         toastList.forEach(toast => toast.show())
     }
 
     function hideButtonReloadMr(element) {
-        document.getElementById(element).style.display = "none";
-    }
-
-    function showButtonReloadMr(element) {
-        document.getElementById(element).style.display = "block";
+        $('#' + element.id).hide(2000);
     }
 
     function getParentByClass(element, parentClass) {
