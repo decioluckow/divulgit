@@ -43,7 +43,7 @@
          <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
          </td>
          <td class="align-middle">
-            <a id="btreloadmr" href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
+            <a th:id="${mergeRequest.id}" href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
          </td>
       </tr>
       <th:block th:if="${mergeRequest.getValidComments().size() > 0}">
