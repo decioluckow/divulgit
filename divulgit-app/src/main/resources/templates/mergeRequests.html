@@ -8,7 +8,7 @@
         <div class="col-4 text-right">
         </div>
     </div>
-    <div class="position-fixed bottom-1 end-0 p-3" style="z-index: 150">
+    <div class="position-fixed bottom-1 end-0 p-3" style="z-index: 10">
         <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">Reloading Merge Request...</strong>
@@ -41,12 +41,6 @@
          <td th:class="${mergeRequest.author == user.username ? 'text-primary' : ''}" th:text="${mergeRequest.author}"></td>
          <td class="mergeRequest-text-column-width" th:text="${mergeRequest.title}"></td>
          <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
-          <!--
-          <a href="javascript:void(0)" onclick="rescan(this, '<%=mergeRequests[i].id%>')"><i class="bi bi-arrow-clockwise"/></a>
-          <div class="spinner-border spinner-border-sm" role="status">
-              <span class="sr-only">Loading...</span>
-          </div>
-          -->
          </td>
          <td class="align-middle">
             <a id="btreloadmr" href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
@@ -190,8 +184,8 @@
     }
 
     function rescan(button) {
-        hideButtonReloadMr(button);
         generateWarningRescanMergeRequest();
+        hideButtonRescanMergeReques(button);
         var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
         var mergeRequestId = mergeRequestLine.data('mergerequest-id');
         var projectId = mergeRequestLine.data('project-id');
@@ -212,14 +206,12 @@
     }
 
     function generateWarningRescanMergeRequest() {
-        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        const toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl)
-        });
+        const toastElList = document.querySelectorAll('.toast')
+        const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl))
         toastList.forEach(toast => toast.show())
     }
 
-    function hideButtonReloadMr(element) {
+    function hideButtonRescanMergeReques(element) {
         $('#' + element.id).hide(2000);
     }
 
