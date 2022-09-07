@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="position-fixed bottom-1 end-0 p-3" style="z-index: 10">
-        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="rescan-mergerequest-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">Reloading Merge Request...</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -43,7 +43,7 @@
          <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
          </td>
          <td class="align-middle">
-            <a th:id="${mergeRequest.id}" href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
+            <a href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
          </td>
       </tr>
       <th:block th:if="${mergeRequest.getValidComments().size() > 0}">
@@ -184,17 +184,16 @@
     }
 
     function rescan(button) {
-        generateWarningRescanMergeRequest();
-        hideButtonRescanMergeReques(button);
         var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
         var mergeRequestId = mergeRequestLine.data('mergerequest-id');
         var projectId = mergeRequestLine.data('project-id');
         $.ajax({
             url: '/in/project/' + projectId + '/mergeRequest/' + mergeRequestId + '/rescan',
             method: 'post',
-            dataType: 'json',
             success: function (response) {
                 console.log(response)
+                new bootstrap.Toast(document.getElementById('rescan-mergerequest-toast')).show();
+                $(button).hide(2000);
             },
             error: function (response, errorThrown) {
                 if (response.status >= 400 && response.status < 600) {
@@ -203,16 +202,6 @@
                 }
             }
         });
-    }
-
-    function generateWarningRescanMergeRequest() {
-        const toastElList = document.querySelectorAll('.toast')
-        const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl))
-        toastList.forEach(toast => toast.show())
-    }
-
-    function hideButtonRescanMergeReques(element) {
-        $('#' + element.id).hide(2000);
     }
 
     function getParentByClass(element, parentClass) {
