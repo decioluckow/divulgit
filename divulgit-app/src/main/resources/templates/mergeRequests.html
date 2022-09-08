@@ -8,6 +8,17 @@
         <div class="col-4 text-right">
         </div>
     </div>
+    <div class="position-fixed bottom-1 end-0 p-3" style="z-index: 10">
+        <div id="rescan-mergerequest-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Reloading Merge Request...</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Wait a few seconds and reload the page.
+            </div>
+        </div>
+    </div>
     </br>
    <h1 class="display-4" th:text="${project.name}"></h1>
    <input type="hidden" id="currentProjectId" th:value="${project.id}"/>
@@ -30,12 +41,6 @@
          <td th:class="${mergeRequest.author == user.username ? 'text-primary' : ''}" th:text="${mergeRequest.author}"></td>
          <td class="mergeRequest-text-column-width" th:text="${mergeRequest.title}"></td>
          <td class="text-end" th:text="${mergeRequest.commentsDiscussed} + ' / ' + ${mergeRequest.commentsTotal}">
-          <!--
-          <a href="javascript:void(0)" onclick="rescan(this, '<%=mergeRequests[i].id%>')"><i class="bi bi-arrow-clockwise"/></a>
-          <div class="spinner-border spinner-border-sm" role="status">
-              <span class="sr-only">Loading...</span>
-          </div>
-          -->
          </td>
          <td class="align-middle">
             <a href="javascript:void(0)" class="text-decoration-none mergerequest-reload" onclick="javascript:rescan(this)"><i class="bi bi-arrow-clockwise"></i></a>
@@ -178,25 +183,26 @@
         }
     }
 
-   function rescan(button) {
-      var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
-      var mergeRequestId = mergeRequestLine.data('mergerequest-id');
-      var projectId = mergeRequestLine.data('project-id');
-      $.ajax({
-         url:'/in/project/' + projectId + '/mergeRequest/' + mergeRequestId + '/rescan',
-         method:'post',
-         dataType:'json',
-         success:function(response) {
-            console.log(response)
-         },
-         error:function(response, errorThrown) {
-            if(response.status >= 400 && response.status < 600){
-                console.log(errorThrown);
-                alert('server error occured')
+    function rescan(button) {
+        var mergeRequestLine = getParentByClass(button, '.mergerequest-line');
+        var mergeRequestId = mergeRequestLine.data('mergerequest-id');
+        var projectId = mergeRequestLine.data('project-id');
+        $.ajax({
+            url: '/in/project/' + projectId + '/mergeRequest/' + mergeRequestId + '/rescan',
+            method: 'post',
+            success: function (response) {
+                console.log(response)
+                new bootstrap.Toast(document.getElementById('rescan-mergerequest-toast')).show();
+                $(button).hide(2000);
+            },
+            error: function (response, errorThrown) {
+                if (response.status >= 400 && response.status < 600) {
+                    console.log(errorThrown);
+                    alert('server error occured')
+                }
             }
-         }
-      });
-   }
+        });
+    }
 
     function getParentByClass(element, parentClass) {
       return $(element).parents(parentClass);
