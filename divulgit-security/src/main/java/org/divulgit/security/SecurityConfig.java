@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers("/static/**", "/resources/**", "/js/**", "/css/**", "/images/**");
-
     }
 
     @Override
@@ -35,7 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/in/**").authenticated()
                 .and()
-                .formLogin().usernameParameter("principal").loginPage("/login").permitAll()
+                .formLogin()
+                .usernameParameter("principal")
+                .loginPage("/login")
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error=true")).permitAll()
                 .defaultSuccessUrl("/in/projects")
                 .and()
                 .logout().logoutUrl("/logout").permitAll();

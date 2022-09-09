@@ -7,6 +7,10 @@
   width: 500px;
 }
 
+.error-page-content {
+    height: 100%;
+}
+
 .page-footer-text {
     @extend .dark-background-color;
     @extend .text-center;
@@ -27,9 +31,6 @@
 }
 
 .logo-divulgit {
-  width: 10%;
-  padding-top: 0.3%;
-  padding-bottom: 0.3%;
 }
 
 .toast-header {

@@ -21,4 +21,34 @@ class ErrorResponseHandlerTest {
             assertEquals("Resource not found", e.getMessage());
         }
     }
+
+    @Test
+    public void testSmallPlainError() {
+        var errorHandler = new BitBucketErrorResponseHandler();
+
+        Exception exception = assertThrows(RemoteException.class, () -> {
+            errorHandler.handleErrorResponse(ResponseEntity.ok("Mussum Ipsum, cacilds vidis litro abertis."));
+        });
+
+        String expectedMessage = "Mussum Ipsum, cacilds vidis litro abertis.";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void testLargePlainError() {
+        var errorHandler = new BitBucketErrorResponseHandler();
+
+        Exception exception = assertThrows(RemoteException.class, () -> {
+            errorHandler.handleErrorResponse(ResponseEntity.ok("Mussum Ipsum, cacilds vidis litro abertis. Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl."));
+        });
+
+        String expectedMessage = "Mussum Ipsum, cacilds vidis litro abertis. Mauris nec dolor in eros commodo tempor. Aenean aliquam m...";
+        String actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+
 }
