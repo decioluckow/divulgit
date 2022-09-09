@@ -1,6 +1,7 @@
 package org.divulgit.bitbucket.error;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.divulgit.annotation.ForRemote;
@@ -48,6 +49,8 @@ public class BitBucketErrorResponseHandler implements ErrorResponseHandler {
     }
 
     public void handlePlainErrorResponse(ResponseEntity<String> response) throws RemoteException {
-        throw new RemoteException(StringUtils.substring(response.getBody(), 0, MAX_ERROR_MESSAGE_LENGTH) + "...");
+        String limitedMessage = StringUtils.substring(Strings.nullToEmpty(response.getBody()), 0, MAX_ERROR_MESSAGE_LENGTH);
+        limitedMessage = limitedMessage.length() < MAX_ERROR_MESSAGE_LENGTH ? limitedMessage : limitedMessage.trim() + "...";
+        throw new RemoteException(limitedMessage);
     }
 }
