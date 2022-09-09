@@ -38,8 +38,9 @@ class JSONUtilTest {
         assertFalse(JSONUtil.isValid("Internal Server Error"));
         assertFalse(JSONUtil.isValid("<401,Not Authorized Access"));
         assertFalse(JSONUtil.isValid("<html><body>Internal Server Error</body></html>"));
+        assertTrue(JSONUtil.isValid("{}"));
+        assertTrue(JSONUtil.isValid("[]"));
         assertTrue(JSONUtil.isValid("{\"name\":\"someone\"}"));
         assertTrue(JSONUtil.isValid("[{\"name\":\"someone\"},{\"name\":\"someone\"}]"));
-
     }
 }
