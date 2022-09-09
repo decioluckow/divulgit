@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -114,7 +115,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
                 newUserProjectIds.add(UserProject.builder().projectId(project.getId()).state(UserProject.State.NEW).build());
             }
         }
-        if (!newUserProjectIds.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(newUserProjectIds)) {
             Optional<User> freshUser = userRepository.findById(user.getId());
             if (freshUser.isPresent()) {
                 freshUser.get().getUserProjects().addAll(newUserProjectIds);

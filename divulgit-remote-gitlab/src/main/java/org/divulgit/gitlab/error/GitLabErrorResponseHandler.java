@@ -7,6 +7,7 @@ import org.divulgit.annotation.ForRemote;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
 import org.divulgit.type.RemoteType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class GitLabErrorResponseHandler implements ErrorResponseHandler {
     }
 
     private static boolean isHttpError(ResponseEntity<String> response) {
-        return response.getStatusCodeValue() != 200;
+        return response.getStatusCode() != HttpStatus.OK;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class AzureCurrentUserCaller {
         String url = urlBuilder.buildUserURL();
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         Optional<RemoteUser> authenticatedUser = Optional.empty();
-        if (response.getStatusCodeValue() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             authenticatedUser = Optional.ofNullable(responseHandler.handle200Response(response));
         }
         return authenticatedUser;

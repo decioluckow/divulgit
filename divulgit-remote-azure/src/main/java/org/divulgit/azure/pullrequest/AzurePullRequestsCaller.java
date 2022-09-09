@@ -70,7 +70,7 @@ public class AzurePullRequestsCaller {
             String url) throws RemoteException {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         boolean stopScan = false;
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
             for (AzurePullRequest pullRequest : pullRequests) {
                 if (pullRequest.getExternalId() >= scanFrom) {
@@ -96,7 +96,7 @@ public class AzurePullRequestsCaller {
         String url = urlBuilder.buildPullRequestURL(organization, pullRequestExternalId);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         AzurePullRequest pullRequest = null;
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
         	pullRequest = responseHandler.handle200ResponseSingleResult(response);
         }
         return pullRequest;

@@ -1,6 +1,7 @@
 package org.divulgit.azure.pullrequest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.azure.AzureURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -39,9 +40,9 @@ public class AzureLastPullRequestCaller {
         String url = urlBuilder.buildPullRequestsURL(organization, project);
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
         int lastMergeRequestId = 0;
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             List<AzurePullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
-            if (!pullRequests.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(pullRequests)) {
                 lastMergeRequestId = pullRequests.get(0).getExternalId();
             }
         }

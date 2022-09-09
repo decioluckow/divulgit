@@ -40,7 +40,7 @@ public class AzureRepositoryCaller {
 
     private void retrieveRepositories(final Remote remote, final Authentication authentication, final List<AzureRepository> projects, String url) throws RemoteException {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             projects.addAll(responseHandler.handle200Response(response));
         }
         Optional<String> continuationURL = urlBuilder.buildContinuationURL(response, url);

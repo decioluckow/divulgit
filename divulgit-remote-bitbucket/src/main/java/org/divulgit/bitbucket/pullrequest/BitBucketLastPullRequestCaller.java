@@ -1,4 +1,5 @@
 package org.divulgit.bitbucket.pullrequest;
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.bitbucket.BitBucketURLBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.divulgit.model.Project;
@@ -36,7 +37,7 @@ public class BitBucketLastPullRequestCaller {
         int lastMergeRequestId = 0;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<BitBucketPullRequest> pullRequests = bitBucketPullRequestResponseHandler.handle200ResponseMultipleResult(response);
-            if (!pullRequests.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(pullRequests)) {
                 lastMergeRequestId = pullRequests.get(0).getExternalId();
             }
         }
