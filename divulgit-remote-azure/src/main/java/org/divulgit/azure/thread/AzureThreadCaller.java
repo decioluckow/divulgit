@@ -49,7 +49,7 @@ public class AzureThreadCaller {
             Authentication authentication,
             String url) throws RemoteException {
         ResponseEntity<String> response = azureRestCaller.call(url, authentication);
-        if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        if (response.getStatusCode() == HttpStatus.OK) {
             List<AzureThread> threads = responseHandler.handle200ResponseMultipleResult(response);
             loadedThreads.addAll(threads);
         }

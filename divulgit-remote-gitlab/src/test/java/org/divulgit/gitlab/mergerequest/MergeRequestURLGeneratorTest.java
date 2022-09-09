@@ -38,5 +38,4 @@ class MergeRequestURLGeneratorTest {
 
         Assertions.assertEquals("https://git.company.com/api/v4/projects/2250/merge_requests?per_page=5050&page=5000&iids[]=5&iids[]=7&iids[]=9", url);
     }
-
 }

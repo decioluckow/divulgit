@@ -11,7 +11,7 @@ import org.divulgit.remote.exception.RemoteException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-public class MergeRequestMapperTest {
+public class MergeRequestResponseHandlerTest {
 
     private MergeRequestResponseHandler responseHandler = new MergeRequestResponseHandler();
 

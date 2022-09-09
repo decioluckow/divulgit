@@ -38,6 +38,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>android-json</artifactId>
+                    <groupId>com.vaadin.external.google</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -70,6 +76,24 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>2.23.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>5.14.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-client-java</artifactId>
+            <version>5.14.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>3.4.8</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -107,6 +131,11 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IT</exclude>
+                    </excludes>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
@@ -115,8 +144,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
         </plugins>
+
     </build>
 
     <modules>
@@ -136,4 +165,37 @@
         <module>divulgit-util</module>
         <module>divulgit-type</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <properties>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.unit.tests>true</skip.unit.tests>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>3.0.0-M7</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*IT</include>
+                            </includes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

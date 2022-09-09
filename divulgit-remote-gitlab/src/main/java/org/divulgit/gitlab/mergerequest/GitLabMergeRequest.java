@@ -1,6 +1,5 @@
 package org.divulgit.gitlab.mergerequest;
 
-import org.apache.http.client.utils.DateUtils;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.remote.model.RemoteMergeRequest;
@@ -9,8 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import org.divulgit.util.DateUtil;
-
-import java.time.LocalDateTime;
 
 @Data
 public class GitLabMergeRequest implements RemoteMergeRequest {

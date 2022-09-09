@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -93,7 +94,7 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
             for (RemoteComment remoteComment : remoteComments) {
             	Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
                 List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
-                if (! hashTags.isEmpty()) {
+                if (CollectionUtils.isNotEmpty(hashTags)) {
                     if (existingComment.isPresent()) {
                         updateIfNecessary(remoteComment, hashTags, existingComment);
                     } else {

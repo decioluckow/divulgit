@@ -1,6 +1,7 @@
 package org.divulgit.github.pullrequest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.github.GitHubURLBuilder;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -38,7 +40,7 @@ public class LastPullRequestCaller {
         int lastMergeRequestId = 0;
         if (response.getStatusCode().is2xxSuccessful()) {
             List<GitHubPullRequest> pullRequests = responseHandler.handle200ResponseMultipleResult(response);
-            if (!pullRequests.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(pullRequests)) {
                 lastMergeRequestId = pullRequests.get(0).getExternalId();
             }
         }
