@@ -2,7 +2,7 @@ package org.divulgit.gitlab.error;
 
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.rest.error.ErrorResponseHandler;
-import org.divulgit.util.TestUtil;
+import org.divulgit.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -14,7 +14,7 @@ class ErrorResponseHandlerTest {
 
     @Test
     void testError() throws IOException, RemoteException {
-        String json = TestUtil.getResourceAsString(this, "error.json");
+        String json = TestUtils.getResourceAsString(this, "error.json");
         ErrorResponseHandler errorHandler = new GitLabErrorResponseHandler();
 
         try {

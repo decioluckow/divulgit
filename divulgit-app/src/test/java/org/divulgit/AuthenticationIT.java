@@ -11,7 +11,7 @@ import org.divulgit.gitlab.GitLabURLBuilder;
 import org.divulgit.model.Remote;
 import org.divulgit.repository.UserRepository;
 import org.divulgit.security.CustomAuthenticationProvider;
-import org.divulgit.util.TestUtil;
+import org.divulgit.util.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +86,7 @@ public class AuthenticationIT {
                         .withPath("/api/v4/user/"))
                 .respond(HttpResponse.response()
                         .withStatusCode(200)
-                        .withBody(TestUtil.getResourceAsString(this, "user.json"))
+                        .withBody(TestUtils.getResourceAsString(this, "user.json"))
                         .withDelay(TimeUnit.SECONDS, 1));
         String principal = "{\"username\":\"\",\"organization\":\"\", \"domain\":\"gitlab.com\", \"plataform\":\"GITLAB\"}";
         String credential = "xpto123token";
