@@ -7,6 +7,10 @@
   width: 500px;
 }
 
+.error-page-content {
+    height: 100%;
+}
+
 .page-footer-text {
     @extend .dark-background-color;
     @extend .text-center;
@@ -27,9 +31,21 @@
 }
 
 .logo-divulgit {
-  width: 10%;
-  padding-top: 0.3%;
-  padding-bottom: 0.3%;
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  background-clip: padding-box;
+  border-top-left-radius: calc(0.25rem - 1px);
+  border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.toast-body {
+  padding: 0.75rem;
 }
 
 .task-state-badge {

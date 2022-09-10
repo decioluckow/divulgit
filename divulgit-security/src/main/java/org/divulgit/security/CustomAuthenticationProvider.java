@@ -43,7 +43,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		final String principal = authentication.getPrincipal().toString();
 		RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal(principal);
-		log.info("Autenticating user {} on {}", remoteIdentify.getUsername(), remoteIdentify.getDomain());
+		log.info("Autenticating {}", remoteIdentify.toString());
 		RemoteAuthentication remoteAuthentication;
 		try {
 			final String credential = authentication.getCredentials().toString();
@@ -53,10 +53,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			if (remoteUser.isPresent()) {
 				remoteAuthentication = findOrCreateUser(remoteIdentify, remote, remoteAuthentication, remoteUser.get());
 			} else {
-				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
+				throw new InsufficientAuthenticationException("Unable to authenticate, please check your login information");
 			}
 		} catch (RemoteException e) {
-			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação", e);
+			log.error(e.getMessage(), e);
+			throw new InsufficientAuthenticationException("Unable to authenticate (" + e.getMessage() + ")", e);
 		}
 		return remoteAuthentication;
 	}
