@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.util.TestUtil;
+import org.divulgit.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -15,7 +15,7 @@ public class UserResponseHandlerTest {
 
     @Test
     public void testConvertUser() throws IOException, RemoteException {
-        String json = TestUtil.getResourceAsString(this, "user.json");
+        String json = TestUtils.getResourceAsString(this, "user.json");
 
         GitLabUser authenticatedUser = handler.handle200Response(ResponseEntity.ok(json));
 

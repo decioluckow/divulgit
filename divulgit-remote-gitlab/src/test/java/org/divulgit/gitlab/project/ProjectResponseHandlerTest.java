@@ -1,7 +1,7 @@
 package org.divulgit.gitlab.project;
 
 import org.divulgit.remote.exception.RemoteException;
-import org.divulgit.util.TestUtil;
+import org.divulgit.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
@@ -16,7 +16,7 @@ public class ProjectResponseHandlerTest {
 
     @Test
     public void testConvertProject() throws IOException, RemoteException {
-        String json = TestUtil.getResourceAsString(this,"projects.json");
+        String json = TestUtils.getResourceAsString(this,"projects.json");
 
         List<GitLabProject> authenticatedUser = responseHandler.handle200Response(ResponseEntity.ok(json));
 
