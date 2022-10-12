@@ -2,7 +2,9 @@ package org.divulgit.task.comment;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
@@ -18,14 +20,16 @@ import org.divulgit.task.RemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.divulgit.util.HashTagIdentifierUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CommentsRemoteScan extends AbstractRemoteScan {
 
     @Autowired
@@ -41,14 +45,14 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     private final User user;
     private final Project project;
     private final MergeRequest mergeRequest;
-    private final String token;
+    private final Authentication authentication;
 
     public static RemoteScan build(Remote remote,
     		 					   User user,
                                    Project project,
                                    MergeRequest mergeRequest,
-                                   String token) {
-        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, user, project, mergeRequest, token);
+                                   Authentication authentication) {
+        return (RemoteScan) ApplicationContextProvider.getApplicationContext().getBean("commentsRemoteScan", remote, user, project, mergeRequest, authentication);
     }
 
     public CommentsRemoteScan(
@@ -56,12 +60,12 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
             User user,
             Project project,
             MergeRequest mergeRequest,
-            String token) {
+            Authentication authentication) {
         this.remote = remote;
         this.user = user;
         this.project = project;
         this.mergeRequest = mergeRequest;
-        this.token = token;
+        this.authentication = authentication;
     }
 
     @Override
@@ -84,16 +88,21 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.debug("Start retrieving comments from merge request");
-            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, user, project, mergeRequest, token);
+            List<? extends RemoteComment> remoteComments = callerFactory.build(remote).retrieveComments(remote, user, project, mergeRequest, authentication);
             log.debug("Finished retrieving comments from merge request, {} retrieved", remoteComments.size());
             log.debug("Start merging comments");
             for (RemoteComment remoteComment : remoteComments) {
             	Optional<MergeRequest.Comment> existingComment = findExistingComment(remoteComment);
-            	if (existingComment.isPresent()) {
-            		updateIfNecessary(remoteComment, existingComment);
-            	} else {
-            		addNewComment(remoteComment);
-            	}
+                List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
+                if (CollectionUtils.isNotEmpty(hashTags)) {
+                    if (existingComment.isPresent()) {
+                        updateIfNecessary(remoteComment, hashTags, existingComment);
+                    } else {
+                        addNewComment(remoteComment, hashTags);
+                    }
+                } else {
+                    removeComment(remoteComment);
+                }
             }
             mergeRequestService.save(mergeRequest);
             log.debug("Finished comments merging");
@@ -104,16 +113,14 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
         }
     }
 
-	private void updateIfNecessary(RemoteComment remoteComment, Optional<MergeRequest.Comment> existingComment) {
+	private void updateIfNecessary(RemoteComment remoteComment, List<String> hashTags, Optional<MergeRequest.Comment> existingComment) {
 		if (!existingComment.get().getText().equals(remoteComment.getText())) {
-			List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
 			existingComment.get().setText(remoteComment.getText());
 		    existingComment.get().setHashTags(hashTags);
 		}
 	}
 
-	private void addNewComment(RemoteComment remoteComment) {
-		List<String> hashTags = HashTagIdentifierUtil.extractHashTag(remoteComment.getText());
+	private void addNewComment(RemoteComment remoteComment, List<String> hashTags) {
         mergeRequest.getComments().add(remoteComment
                 .toComment()
                 .hashTags(hashTags)
@@ -123,5 +130,9 @@ public class CommentsRemoteScan extends AbstractRemoteScan {
 
     private Optional<MergeRequest.Comment> findExistingComment(RemoteComment remoteComment) {
         return mergeRequest.getComments().stream().filter(c -> c.getExternalId().equals(remoteComment.getExternalId())).findFirst();
+    }
+
+    private void removeComment(RemoteComment remoteComment) {
+        mergeRequest.getComments().removeIf(c -> c.getExternalId().equals(remoteComment.getExternalId()));
     }
 }

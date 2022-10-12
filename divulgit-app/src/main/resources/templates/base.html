@@ -21,8 +21,8 @@
     <main>
        <nav class="navbar navbar-expand-lg dark-background-color">
           <div class="container-fluid">
-             <div class="navbar-brand logo"><i class="bi bi-chat-left-quote"></i> DivulGit</div>
-             <div th:if="${currentUser != null}">
+              <img src="/images/logo-divulgit.png" class="logo-divulgit">
+              <div th:if="${currentUser != null}">
                 <button type="button" class="btn btn-light" onclick="window.location='/logout'">logout</button>
              </div>
           </div>
@@ -34,7 +34,9 @@
     </main>
     <footer class="footer mt-auto py-3 page-footer-text">
         <div class="container">
-            <span class="text-muted">Sources on: <a href="https://github.com/decioluckow/divulgit/" target="_blank">https://github.com/decioluckow/divulgit/</a></span>
+           <span class="text-muted">Sources on: <a href="https://github.com/decioluckow/divulgit/" target="_blank">https://github.com/decioluckow/divulgit/</a></span>
+           <br/>
+           <a href="http://www.freepik.com">Designed by pch.vector / Freepik</a>
         </div>
     </footer>
 </body>

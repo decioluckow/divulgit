@@ -1,8 +1,6 @@
 package org.divulgit.vo;
-
 import org.divulgit.model.Project;
 import org.divulgit.model.User.UserProject;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +17,8 @@ public class UserProjectVO {
     private long commentsTotal;
     private long commentsDiscussed;
     private String durationFromLastDiscussion;
-    
+    private String durationFromLastScan;
+
     public String getId() {
         return project.getId();
     }

@@ -2,55 +2,50 @@
 <body>
 <main>
     <section class="py-4 text-center container start-width">
-        <form method="post" action="/login">
+        <form id="login-form" method="post" action="/login">
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
+            </div>
+            <input id="principal" name="principal" type="hidden">
+            <input id="plataform" name="plataform" type="hidden">
             <div class="mb-3">
                 <p>O DivulGit não armazena o seu token, ele sempre será a sua credencial de acesso e deverá sempre ser informado.</p>
 
-                <select id="select-repository-type" name="repositoryType" class="form-select" aria-label="Selecione o seu repositório">
-                    <option selected>Selecione o seu repositório</option>
-                    <option value="gitlab.com">GitLab - www.gitlab.com</option>
-                    <option value="api.github.com">GitHub - www.github.com</option>
-                    <option value="other">GitLab - on-premisses (somente GitLab)</option>
+                <select id="select-repository-type" name="repositoryType" class="form-select"
+                        aria-label="Selecione o seu repositório" required="true">
+                    <option value='' selected>Selecione o seu repositório</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "askOrganization":"true", "url":"dev.azure.com", "plataform":"AZURE"}'>Azure DevOps</option>
+                    <option value='{"askUrl":"false", "askUsername":"true", "url":"api.bitbucket.org", "plataform":"BITBUCKET"}'>Bitbucket Cloud - bitbucket.org</option>
+                    <option value='{"askUrl":"true", "askUsername":"true", "plataform":"BITBUCKET"}'>Bitbucket Server</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "url":"gitlab.com", "plataform":"GITLAB"}'>GitLab Cloud - gitlab.com</option>
+                    <option value='{"askUrl":"true", "askUsername":"false", "plataform":"GITLAB"}'>GitLab Server</option>
+                    <option value='{"askUrl":"false", "askUsername":"false", "url":"api.github.com", "plataform":"GITHUB"}'>GitHub - github.com</option>
                 </select>
             </div>
             <div class="mb-3">
-                <input id="input-other-repository-url" name="username" class="form-control" type="text" placeholder="Ex: git.minhaempresa.com" aria-label="Outro repositório">
+                <input id="remoteurl" name="remoteurl" class="form-control" type="text" placeholder="Informe a url do seu Git. Ex: git.minhaempresa.com" aria-label="Outro repositório" required="true">
+            </div>
+            <div class="mb-3">
+                <input id="organization" name="organization" class="form-control" placeholder="Informe sua organização" type="text" required="true">
+            </div>
+            <div class="mb-3">
+                <input id="remoteusername" name="remoteusername" class="form-control" placeholder="Informe seu nome de usuário" type="text" required="true">
             </div>
             <div class="mb-3">
                 <input
                         name="password"
                         class="form-control"
                         type="password"
+                        required="true"
                         placeholder="Informe a sua chave de acesso a API do seu repositório">
                 <p>A API Access Token necessária para o DivulGit acessar as informações do seu repositório (<a href="/token">Como obter?</a>)</p>
-
             </div>
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary btn-lg">Iniciar agora</button>
             </div>
         </form>
     </section>
-    <script>
-        const inputOtherRepositoryURLId = "#input-other-repository-url";
-        const selectRepositoryTypeId = "#select-repository-type";
-
-        $(document).ready(function() {
-            $(inputOtherRepositoryURLId).hide();
-        });
-
-        $(selectRepositoryTypeId).change(function() {
-            var selectedRepository = $(selectRepositoryTypeId).val();
-            if (selectedRepository == 'other') {
-                $(inputOtherRepositoryURLId).show(200);
-                $(inputOtherRepositoryURLId).prop( "readonly", false );
-                $(inputOtherRepositoryURLId).val('');
-            } else {
-                $(inputOtherRepositoryURLId).hide(200);
-                $(inputOtherRepositoryURLId).prop( "readonly", true );
-                $(inputOtherRepositoryURLId).val(selectedRepository);
-            }
-        });
-    </script>
+    <script type="text/javascript" th:src="@{/js/login.js}"></script>
 </main>
 </body>
 </html>

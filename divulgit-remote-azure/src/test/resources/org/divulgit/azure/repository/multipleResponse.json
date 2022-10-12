@@ -1,0 +1,45 @@
+{
+  "value": [
+    {
+      "id": "b2dd3659-1920-4a40-a7d8-7c869f7ff140",
+      "name": "test-project0",
+      "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140",
+      "project": {
+        "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+        "name": "test-project",
+        "url": "https://dev.azure.com/decioluckow-teste/_apis/projects/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+        "state": "wellFormed",
+        "revision": 11,
+        "visibility": "private",
+        "lastUpdateTime": "2022-07-02T02:27:29.183Z"
+      },
+      "defaultBranch": "refs/heads/main",
+      "size": 1552,
+      "remoteUrl": "https://decioluckow-teste@dev.azure.com/decioluckow-teste/test-project/_git/test-project",
+      "sshUrl": "git@ssh.dev.azure.com:v3/decioluckow-teste/test-project/test-project",
+      "webUrl": "https://dev.azure.com/decioluckow-teste/test-project/_git/test-project0",
+      "isDisabled": false
+    },
+    {
+      "id": "b2dd3659-1920-4a40-a7d8-7c869f7ff141",
+      "name": "test-project1",
+      "url": "https://dev.azure.com/decioluckow-teste/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6/_apis/git/repositories/b2dd3659-1920-4a40-a7d8-7c869f7ff140",
+      "project": {
+        "id": "79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+        "name": "test-project",
+        "url": "https://dev.azure.com/decioluckow-teste/_apis/projects/79a7a8d3-d7e8-4132-8e04-53f306c2fbc6",
+        "state": "wellFormed",
+        "revision": 11,
+        "visibility": "private",
+        "lastUpdateTime": "2022-07-02T02:27:29.183Z"
+      },
+      "defaultBranch": "refs/heads/main",
+      "size": 1552,
+      "remoteUrl": "https://decioluckow-teste@dev.azure.com/decioluckow-teste/test-project/_git/test-project",
+      "sshUrl": "git@ssh.dev.azure.com:v3/decioluckow-teste/test-project/test-project",
+      "webUrl": "https://dev.azure.com/decioluckow-teste/test-project/_git/test-project1",
+      "isDisabled": false
+    }
+  ],
+  "count": 2
+}

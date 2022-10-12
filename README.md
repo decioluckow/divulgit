@@ -14,55 +14,57 @@ A resposta é simples e muito usada hoje em dia nas redes sociais...
 
 `#hashtag!`
 
-Sem trocar a sua atual ferramenta git (GitHub ou GitLab), passe a destacar o que for 
+Sem trocar a sua atual ferramenta git, passe a destacar o que for 
 interessante usando: `#divulgar`, `#interessante`, `#legal`, `#cuidado` ou qualquer outra palavra
 usando `#`.
+
+Divulgit trabalha com:
+
+![GitHub](divulgit-app/src/main/resources/static/images/github-200px-logo.png)
+&nbsp;&nbsp;&nbsp;&nbsp;
+![GitLab](divulgit-app/src/main/resources/static/images/gitlab-200px-logo.png)
+
+![Azure DevOps](divulgit-app/src/main/resources/static/images/azure-devops-200px-logo.png)
+&nbsp;&nbsp;&nbsp;&nbsp; 
+![Bitbucket](divulgit-app/src/main/resources/static/images/bitbucket-200px-logo.png)
 
 ## Como utilizar
 
 O DivulGit não está em cloud disponível para uso, você deve compilá-lo e executá-lo 
 dentro de sua infra-estrutura (ou onde quiser).
 
-Por isso faça:
+### Execução Docker
 
-```
-git clone git@github.com:decioluckow/divulgit.git
-mvn clean install
-```
+Verifique as instruções de uso em:
+
+https://hub.docker.com/r/decioluckow/divulgit
+
+### Execução standalone
 
 Utilize Java 11 no mínimo.
 
-Para executar, obtenha o jar resultante em `divulgit\divulgit-app\target`
+No diretório de execução, crie um arquivo application.properties com o seguinte conteúdo para:
+
+#### MongoDB Local
+
+```
+spring.data.mongodb.host=<host>
+spring.data.mongodb.database=<database>
+spring.data.mongodb.port=<porta>
+spring.data.mongodb.username=<username>
+spring.data.mongodb.password=<password>
+```
+
+#### MongoDB como serviço
+```
+spring.data.mongodb.uri=mongodb+srv://<user>:<password>@<cluster>.<host>/<database>
+```
 
 E execute da seguinte forma:
 
 ```
 java -jar divulgit-app.jar
 ```
-
-É necessário criar um arquivo `application.properties` na mesma pasta do jar, com o seguinte conteúdo:
-
-```
-spring.data.mongodb.host=<host>
-spring.data.mongodb.database=<database>
-spring.data.mongodb.port=<porta>
-
-logging.level.org.divulgit=INFO
-logging.file=logs/diVulgit.log
-```
-
-## Trust Store
-
-O Divulgit possui uma trustStore embarcada já com os certificados para o GitLab e GitHub.
-Caso seja necessário adicionar ou atualizar algum certificado, adicione 
-as seguintes linhas ao arquivo `application.properties`
-
-```
-http.client.ssl.trust-store=file:///trustStore.jks
-http.client.ssl.trust-store-password=changeit
-```
-
-:warning: Estaremos monitoramento o vencimentos do certificados e atualizando no repositório.
 
 ## Thread Executor
 

@@ -1,7 +1,5 @@
 package org.divulgit.gitlab.comments;
 
-import java.util.List;
-
 import org.divulgit.gitlab.user.GitLabUser;
 import org.divulgit.model.MergeRequest;
 import org.divulgit.remote.model.RemoteComment;

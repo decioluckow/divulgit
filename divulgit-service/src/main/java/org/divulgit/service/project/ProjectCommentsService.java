@@ -1,11 +1,10 @@
 package org.divulgit.service.project;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
 import org.divulgit.model.Project;
 import org.divulgit.model.User;
 import org.divulgit.model.User.UserProject;
@@ -60,6 +59,10 @@ public class ProjectCommentsService {
                 userProjectVOBuilder.commentsNotDiscussedByAuthor(notDiscussedByAuthorVO.getCommentCount());
             }
 
+            if (Objects.nonNull(project.getLastScan())) {
+                Period period = Period.between(project.getLastScan().toLocalDate(), LocalDate.now());
+                userProjectVOBuilder.durationFromLastScan(PeriodUtil.formatDuration(period));
+            }
             projectComments.add(userProjectVOBuilder.build());
         }
         return projectComments;

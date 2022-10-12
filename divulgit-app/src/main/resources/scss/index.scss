@@ -3,8 +3,20 @@
 @import "../../../../node_modules/bootstrap/scss/_variables";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 
+.arrow-button-column {
+  width: 42px;
+}
+
+.80-column {
+  width: 80px;
+}
+
 .start-width {
   width: 500px;
+}
+
+.error-page-content {
+    height: 100%;
 }
 
 .page-footer-text {
@@ -24,6 +36,24 @@
 .logo {
   color: #cbbcb1 !important;
   font-size: xx-large;
+}
+
+.logo-divulgit {
+}
+
+.toast-header {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  background-clip: padding-box;
+  border-top-left-radius: calc(0.25rem - 1px);
+  border-top-right-radius: calc(0.25rem - 1px);
+}
+
+.toast-body {
+  padding: 0.75rem;
 }
 
 .task-state-badge {

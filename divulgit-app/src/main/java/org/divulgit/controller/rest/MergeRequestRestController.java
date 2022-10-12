@@ -5,7 +5,6 @@ import org.divulgit.model.MergeRequest;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
 import org.divulgit.model.User;
-import org.divulgit.security.UserAuthentication;
 import org.divulgit.service.mergeRequest.MergeRequestCommentService;
 import org.divulgit.task.executor.ScanExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +54,8 @@ public class MergeRequestRestController {
         log.info("Start rescan for mergeRequest {}", mergeRequestId);
         User user = loader.loadUser(authentication);
         Remote remote = loader.loadRemote(user.getRemoteId());
-        String remoteToken = ((UserAuthentication) authentication).getRemoteToken();
         Project project = loader.loadProject(user, projectId);
-        taskExecutor.scanProjectForMergeRequests(remote, user, project, Arrays.asList(mergeRequestId), remoteToken);
+        taskExecutor.scanProjectForMergeRequests(remote, user, project, Arrays.asList(mergeRequestId), authentication);
         return ResponseEntity.ok().build();
     }
 

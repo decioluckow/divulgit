@@ -2,9 +2,20 @@
 <body>
 <main>
    <br/><br/>
+   <h3>Azure</h3>
+   <p>Logado em sua conta do Azure DevOps:
+   <li>Clique no icone "User Settings" na barra superior, e acione "Personal Access Tokens"</li>
+   <li>Clique em <b>[New Token]</b></li>
+   <li>Informe um nome para o token, sugestão: <b>divulgit</b></li>
+   <li>Informe para Organization o valor <b>All accessible organizations</b></li>
+   <li>Informe uma data de expiração</li>
+   <li>Para Scopes, selecione : [Custom defined]</li>
+   <li>Nos escopos, marque: Work Itens > Read</li>
+   <li>Clique <b>[Create]</b></li>
+   <br/><br/>
    <h3>GitHub</h3>
    <p>Logado em sua conta do GitHub:
-   <li>Acesse <a href="https://github.com/settings/tokens">https://github.com/settings/tokens</a>.</li>
+   <li>Acesse <a href="https://github.com/settings/tokens" target="_blank">https://github.com/settings/tokens</a>.</li>
    <li>Clique em <b>[Generate new token]</b></li>
    <li>Informe um nome para o token, sugestão: <b>divulgit</b></li>
    <li>Informe uma data de expiração</li>
@@ -13,12 +24,33 @@
    <br/><br/>
    <h3>GitLab</h3>
    <p>Logado em sua conta do GitLab:
-   <li>Acesse <a href="https://gitlab.com/-/profile/personal_access_tokens">https://gitlab.com/-/profile/personal_access_tokens</a>.
+   <li>Acesse <a href="https://gitlab.com/-/profile/personal_access_tokens" target="_blank">https://gitlab.com/-/profile/personal_access_tokens</a>.
    </li>
    <li>Informe um nome para o token, sugestão: <b>divulgit</b></li>
    <li>Informe uma data de expiração</li>
    <li>Selecione as permissões: <b>read_api</b></li>
    <li>Clique <b>[Create personal access token]</b></li>
+   <br/><br/>
+   <div style="padding-bottom: 20px;">
+      <h3>BitBucket</h3>
+      <p>Logado em sua conta do BitBucket:
+      <li>Acesse <a href="https://bitbucket.org/account/settings/app-passwords/" target="_blank">https://bitbucket.org/account/settings/app-passwords</a>.
+      </li>
+      <li>Clique no botão para criar um "app password"</li>
+      <li>Informe um nome para o token, sugestão: <b>divulgit</b></li>
+      <li>Selecione as permissões abaixo e clique em <b>"Create"</b> para gerar o token</li>
+      <ul style="margin-bottom: 0;">
+         <li>
+            Account: <b>Email e Read</b>
+         </li>
+         <li>
+            Repositories: <b>Read</b>
+         </li>
+         <li>
+            Pull requests: <b>Read</b>
+         </li>
+      </ul>
+   </div>
 </main>
 </body>
 </html>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.divulgit.config.ApplicationContextProvider;
 import org.divulgit.model.Project;
 import org.divulgit.model.Remote;
@@ -19,14 +20,16 @@ import org.divulgit.task.AbstractRemoteScan;
 import org.divulgit.task.RemoteScan;
 import org.divulgit.task.listener.PersistenceScanListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ProjectRemoteScan extends AbstractRemoteScan {
 
     @Autowired
@@ -43,18 +46,18 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
 
     private Remote remote;
     private User user;
-    private String token;
+    private Authentication authentication;
 
-    public ProjectRemoteScan(Remote remote, User user, String token) {
+    public ProjectRemoteScan(Remote remote, User user, Authentication authentication) {
         this.remote = remote;
         this.user = user;
-        this.token = token;
+        this.authentication = authentication;
         super.addScanListener(new PersistenceScanListener(taskRepository, remote, user));
     }
 
-    public static ProjectRemoteScan build(Remote remote, User user, String token) {
+    public static ProjectRemoteScan build(Remote remote, User user, Authentication authentication) {
         return (ProjectRemoteScan) ApplicationContextProvider.getApplicationContext()
-                .getBean("projectRemoteScan", remote, user, token);
+                .getBean("projectRemoteScan", remote, user, authentication);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
     public void execute() {
         try {
             log.info("Starting scanning projects for remote {}", remote.getId());
-            List<? extends RemoteProject> projects = callerFactory.build(remote).retrieveRemoteProjects(remote, token);
+            List<? extends RemoteProject> projects = callerFactory.build(remote).retrieveRemoteProjects(remote, authentication);
             log.info("Finished scanning, found {} projects", projects.size());
             List<String> existingExternalProjectIds = projectService.findExternalIdByRemote(remote);
             List<Project> newProjects = addNewProjects(remote, projects, existingExternalProjectIds);
@@ -112,7 +115,7 @@ public class ProjectRemoteScan extends AbstractRemoteScan {
                 newUserProjectIds.add(UserProject.builder().projectId(project.getId()).state(UserProject.State.NEW).build());
             }
         }
-        if (!newUserProjectIds.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(newUserProjectIds)) {
             Optional<User> freshUser = userRepository.findById(user.getId());
             if (freshUser.isPresent()) {
                 freshUser.get().getUserProjects().addAll(newUserProjectIds);
