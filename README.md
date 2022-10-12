@@ -33,16 +33,32 @@ Divulgit trabalha com:
 O DivulGit não está em cloud disponível para uso, você deve compilá-lo e executá-lo 
 dentro de sua infra-estrutura (ou onde quiser).
 
-Por isso faça:
+### Execução Docker
 
-```
-git clone git@github.com:decioluckow/divulgit.git
-mvn clean install
-```
+Verifique as instruções de uso em:
+
+https://hub.docker.com/r/decioluckow/divulgit
+
+### Execução standalone
 
 Utilize Java 11 no mínimo.
 
-Para executar, obtenha o jar resultante em `divulgit\divulgit-app\target`
+No diretório de execução, crie um arquivo application.properties com o seguinte conteúdo para:
+
+#### MongoDB Local
+
+```
+spring.data.mongodb.host=<host>
+spring.data.mongodb.database=<database>
+spring.data.mongodb.port=<porta>
+spring.data.mongodb.username=<username>
+spring.data.mongodb.password=<password>
+```
+
+#### MongoDB como serviço
+```
+spring.data.mongodb.uri=mongodb+srv://<user>:<password>@<cluster>.<host>/<database>
+```
 
 E execute da seguinte forma:
 
@@ -50,16 +66,6 @@ E execute da seguinte forma:
 java -jar divulgit-app.jar
 ```
 
-É necessário criar um arquivo `application.properties` na mesma pasta do jar, com o seguinte conteúdo:
-
-```
-spring.data.mongodb.host=<host>
-spring.data.mongodb.database=<database>
-spring.data.mongodb.port=<porta>
-
-logging.level.org.divulgit=INFO
-logging.file=logs/diVulgit.log
-```
 ## Thread Executor
 
 O processo de scan dos repositórios git é assíncrono e configurado para trabalhar com 
