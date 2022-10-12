@@ -30,7 +30,7 @@ Divulgit trabalha com:
 
 ## Como utilizar
 
-O DivulGit não está em cloud disponível para uso, você deve compilá-lo e executá-lo 
+O DivulGit não está em cloud disponível para uso como serviço, você deve compilá-lo e executá-lo 
 dentro de sua infra-estrutura (ou onde quiser).
 
 ### Execução Docker
@@ -40,6 +40,8 @@ Verifique as instruções de uso em:
 https://hub.docker.com/r/decioluckow/divulgit
 
 ### Execução standalone
+
+Obtenha o pacote da ultima versão disponível em: https://github.com/decioluckow/divulgit/releases
 
 Utilize Java 11 no mínimo.
 
