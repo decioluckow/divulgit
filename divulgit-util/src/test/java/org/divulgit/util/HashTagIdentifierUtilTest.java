@@ -43,4 +43,13 @@ public class HashTagIdentifierUtilTest {
 		
 		assertTrue(contains);
 	}
+
+	@Test
+	public void testNotContainsHashTagOnURL() {
+		String comment = "Este comentário contém url com hashtag https://github.com/decioluckow/divulgit/issues/87#aqui";
+
+		boolean contains = HashTagIdentifierUtil.containsHashTag(comment);
+
+		assertFalse(contains);
+	}
 }

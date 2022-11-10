@@ -10,7 +10,7 @@ public class HashTagIdentifierUtil {
     private static Pattern HASH_TAG_PATTERN = Pattern.compile("(?:\\s|\\A|^)[##]+([A-Za-z0-9-_]+)");
 	
     public static boolean containsHashTag(String text) {
-    	return text.contains("#");
+    	return ! extractHashTag(text).isEmpty();
     }
     
     public static List<String> extractHashTag(String text) {
