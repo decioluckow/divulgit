@@ -24,6 +24,7 @@ class MergeRequestMapperTest {
         assertEquals(8, mergeRequest.getExternalId());
         assertEquals("Update README.md", mergeRequest.getTitle());
         assertEquals("decioluckow", mergeRequest.getAuthor());
+        assertNotNull(mergeRequest.getCreatedAt());
     }
 
     @Test
@@ -38,9 +39,12 @@ class MergeRequestMapperTest {
         assertEquals(9, firstMergeRequest.getExternalId());
         assertEquals("Update HELP.md", firstMergeRequest.getTitle());
         assertEquals("decioluckow", firstMergeRequest.getAuthor());
+        assertNotNull(firstMergeRequest.getCreatedAt());
+
         GitHubPullRequest secondMergeRequest = mergeRequests.get(1);
         assertEquals(8, secondMergeRequest.getExternalId());
         assertEquals("Update README.md", secondMergeRequest.getTitle());
         assertEquals("decioluckow", secondMergeRequest.getAuthor());
+        assertNotNull(secondMergeRequest.getCreatedAt());
     }
 }

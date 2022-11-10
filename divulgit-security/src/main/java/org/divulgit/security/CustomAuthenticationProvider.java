@@ -9,6 +9,8 @@ import org.divulgit.remote.RemoteFacade;
 import org.divulgit.remote.exception.RemoteException;
 import org.divulgit.remote.model.RemoteUser;
 import org.divulgit.repository.UserRepository;
+import org.divulgit.util.vo.RemoteIdentify;
+import org.divulgit.security.identify.RemoteIdentifyParser;
 import org.divulgit.service.remote.RemoteDiscoveryService;
 import org.divulgit.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,35 +41,38 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		final String remoteURL = authentication.getPrincipal().toString();
-		log.info("Autenticating user on {}", remoteURL);
-		Authentication authenticatedUser;
+		final String principal = authentication.getPrincipal().toString();
+		RemoteIdentify remoteIdentify = RemoteIdentifyParser.parsePrincipal(principal);
+		log.info("Autenticating {}", remoteIdentify.toString());
+		RemoteAuthentication remoteAuthentication;
 		try {
-			final String remoteToken = authentication.getCredentials().toString();
-			final Remote remote = remoteDiscoveryService.findRemote(remoteURL, remoteToken);
-			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteToken);
+			final String credential = authentication.getCredentials().toString();
+			remoteAuthentication = RemoteAuthentication.of(remoteIdentify.getUsername(), credential);
+			final Remote remote = remoteDiscoveryService.findRemote(remoteIdentify, remoteAuthentication);
+			final Optional<RemoteUser> remoteUser = retrieveRemoteUser(remote, remoteAuthentication);
 			if (remoteUser.isPresent()) {
-				authenticatedUser = findOrCreateUser(remote, remoteToken, remoteUser.get());
+				remoteAuthentication = findOrCreateUser(remoteIdentify, remote, remoteAuthentication, remoteUser.get());
 			} else {
-				throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação");
+				throw new InsufficientAuthenticationException("Unable to authenticate, please check your login information");
 			}
 		} catch (RemoteException e) {
-			throw new InsufficientAuthenticationException("Não foi possível realizar a autenticação", e);
+			log.error(e.getMessage(), e);
+			throw new InsufficientAuthenticationException("Unable to authenticate (" + e.getMessage() + ")", e);
 		}
-		return authenticatedUser;
+		return remoteAuthentication;
 	}
 
-	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, String remoteToken) throws RemoteException {
+	private Optional<RemoteUser> retrieveRemoteUser(Remote remote, RemoteAuthentication authentication) throws RemoteException {
 		final RemoteFacade caller = callerFactory.build(remote);
-		return caller.retrieveRemoteUser(remote, remoteToken);
+		return caller.retrieveRemoteUser(remote, authentication);
 	}
 
-	private UserAuthentication findOrCreateUser(Remote remote, String remoteToken, RemoteUser remoteUser) {
+	private RemoteAuthentication findOrCreateUser(RemoteIdentify remoteIdentify, Remote remote, Authentication authenticated, RemoteUser remoteUser) {
 		Optional<User> user = userRepository.findByExternalUserIdAndRemoteId(remoteUser.getInternalId(), remote.getId());
 		if (!user.isPresent()) {
 			user = Optional.of(userService.save(remoteUser, remote));
 		}
-		return UserAuthentication.of(user.get(), remoteToken);
+		return RemoteAuthentication.of(remoteIdentify, user.get(), (String) authenticated.getCredentials());
 	}
 
 	@Override

@@ -17,12 +17,26 @@ public class RemoteCallerFacadeFactory {
     @ForRemote(RemoteType.GITHUB)
     private RemoteFacade gitHubCallerFacade;
 
+    @Autowired
+    @ForRemote(RemoteType.AZURE)
+    private RemoteFacade azureCallerFacade;
+
+    @Autowired
+    @ForRemote(RemoteType.BITBUCKET)
+    private RemoteFacade bitBucketCallerFacade;
+
     public RemoteFacade build(Remote remote) {
-        switch (remote.getType()) {
+        return build(remote.getType());
+    }
+
+    public RemoteFacade build(RemoteType type) {
+        switch (type) {
+            case AZURE: return azureCallerFacade;
             case GITLAB: return gitLabCallerFacade;
             case GITHUB: return gitHubCallerFacade;
+            case BITBUCKET: return bitBucketCallerFacade;
             default:
-                throw new IllegalArgumentException("Opcão "+ remote +" não implementada");
+                throw new IllegalArgumentException("Opcão "+ type +" não implementada");
         }
     }
 }

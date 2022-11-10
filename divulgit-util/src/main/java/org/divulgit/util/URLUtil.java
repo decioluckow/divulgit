@@ -1,10 +1,7 @@
 package org.divulgit.util;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.util.Strings;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -19,5 +16,9 @@ public class URLUtil {
             return (before ? "&":"") + param + (!before ? "&":"");
         }
         return "";
+    }
+
+    public static String appendParameter(String url, String name, String value) {
+        return url + (url.contains("?") ? "&" : "?") + name + "=" + value;
     }
 }

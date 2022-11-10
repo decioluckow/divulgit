@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.divulgit.util.DateUtil;
 
 @Data
 @Builder
@@ -33,6 +34,8 @@ public class GitHubPullRequest implements RemoteMergeRequest {
     private String state;
     @JsonProperty("merged_at")
     private String mergedAt;
+    @JsonProperty("created_at")
+    private String createdAt;
 
     @Override
     public String getAuthor() {
@@ -47,6 +50,7 @@ public class GitHubPullRequest implements RemoteMergeRequest {
                 .description(description)
                 .url(url)
                 .author(user.getUsername())
+                .createdAt(DateUtil.parseDateFromDateTime(createdAt))
                 .state(convertState(state)).build();
     }
 

@@ -1,9 +1,10 @@
 package org.divulgit.util;
-
+import lombok.experimental.UtilityClass;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class PeriodUtil {
 
     public static String formatDuration(Period period) {

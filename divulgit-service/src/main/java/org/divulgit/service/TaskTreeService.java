@@ -41,7 +41,7 @@ public class TaskTreeService {
         Map<String, User> taskUsers = extractUsernames(tasks);
         List<TaskTreeVO> tasksTree = new ArrayList<>();
         for ( Task task : tasksById.values() ) {
-            if (! CollectionUtils.isEmpty(task.getSubTasks())) {
+            if (CollectionUtils.isNotEmpty(task.getSubTasks())) {
                 log.trace("Adicionando task {} com filhos", task.getId());
                 final TaskTreeVO taskTree = buildTaskTree(task, taskUsers);
                 taskTree.getSubTaskDetail().initSubTaskValues();

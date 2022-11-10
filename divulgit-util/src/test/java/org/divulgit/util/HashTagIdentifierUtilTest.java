@@ -16,6 +16,15 @@ public class HashTagIdentifierUtilTest {
 		
 		assertEquals(2, hashTags.size());
 	}
+
+	@Test
+	public void testIdentifingHashTagsInBegin() {
+		String comment = "#teste Este comentário é muito legal";
+
+		List<String> hashTags = HashTagIdentifierUtil.extractHashTag(comment);
+
+		assertEquals(1, hashTags.size());
+	}
 	
 	@Test
 	public void testContainsTwoHashTags() {
@@ -33,5 +42,14 @@ public class HashTagIdentifierUtilTest {
 		boolean contains = HashTagIdentifierUtil.containsHashTag(comment);
 		
 		assertTrue(contains);
+	}
+
+	@Test
+	public void testNotContainsHashTagOnURL() {
+		String comment = "Este comentário contém url com hashtag https://github.com/decioluckow/divulgit/issues/87#aqui";
+
+		boolean contains = HashTagIdentifierUtil.containsHashTag(comment);
+
+		assertFalse(contains);
 	}
 }

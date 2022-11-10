@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import lombok.extern.slf4j.Slf4j;
-import org.divulgit.gitlab.mergerequest.GitLabMergeRequest;
 import org.divulgit.remote.exception.RemoteException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>divulgit</artifactId>
         <groupId>br.com.decioluckow</groupId>
-		<version>0.0.2-SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -35,6 +35,16 @@
         <dependency>
             <groupId>br.com.decioluckow</groupId>
             <artifactId>divulgit-remote-github</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-remote-bitbucket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>br.com.decioluckow</groupId>
+            <artifactId>divulgit-remote-azure</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
