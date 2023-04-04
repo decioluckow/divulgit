@@ -30,7 +30,7 @@ public class GitHubURLBuilder {
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
-            mergeRequest.getExternalId(),
+            String.valueOf(mergeRequest.getExternalId()),
             String.valueOf(pageSize),
             String.valueOf(page));
     }
@@ -40,7 +40,7 @@ public class GitHubURLBuilder {
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
-            mergeRequest.getExternalId(),
+            String.valueOf(mergeRequest.getExternalId()),
             String.valueOf(pageSize),
             String.valueOf(page));
     }
@@ -63,7 +63,7 @@ public class GitHubURLBuilder {
             remote.getUrl(),
             user.getUsername(),
             project.getName(),
-            mergeRequestExternalId);
+            String.valueOf(mergeRequestExternalId));
     }
     
     public String buildRepository(Remote remote, int page) {

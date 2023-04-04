@@ -33,15 +33,15 @@ public class AzureURLBuilder {
         return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/repositories/{1}/pullRequests/{2}/threads?api-version=6.0",
                 organization,
                 project.getExternalId(),
-                mergeRequest.getExternalId());
+                String.valueOf(mergeRequest.getExternalId()));
     }
 
     public String buildPullRequestCommentWebURL(Project project, MergeRequest mergeRequest, AzureThread thread, AzureComment comment) {
         return MessageFormat.format("{0}/pullrequest/{1}?_a=files&path={2}&discussionId={3}",
                 project.getUrl(),
-                mergeRequest.getExternalId(),
+                String.valueOf(mergeRequest.getExternalId()),
                 thread.getThreadContext().getFilePath(),
-                thread.getId());
+                String.valueOf(thread.getId()));
     }
 
     public String buildPullRequestsURL(String organization, Project project) {
@@ -53,13 +53,13 @@ public class AzureURLBuilder {
     public String buildPullRequestURL(String organization, int pullRequestExternalId) {
         return MessageFormat.format("https://dev.azure.com/{0}/_apis/git/pullrequests/{1}?api-version=6.0",
                 organization,
-                pullRequestExternalId);
+                String.valueOf(pullRequestExternalId));
     }
 
     public String buildPullRequestWebURL(String projectURL, int pullRequestExternalId) {
         return MessageFormat.format("{0}/pullrequest/{1}",
                 projectURL,
-                pullRequestExternalId);
+                String.valueOf(pullRequestExternalId));
     }
 
     public String buildRepository(String organization) {
