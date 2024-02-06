@@ -23,10 +23,11 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <bcprov-jdk14.version>138</bcprov-jdk14.version>
-        <guava.version>30.1.1-jre</guava.version>
+        <guava.version>31.1-jre</guava.version>
         <bootstrap.version>4.0.0-2</bootstrap.version>
         <webjars-locator.version>0.30</webjars-locator.version>
         <json.version>20220320</json.version>
+        <jackson.databind>[2.14.2,)</jackson.databind>
     </properties>
 
     <dependencies>
